@@ -1,0 +1,10 @@
+# Profile:
+- 场景：架构图等
+- write by: 江树
+- Model:使用 Claude （claude.ai）
+
+绘制 xxx 结构图（SVG）
+- 元素不重叠，避免内容过于拥挤
+- 添加小型公式来解释关键计算
+- 使用精确的专业术语
+- 数学公式使用公式字体，英文使用 time news roman 字体，中文使用宋体
