@@ -1,0 +1,172 @@
+<svg viewBox="0 0 1200 1600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: '宋体', serif; font-size: 24px; font-weight: bold; fill: #2c3e50; }
+      .section-title { font-family: '宋体', serif; font-size: 18px; font-weight: bold; fill: #34495e; }
+      .subsection { font-family: '宋体', serif; font-size: 14px; fill: #2c3e50; }
+      .english { font-family: 'Times New Roman', serif; font-size: 12px; fill: #7f8c8d; }
+      .formula { font-family: 'Times New Roman', serif; font-size: 12px; fill: #e74c3c; font-style: italic; }
+      .box { fill: #ecf0f1; stroke: #bdc3c7; stroke-width: 2; rx: 8; }
+      .highlight-box { fill: #e8f5e8; stroke: #27ae60; stroke-width: 2; rx: 8; }
+      .process-box { fill: #fff3cd; stroke: #ffc107; stroke-width: 2; rx: 8; }
+      .arrow { stroke: #34495e; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34495e" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">AI智能体学习路线图</text>
+  <text x="600" y="65" text-anchor="middle" class="english">AI Agents Roadmap</text>
+  
+  <!-- Prerequisites Section -->
+  <rect x="50" y="90" width="280" height="120" class="box"/>
+  <text x="190" y="115" text-anchor="middle" class="section-title">学习前置条件</text>
+  <text x="70" y="140" class="subsection">• 基础后端开发 (Backend Development)</text>
+  <text x="70" y="160" class="subsection">• Git和终端使用 (Git/Terminal)</text>
+  <text x="70" y="180" class="subsection">• REST API知识</text>
+  <text x="70" y="200" class="subsection">• 数据结构与算法基础</text>
+  
+  <!-- LLM Fundamentals -->
+  <rect x="370" y="90" width="320" height="200" class="highlight-box"/>
+  <text x="530" y="115" text-anchor="middle" class="section-title">大语言模型基础</text>
+  <text x="390" y="140" class="subsection">• Transformer架构</text>
+  <text x="390" y="160" class="subsection">• 分词处理 (Tokenization)</text>
+  <text x="390" y="180" class="subsection">• 上下文窗口 (Context Window)</text>
+  <text x="390" y="200" class="subsection">• 生成控制参数:</text>
+  <text x="410" y="220" class="subsection">- 温度: T ∈ [0,2]</text>
+  <text x="410" y="240" class="formula">P(w|context) = softmax(logits/T)</text>
+  <text x="410" y="260" class="subsection">- Top-p采样: Σp ≤ nucleus_p</text>
+  <text x="410" y="280" class="subsection">- 频率惩罚 (Frequency Penalty)</text>
+  
+  <!-- Agent Loop -->
+  <rect x="730" y="90" width="420" height="280" class="process-box"/>
+  <text x="940" y="115" text-anchor="middle" class="section-title">智能体核心循环</text>
+  <text x="940" y="135" text-anchor="middle" class="english">Agent Loop</text>
+  
+  <!-- Step 1: Perception -->
+  <rect x="750" y="150" width="160" height="60" class="box"/>
+  <text x="830" y="175" text-anchor="middle" class="subsection">1. 感知输入</text>
+  <text x="830" y="195" text-anchor="middle" class="english">Perception</text>
+  
+  <!-- Step 2: Reasoning -->
+  <rect x="950" y="150" width="160" height="60" class="box"/>
+  <text x="1030" y="175" text-anchor="middle" class="subsection">2. 推理规划</text>
+  <text x="1030" y="195" text-anchor="middle" class="english">Reasoning</text>
+  
+  <!-- Step 3: Action -->
+  <rect x="950" y="240" width="160" height="60" class="box"/>
+  <text x="1030" y="265" text-anchor="middle" class="subsection">3. 执行动作</text>
+  <text x="1030" y="285" text-anchor="middle" class="english">Action</text>
+  
+  <!-- Step 4: Observation -->
+  <rect x="750" y="240" width="160" height="60" class="box"/>
+  <text x="830" y="265" text-anchor="middle" class="subsection">4. 观察反馈</text>
+  <text x="830" y="285" text-anchor="middle" class="english">Observation</text>
+  
+  <!-- Loop arrows -->
+  <path d="M 910 180 L 950 180" class="arrow"/>
+  <path d="M 1030 210 L 1030 240" class="arrow"/>
+  <path d="M 950 270 L 910 270" class="arrow"/>
+  <path d="M 830 240 L 830 210" class="arrow"/>
+  
+  <!-- Reward Function -->
+  <text x="940" y="330" text-anchor="middle" class="formula">R(s,a,s') = reward function</text>
+  <text x="940" y="350" text-anchor="middle" class="formula">Q(s,a) = E[Σγᵗr_{t+1}|s_t=s,a_t=a]</text>
+  
+  <!-- Tools and Memory Section -->
+  <rect x="50" y="400" width="350" height="180" class="box"/>
+  <text x="225" y="425" text-anchor="middle" class="section-title">工具与记忆系统</text>
+  <text x="70" y="450" class="subsection">工具定义 (Tool Definition):</text>
+  <text x="90" y="470" class="subsection">• 名称和描述 (Name/Description)</text>
+  <text x="90" y="490" class="subsection">• 输入/输出模式 (I/O Schema)</text>
+  <text x="90" y="510" class="subsection">• 错误处理 (Error Handling)</text>
+  
+  <text x="70" y="540" class="subsection">记忆类型 (Memory Types):</text>
+  <text x="90" y="560" class="subsection">• 短期记忆: Working Memory</text>
+  <text x="90" y="580" class="subsection">• 长期记忆: Vector DB/SQL</text>
+  
+  <!-- RAG and Vector Search -->
+  <rect x="430" y="400" width="350" height="180" class="highlight-box"/>
+  <text x="605" y="425" text-anchor="middle" class="section-title">RAG与向量检索</text>
+  <text x="450" y="450" class="subsection">向量嵌入 (Vector Embeddings):</text>
+  <text x="450" y="470" class="formula">embedding: text → ℝᵈ</text>
+  <text x="450" y="490" class="subsection">相似度计算:</text>
+  <text x="450" y="510" class="formula">cosine_sim(a,b) = a·b/(||a|| ||b||)</text>
+  <text x="450" y="530" class="subsection">检索过程:</text>
+  <text x="450" y="550" class="subsection">1. 查询编码 → 2. 向量搜索 → 3. 重排序</text>
+  <text x="450" y="570" class="formula">top_k = argmax_k cos_sim(q, d_i)</text>
+  
+  <!-- Architecture Patterns -->
+  <rect x="810" y="400" width="340" height="180" class="process-box"/>
+  <text x="980" y="425" text-anchor="middle" class="section-title">架构模式</text>
+  <text x="830" y="450" class="subsection">• ReAct (Reasoning + Acting)</text>
+  <text x="830" y="470" class="subsection">• 思维链 (Chain of Thought)</text>
+  <text x="830" y="490" class="subsection">• 模型上下文协议 (MCP)</text>
+  <text x="830" y="510" class="subsection">• 思维树 (Tree of Thoughts)</text>
+  <text x="830" y="530" class="subsection">• DAG智能体</text>
+  <text x="830" y="550" class="formula">CoT: P(answer|question) = Π P(step_i|context)</text>
+  
+  <!-- Implementation Frameworks -->
+  <rect x="50" y="620" width="500" height="160" class="box"/>
+  <text x="300" y="645" text-anchor="middle" class="section-title">实现框架</text>
+  <text x="70" y="670" class="subsection">手动实现 (Manual Implementation):</text>
+  <text x="90" y="690" class="subsection">• 直接API调用 • 循环控制 • 输出解析</text>
+  
+  <text x="70" y="720" class="subsection">框架选择 (Frameworks):</text>
+  <text x="90" y="740" class="english">• LangChain • LlamaIndex • AutoGen</text>
+  <text x="90" y="760" class="english">• CrewAI • Anthropic Tool Use</text>
+  
+  <!-- Evaluation and Testing -->
+  <rect x="580" y="620" width="320" height="160" class="highlight-box"/>
+  <text x="740" y="645" text-anchor="middle" class="section-title">评估与测试</text>
+  <text x="600" y="670" class="subsection">评估指标 (Metrics):</text>
+  <text x="600" y="690" class="formula">Success Rate = Correct_Actions/Total_Actions</text>
+  <text x="600" y="710" class="formula">Latency = Response_Time - Processing_Time</text>
+  <text x="600" y="730" class="subsection">测试框架:</text>
+  <text x="600" y="750" class="english">• LangSmith • Ragas • DeepEval</text>
+  <text x="600" y="770" class="subsection">• 单元测试 • 集成测试 • 人工评估</text>
+  
+  <!-- Security and Ethics -->
+  <rect x="930" y="620" width="220" height="160" class="box"/>
+  <text x="1040" y="645" text-anchor="middle" class="section-title">安全与伦理</text>
+  <text x="950" y="670" class="subsection">安全措施:</text>
+  <text x="950" y="690" class="subsection">• 提示注入防护</text>
+  <text x="950" y="710" class="subsection">• 工具权限管理</text>
+  <text x="950" y="730" class="subsection">• 数据隐私保护</text>
+  <text x="950" y="750" class="subsection">• 偏见检测</text>
+  <text x="950" y="770" class="subsection">• 红队测试</text>
+  
+  <!-- Applications -->
+  <rect x="300" y="820" width="600" height="120" class="process-box"/>
+  <text x="600" y="845" text-anchor="middle" class="section-title">应用场景</text>
+  <text x="320" y="870" class="subsection">• 个人智能助理 (Personal Assistant)</text>
+  <text x="320" y="890" class="subsection">• 代码生成与调试 (Code Generation/Debugging)</text>
+  <text x="320" y="910" class="subsection">• 数据分析与可视化 (Data Analysis/Visualization)</text>
+  <text x="650" y="870" class="subsection">• 网页抓取与爬虫 (Web Scraping)</text>
+  <text x="650" y="890" class="subsection">• 游戏NPC智能 (Game NPC AI)</text>
+  <text x="650" y="910" class="subsection">• 客户服务自动化</text>
+  
+  <!-- Performance Optimization -->
+  <rect x="50" y="980" width="1100" height="100" class="highlight-box"/>
+  <text x="600" y="1005" text-anchor="middle" class="section-title">性能优化与监控</text>
+  <text x="70" y="1030" class="subsection">延迟优化: </text>
+  <text x="180" y="1030" class="formula">Total_Latency = LLM_Latency + Tool_Latency + Network_Latency</text>
+  <text x="70" y="1050" class="subsection">成本控制: </text>
+  <text x="180" y="1050" class="formula">Cost = (Input_Tokens × Input_Price + Output_Tokens × Output_Price) × API_Calls</text>
+  <text x="70" y="1070" class="subsection">可观察性工具: LangSmith, Helicone, LangFuse, OpenLLMetry</text>
+  
+  <!-- Future Trends -->
+  <rect x="200" y="1120" width="800" height="80" class="box"/>
+  <text x="600" y="1145" text-anchor="middle" class="section-title">发展趋势</text>
+  <text x="220" y="1170" class="subsection">• 多模态智能体 (Multimodal Agents) • 自主学习能力 (Autonomous Learning)</text>
+  <text x="220" y="1190" class="subsection">• 分布式协作 (Distributed Collaboration) • 实时适应性 (Real-time Adaptation)</text>
+  
+  <!-- Connection arrows between major sections -->
+  <path d="M 330 150 L 370 150" class="arrow"/>
+  <path d="M 530 290 L 530 400" class="arrow"/>
+  <path d="M 605 580 L 605 620" class="arrow"/>
+  <path d="M 600 780 L 600 820" class="arrow"/>
+  <path d="M 600 940 L 600 980" class="arrow"/>
+</svg>

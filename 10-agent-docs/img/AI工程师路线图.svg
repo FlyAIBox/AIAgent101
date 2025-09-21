@@ -1,0 +1,242 @@
+<svg viewBox="0 0 1200 1600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: '宋体', serif; font-size: 24px; font-weight: bold; fill: #2c3e50; }
+      .section-title { font-family: '宋体', serif; font-size: 18px; font-weight: bold; fill: #34495e; }
+      .subsection { font-family: '宋体', serif; font-size: 14px; fill: #2c3e50; }
+      .english { font-family: 'Times New Roman', serif; font-size: 12px; fill: #7f8c8d; }
+      .formula { font-family: 'Times New Roman', serif; font-size: 12px; fill: #e74c3c; font-style: italic; }
+      .foundation-box { fill: #fdf2e9; stroke: #e67e22; stroke-width: 2; rx: 8; }
+      .api-box { fill: #e8f5e8; stroke: #27ae60; stroke-width: 2; rx: 8; }
+      .ml-box { fill: #ebf3fd; stroke: #3498db; stroke-width: 2; rx: 8; }
+      .safety-box { fill: #fdebf7; stroke: #e91e63; stroke-width: 2; rx: 8; }
+      .multimodal-box { fill: #f3e5f5; stroke: #9c27b0; stroke-width: 2; rx: 8; }
+      .arrow { stroke: #34495e; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34495e" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" class="title">AI工程师学习路线图</text>
+  <text x="600" y="65" text-anchor="middle" class="english">AI Engineer Roadmap</text>
+  
+  <!-- Prerequisites -->
+  <rect x="50" y="90" width="350" height="180" class="foundation-box"/>
+  <text x="225" y="115" text-anchor="middle" class="section-title">先决条件</text>
+  <text x="225" y="135" text-anchor="middle" class="english">Prerequisites</text>
+  
+  <text x="70" y="160" class="subsection">选择一个开发背景:</text>
+  <text x="70" y="180" class="subsection">• 前端开发 (Frontend)</text>
+  <text x="70" y="200" class="subsection">• 后端开发 (Backend)</text>
+  <text x="70" y="220" class="subsection">• 全栈开发 (Full-Stack)</text>
+  <text x="70" y="250" class="subsection">核心技能: HTTP, REST API, JSON, Git</text>
+  
+  <!-- AI Engineer Role -->
+  <rect x="430" y="90" width="320" height="180" class="foundation-box"/>
+  <text x="590" y="115" text-anchor="middle" class="section-title">AI工程师角色</text>
+  <text x="590" y="135" text-anchor="middle" class="english">AI Engineer Role</text>
+  
+  <text x="450" y="160" class="subsection">AI工程师 vs ML工程师:</text>
+  <text x="450" y="180" class="subsection">• AI工程师: 应用集成</text>
+  <text x="450" y="200" class="subsection">• ML工程师: 模型训练部署</text>
+  <text x="450" y="220" class="subsection">职责: 产品开发影响</text>
+  <text x="450" y="240" class="subsection">• 用户体验设计</text>
+  <text x="450" y="260" class="subsection">• 业务逻辑集成</text>
+  
+  <!-- Common Terminology -->
+  <rect x="780" y="90" width="370" height="200" class="foundation-box"/>
+  <text x="965" y="115" text-anchor="middle" class="section-title">核心概念</text>
+  <text x="965" y="135" text-anchor="middle" class="english">Core Concepts</text>
+  
+  <text x="800" y="160" class="subsection">• LLMs (Large Language Models)</text>
+  <text x="800" y="180" class="subsection">• 推理 (Inference) vs 训练 (Training)</text>
+  <text x="800" y="200" class="subsection">• 嵌入 (Embeddings)</text>
+  <text x="800" y="220" class="subsection">• 向量数据库 (Vector Databases)</text>
+  <text x="800" y="240" class="subsection">• RAG (Retrieval Augmented Generation)</text>
+  <text x="800" y="260" class="subsection">• AI vs AGI (人工通用智能)</text>
+  
+  <!-- Pre-trained Models -->
+  <rect x="50" y="310" width="380" height="250" class="api-box"/>
+  <text x="240" y="335" text-anchor="middle" class="section-title">预训练模型</text>
+  <text x="240" y="355" text-anchor="middle" class="english">Pre-trained Models</text>
+  
+  <text x="70" y="380" class="subsection">流行AI模型:</text>
+  <text x="70" y="400" class="english">• OpenAI (GPT-4, GPT-3.5)</text>
+  <text x="70" y="420" class="english">• Anthropic Claude</text>
+  <text x="70" y="440" class="english">• Google Gemini</text>
+  <text x="70" y="460" class="english">• Meta Llama</text>
+  
+  <text x="70" y="490" class="subsection">模型特性:</text>
+  <text x="70" y="510" class="subsection">• 上下文长度 (Context Length)</text>
+  <text x="70" y="530" class="subsection">• 知识截止日期</text>
+  <text x="70" y="550" class="subsection">• 定价模型: $/1K tokens</text>
+  
+  <!-- OpenAI Platform -->
+  <rect x="460" y="310" width="350" height="250" class="api-box"/>
+  <text x="635" y="335" text-anchor="middle" class="section-title">OpenAI平台</text>
+  <text x="635" y="355" text-anchor="middle" class="english">OpenAI Platform</text>
+  
+  <text x="480" y="380" class="subsection">API使用:</text>
+  <text x="480" y="400" class="english">• Chat Completions API</text>
+  <text x="480" y="420" class="english">• Embeddings API</text>
+  <text x="480" y="440" class="english">• Fine-tuning API</text>
+  
+  <text x="480" y="470" class="subsection">令牌管理:</text>
+  <text x="480" y="490" class="formula">Cost = (input_tokens × $0.01 + output_tokens × $0.03)/1K</text>
+  <text x="480" y="510" class="subsection">• 最大令牌数限制</text>
+  <text x="480" y="530" class="subsection">• 令牌计数工具</text>
+  <text x="480" y="550" class="english">tiktoken库使用</text>
+  
+  <!-- AI Safety -->
+  <rect x="840" y="310" width="310" height="200" class="safety-box"/>
+  <text x="995" y="335" text-anchor="middle" class="section-title">AI安全与伦理</text>
+  <text x="995" y="355" text-anchor="middle" class="english">AI Safety/Ethics</text>
+  
+  <text x="860" y="380" class="subsection">安全问题:</text>
+  <text x="860" y="400" class="subsection">• 提示注入攻击</text>
+  <text x="860" y="420" class="subsection">• 偏见和公平性</text>
+  <text x="860" y="440" class="subsection">• 隐私保护</text>
+  
+  <text x="860" y="470" class="subsection">最佳实践:</text>
+  <text x="860" y="490" class="subsection">• 输入输出验证</text>
+  
+  <!-- Open Source AI -->
+  <rect x="50" y="590" width="300" height="200" class="ml-box"/>
+  <text x="200" y="615" text-anchor="middle" class="section-title">开源AI</text>
+  <text x="200" y="635" text-anchor="middle" class="english">Open Source AI</text>
+  
+  <text x="70" y="660" class="subsection">开源 vs 闭源模型:</text>
+  <text x="70" y="680" class="subsection">• 成本考虑</text>
+  <text x="70" y="700" class="subsection">• 定制能力</text>
+  <text x="70" y="720" class="subsection">• 隐私控制</text>
+  
+  <text x="70" y="750" class="english">平台:</text>
+  <text x="70" y="770" class="english">• Hugging Face Hub</text>
+  
+  <!-- Embeddings -->
+  <rect x="380" y="590" width="350" height="200" class="ml-box"/>
+  <text x="555" y="615" text-anchor="middle" class="section-title">嵌入与向量数据库</text>
+  <text x="555" y="635" text-anchor="middle" class="english">Embeddings/Vector DBs</text>
+  
+  <text x="400" y="660" class="subsection">嵌入用例:</text>
+  <text x="400" y="680" class="subsection">• 语义搜索 (Semantic Search)</text>
+  <text x="400" y="700" class="subsection">• 推荐系统</text>
+  <text x="400" y="720" class="subsection">• 异常检测</text>
+  
+  <text x="400" y="750" class="formula">similarity = cos(θ) = A·B/(||A|| ||B||)</text>
+  <text x="400" y="770" class="english">Vector DBs: Pinecone, Chroma, Weaviate</text>
+  
+  <!-- RAG Implementation -->
+  <rect x="760" y="590" width="390" height="200" class="ml-box"/>
+  <text x="955" y="615" text-anchor="middle" class="section-title">RAG实现</text>
+  <text x="955" y="635" text-anchor="middle" class="english">RAG Implementation</text>
+  
+  <text x="780" y="660" class="subsection">RAG流程:</text>
+  <text x="780" y="680" class="subsection">1. 文档分块 (Chunking)</text>
+  <text x="780" y="700" class="subsection">2. 向量化 (Embedding)</text>
+  <text x="780" y="720" class="subsection">3. 存储 (Vector Store)</text>
+  <text x="780" y="740" class="subsection">4. 检索 (Retrieval)</text>
+  <text x="780" y="760" class="subsection">5. 生成 (Generation)</text>
+  
+  <text x="780" y="780" class="formula">RAG(x) = Generator(x, Retriever(x, D))</text>
+  
+  <!-- AI Agents -->
+  <rect x="50" y="820" width="400" height="180" class="api-box"/>
+  <text x="250" y="845" text-anchor="middle" class="section-title">AI智能体</text>
+  <text x="250" y="865" text-anchor="middle" class="english">AI Agents</text>
+  
+  <text x="70" y="890" class="subsection">智能体能力:</text>
+  <text x="70" y="910" class="subsection">• 工具调用 (Tool Calling)</text>
+  <text x="70" y="930" class="subsection">• 多步推理</text>
+  <text x="70" y="950" class="subsection">• 记忆管理</text>
+  
+  <text x="70" y="980" class="english">实现方式: OpenAI Functions, Assistant API</text>
+  
+  <!-- Multimodal AI -->
+  <rect x="480" y="820" width="350" height="220" class="multimodal-box"/>
+  <text x="655" y="845" text-anchor="middle" class="section-title">多模态AI</text>
+  <text x="655" y="865" text-anchor="middle" class="english">Multimodal AI</text>
+  
+  <text x="500" y="890" class="subsection">任务类型:</text>
+  <text x="500" y="910" class="subsection">• 图像理解 (Vision API)</text>
+  <text x="500" y="930" class="subsection">• 图像生成 (DALL-E)</text>
+  <text x="500" y="950" class="subsection">• 语音处理 (Whisper)</text>
+  <text x="500" y="970" class="subsection">• 文本转语音 (TTS)</text>
+  
+  <text x="500" y="1000" class="subsection">技术栈:</text>
+  <text x="500" y="1020" class="english">• OpenAI Vision/Audio APIs</text>
+  
+  <!-- Implementation Frameworks -->
+  <rect x="860" y="820" width="290" height="180" class="api-box"/>
+  <text x="1005" y="845" text-anchor="middle" class="section-title">实现框架</text>
+  <text x="1005" y="865" text-anchor="middle" class="english">Frameworks</text>
+  
+  <text x="880" y="890" class="subsection">SDK选择:</text>
+  <text x="880" y="910" class="english">• LangChain</text>
+  <text x="880" y="930" class="english">• LlamaIndex</text>
+  <text x="880" y="950" class="english">• Haystack</text>
+  
+  <text x="880" y="980" class="subsection">直接API调用</text>
+  
+  <!-- Production Deployment -->
+  <rect x="50" y="1070" width="500" height="180" class="foundation-box"/>
+  <text x="300" y="1095" text-anchor="middle" class="section-title">生产环境部署</text>
+  <text x="300" y="1115" text-anchor="middle" class="english">Production Deployment</text>
+  
+  <text x="70" y="1140" class="subsection">性能优化:</text>
+  <text x="70" y="1160" class="formula">Latency = API_Call_Time + Processing_Time</text>
+  <text x="70" y="1180" class="subsection">• 缓存策略</text>
+  <text x="70" y="1200" class="subsection">• 负载均衡</text>
+  <text x="70" y="1220" class="subsection">• 错误处理和重试</text>
+  <text x="70" y="1240" class="english">监控: 延迟, 错误率, 成本</text>
+  
+  <!-- Testing and Evaluation -->
+  <rect x="580" y="1070" width="350" height="180" class="safety-box"/>
+  <text x="755" y="1095" text-anchor="middle" class="section-title">测试与评估</text>
+  <text x="755" y="1115" text-anchor="middle" class="english">Testing/Evaluation</text>
+  
+  <text x="600" y="1140" class="subsection">评估方法:</text>
+  <text x="600" y="1160" class="subsection">• 单元测试</text>
+  <text x="600" y="1180" class="subsection">• 集成测试</text>
+  <text x="600" y="1200" class="subsection">• A/B测试</text>
+  <text x="600" y="1220" class="subsection">• 人工评估</text>
+  <text x="600" y="1240" class="english">工具: pytest, LangSmith</text>
+  
+  <!-- Development Tools -->
+  <rect x="960" y="1070" width="190" height="140" class="foundation-box"/>
+  <text x="1055" y="1095" text-anchor="middle" class="section-title">开发工具</text>
+  
+  <text x="980" y="1120" class="subsection">AI代码编辑器:</text>
+  <text x="980" y="1140" class="english">• GitHub Copilot</text>
+  <text x="980" y="1160" class="english">• Cursor</text>
+  <text x="980" y="1180" class="english">• Replit</text>
+  <text x="980" y="1200" class="subsection">代码补全工具</text>
+  
+  <!-- Career Path -->
+  <rect x="200" y="1280" width="800" height="120" class="multimodal-box"/>
+  <text x="600" y="1305" text-anchor="middle" class="section-title">职业发展路径</text>
+  <text x="600" y="1325" text-anchor="middle" class="english">Career Development</text>
+  
+  <text x="220" y="1350" class="subsection">技能进阶: 初级开发 → AI应用集成 → 高级AI架构师 → AI产品经理</text>
+  <text x="220" y="1370" class="subsection">专业方向: NLP应用、计算机视觉、多模态系统、AI基础设施</text>
+  <text x="220" y="1390" class="english">认证: OpenAI, Google Cloud AI, AWS ML Specialty</text>
+  
+  <!-- Industry Applications -->
+  <rect x="50" y="1430" width="1100" height="100" class="ml-box"/>
+  <text x="600" y="1455" text-anchor="middle" class="section-title">行业应用</text>
+  <text x="600" y="1475" text-anchor="middle" class="english">Industry Applications</text>
+  
+  <text x="70" y="1500" class="subsection">垂直领域: 教育科技、医疗健康、金融服务、电商零售、内容创作</text>
+  <text x="70" y="1520" class="subsection">应用场景: 智能客服、内容生成、数据分析、自动化工作流、个性化推荐</text>
+  
+  <!-- Connection arrows -->
+  <path d="M 400 200 L 430 200" class="arrow"/>
+  <path d="M 750 200 L 780 200" class="arrow"/>
+  <path d="M 240 560 L 240 590" class="arrow"/>
+  <path d="M 555 790 L 555 820" class="arrow"/>
+  <path d="M 450 920 L 480 920" class="arrow"/>
+  <path d="M 300 1250 L 300 1280" class="arrow"/>
+  
+</svg>
