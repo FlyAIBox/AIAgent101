@@ -269,7 +269,7 @@ graph TB
 | **📊 评估平台** | Langfuse | 3.3.0 | 性能监控与评估 |
 | **📋 模型压测** | vLLM Benchmark | 0.8.5+ | 大模型推理服务压测 |
 | **🔄 工作流引擎** | n8n | 1.101.1 | 自动化流程编排 |
-| **🐍 运行环境** | Python/Docker/DockerCompose | 3.10+/20+ | 开发语言环境 |
+| **🐍 运行环境** | Python/Docker/DockerCompose | 3.10+/20+ | 开发环境 |
 
 
 ## 🏨 实战项目
