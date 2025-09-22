@@ -1,0 +1,169 @@
+<svg viewBox="0 0 1600 1200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 定义渐变和阴影 -->
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="foundationGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#45a049;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="advancedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF9800;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#F57C00;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="expertGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#E91E63;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#C2185B;stop-opacity:0.8" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
+    <style>
+      .title-text { font-family: '宋体', SimSun, serif; font-size: 28px; font-weight: bold; fill: white; }
+      .level-label { font-family: '宋体', SimSun, serif; font-size: 20px; font-weight: bold; fill: white; }
+      .project-title { font-family: '宋体', SimSun, serif; font-size: 16px; font-weight: bold; }
+      .project-content { font-family: '宋体', SimSun, serif; font-size: 13px; }
+      .skill-text { font-family: '宋体', SimSun, serif; font-size: 12px; font-weight: bold; }
+      .formula { font-family: '宋体', SimSun, serif; font-size: 14px; font-style: italic; }
+    </style>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1600" height="1200" fill="#f8f9fa"/>
+  
+  <!-- 标题区域 -->
+  <rect x="0" y="0" width="1600" height="100" fill="url(#headerGrad)" filter="url(#shadow)"/>
+  <text x="800" y="60" text-anchor="middle" class="title-text">零基础实战AI Agent--10大实战项目</text>
+
+  <!-- 技能发展曲线公式 -->
+  <text x="80" y="140" class="formula">技能发展模型：技能水平 = 基础能力 + 项目经验积累 × 学习效率</text>
+  <text x="80" y="160" class="project-content" fill="#666">其中项目复杂度递增，学习效率随经验提升</text>
+
+  <!-- 基础层 (项目1-3) -->
+  <rect x="80" y="200" width="1440" height="240" rx="15" fill="url(#foundationGrad)" filter="url(#shadow)"/>
+  <text x="120" y="235" class="level-label">基础构建层</text>
+
+  <!-- 项目1 -->
+  <rect x="120" y="260" width="420" height="160" rx="10" fill="white" opacity="0.95" stroke="#4CAF50" stroke-width="3"/>
+  <text x="140" y="290" class="project-title" fill="#2E7D32">项目1：旅行智能体原型构建</text>
+  <text x="140" y="315" class="project-content">上：打造第一个问答助手</text>
+  <text x="160" y="335" class="project-content">（Python脚本 + 硬编码知识库）</text>
+  <text x="140" y="355" class="project-content">下：优化提示词，让助手更"聪明"</text>
+  <text x="140" y="385" class="skill-text" fill="#1976D2">核心技能：提示词工程与API调用</text>
+  <text x="140" y="405" class="project-content" fill="#FF5722">收获：掌握提示词与API调用的基础能力</text>
+
+  <!-- 项目2 -->
+  <rect x="580" y="260" width="420" height="160" rx="10" fill="white" opacity="0.95" stroke="#4CAF50" stroke-width="3"/>
+  <text x="600" y="290" class="project-title" fill="#2E7D32">项目2：增强型旅行规划助手</text>
+  <text x="600" y="315" class="project-content">上：编写可调用的工具函数（航班、酒店查询）</text>
+  <text x="600" y="335" class="project-content">中：连接"大脑"和"工具"，让智能体正确调用</text>
+  <text x="600" y="355" class="project-content">下：端到端集成，构建获取动态信息的完整应用</text>
+  <text x="600" y="385" class="skill-text" fill="#1976D2">核心技能：函数调用与工具链整合</text>
+  <text x="600" y="405" class="project-content" fill="#FF5722">收获：具备函数调用和工具链整合的实战经验</text>
+
+  <!-- 项目3 -->
+  <rect x="1040" y="260" width="420" height="160" rx="10" fill="white" opacity="0.95" stroke="#4CAF50" stroke-width="3"/>
+  <text x="1060" y="290" class="project-title" fill="#2E7D32">项目3：高性能旅行模型服务</text>
+  <text x="1060" y="315" class="project-content">上：将旅行助手部署到vLLM</text>
+  <text x="1060" y="335" class="project-content">下：参数优化 + 压测验证性能提升</text>
+  <text x="1060" y="365" class="skill-text" fill="#1976D2">核心技能：高性能推理与优化部署</text>
+  <text x="1060" y="385" class="formula" fill="#FF5722">吞吐量 = 批次大小 × 模型效率</text>
+  <text x="1060" y="405" class="project-content" fill="#FF5722">收获：掌握高性能推理部署与调优的工程化方法</text>
+
+  <!-- 进阶层 (项目4-7) -->
+  <rect x="80" y="480" width="1440" height="320" rx="15" fill="url(#advancedGrad)" filter="url(#shadow)"/>
+  <text x="120" y="515" class="level-label">进阶应用层</text>
+
+  <!-- 项目4 -->
+  <rect x="120" y="540" width="330" height="180" rx="10" fill="white" opacity="0.95" stroke="#FF9800" stroke-width="3"/>
+  <text x="140" y="570" class="project-title" fill="#E65100">项目4：全功能旅行MCP智能体</text>
+  <text x="140" y="595" class="project-content">上：需求拆解与架构设计</text>
+  <text x="140" y="615" class="project-content">中：构建智能体团队 + 集成MCP工具链</text>
+  <text x="140" y="635" class="project-content">下：端到端联调 + 前后端开发</text>
+  <text x="140" y="655" class="project-content">优化：提升对模糊需求的理解能力</text>
+  <text x="140" y="680" class="skill-text" fill="#1976D2">核心技能：多智能体协作与MCP协议</text>
+  <text x="140" y="700" class="project-content" fill="#FF5722">收获：掌握多智能体协作应用</text>
+
+  <!-- 项目5 -->
+  <rect x="480" y="540" width="330" height="180" rx="10" fill="white" opacity="0.95" stroke="#FF9800" stroke-width="3"/>
+  <text x="500" y="570" class="project-title" fill="#E65100">项目5：多角色协作旅行智能体</text>
+  <text x="500" y="595" class="project-content">上：智能体团队组建与任务分配</text>
+  <text x="500" y="615" class="project-content">中：实现路线规划 → 自动预订</text>
+  <text x="500" y="635" class="project-content">下：预算优化 + 最终方案生成</text>
+  <text x="500" y="655" class="project-content">优化：动态行程调整与反馈处理</text>
+  <text x="500" y="675" class="project-content">进阶：扩展新角色（如游记撰写师）</text>
+  <text x="500" y="700" class="skill-text" fill="#1976D2">核心技能：多角色架构设计与协作</text>
+
+  <!-- 项目6 -->
+  <rect x="840" y="540" width="330" height="180" rx="10" fill="white" opacity="0.95" stroke="#FF9800" stroke-width="3"/>
+  <text x="860" y="570" class="project-title" fill="#E65100">项目6：大模型高效微调与定制</text>
+  <text x="860" y="595" class="project-content">上：数据集准备与微调环境搭建</text>
+  <text x="860" y="615" class="project-content">中：运行微调并进行初步评估</text>
+  <text x="860" y="635" class="project-content">下：模型量化优化与效果评估</text>
+  <text x="860" y="655" class="project-content">进阶：不同模型对比微调</text>
+  <text x="860" y="675" class="project-content">部署：微调模型服务化部署</text>
+  <text x="860" y="700" class="skill-text" fill="#1976D2">核心技能：模型微调与量化优化</text>
+
+  <!-- 项目7 -->
+  <rect x="1200" y="540" width="330" height="180" rx="10" fill="white" opacity="0.95" stroke="#FF9800" stroke-width="3"/>
+  <text x="1220" y="570" class="project-title" fill="#E65100">项目7：生产环境部署</text>
+  <text x="1220" y="595" class="project-content">上：编写容器化配置文件</text>
+  <text x="1220" y="615" class="project-content">中：一键部署与服务联调</text>
+  <text x="1220" y="635" class="project-content">下：监控系统部署与配置</text>
+  <text x="1220" y="655" class="project-content">进阶：API网关安全加固</text>
+  <text x="1220" y="675" class="project-content">运维：集中式日志收集与排查</text>
+  <text x="1220" y="700" class="skill-text" fill="#1976D2">核心技能：企业级部署与运维</text>
+
+  <!-- 微调优化公式 -->
+  <text x="480" y="770" class="formula" fill="#D84315">微调损失函数 = 预测损失 + 正则化项</text>
+
+  <!-- 专家层 (项目8-10) -->
+  <rect x="80" y="840" width="1440" height="240" rx="15" fill="url(#expertGrad)" filter="url(#shadow)"/>
+  <text x="120" y="875" class="level-label">专家实战层</text>
+
+  <!-- 项目8 -->
+  <rect x="120" y="900" width="420" height="160" rx="10" fill="white" opacity="0.95" stroke="#E91E63" stroke-width="3"/>
+  <text x="140" y="930" class="project-title" fill="#AD1457">项目8：AI旅行智能体效果评估</text>
+  <text x="140" y="955" class="project-content">上：集成评估工具，搭建基础设施</text>
+  <text x="140" y="975" class="project-content">中：自动化评估 + 数据驱动分析</text>
+  <text x="140" y="995" class="project-content">下：撰写评估报告与优化建议</text>
+  <text x="140" y="1020" class="skill-text" fill="#1976D2">核心技能：科学评估与数据分析</text>
+  <text x="140" y="1040" class="formula" fill="#FF5722">评估得分 = 准确度 + 相关性 + 效率</text>
+
+  <!-- 项目9 -->
+  <rect x="580" y="900" width="420" height="160" rx="10" fill="white" opacity="0.95" stroke="#E91E63" stroke-width="3"/>
+  <text x="600" y="930" class="project-title" fill="#AD1457">项目9：零代码构建智能体</text>
+  <text x="600" y="955" class="project-content">上：用户需求采集 + 自动化搜索</text>
+  <text x="600" y="975" class="project-content">中：AI分析并生成个性化推荐</text>
+  <text x="600" y="995" class="project-content">下：生成邮件并自动发送</text>
+  <text x="600" y="1020" class="skill-text" fill="#1976D2">核心技能：低代码开发与自动化</text>
+  <text x="600" y="1040" class="project-content" fill="#FF5722">收获：掌握低代码工具快速落地能力</text>
+
+  <!-- 项目10 -->
+  <rect x="1040" y="900" width="420" height="160" rx="10" fill="white" opacity="0.95" stroke="#E91E63" stroke-width="3"/>
+  <text x="1060" y="930" class="project-title" fill="#AD1457">项目10：性能压测与优化</text>
+  <text x="1060" y="955" class="project-content">上：端到端性能压测与数据分析</text>
+  <text x="1060" y="975" class="project-content">下：提交性能优化报告与解决方案</text>
+  <text x="1060" y="1005" class="skill-text" fill="#1976D2">核心技能：性能测试与瓶颈优化</text>
+  <text x="1060" y="1025" class="formula" fill="#FF5722">QPS = 并发用户数 / 平均响应时间</text>
+  <text x="1060" y="1045" class="project-content" fill="#FF5722">收获：掌握高并发性能诊断与优化</text>
+
+  <!-- 学习路径箭头 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="12" markerHeight="8" 
+     refX="12" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#2196F3" />
+    </marker>
+  </defs>
+  
+  <!-- 垂直箭头 -->
+  <path d="M 800 440 L 800 460" stroke="#2196F3" stroke-width="4" marker-end="url(#arrowhead)"/>
+  <path d="M 800 800 L 800 820" stroke="#2196F3" stroke-width="4" marker-end="url(#arrowhead)"/>
+  
+  <!-- 总结框 -->
+  <rect x="80" y="1120" width="1440" height="60" rx="10" fill="#E3F2FD" stroke="#2196F3" stroke-width="3"/>
+  <text x="800" y="1145" text-anchor="middle" class="project-title" fill="#1565C0">完整学习路径：从零基础到AI智能体开发专家的系统性成长体系</text>
+  <text x="800" y="1165" text-anchor="middle" class="project-content" fill="#0D47A1">核心技能递进：API集成 → 函数调用 → 多智能体 → 模型微调 → 生产部署 → 效果评估</text>
+</svg>

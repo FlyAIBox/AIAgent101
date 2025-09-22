@@ -1,0 +1,278 @@
+<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title-text { font-family: 'SimSun', serif; font-size: 24px; font-weight: bold; fill: #2c3e50; }
+      .stage-title { font-family: 'SimSun', serif; font-size: 14px; font-weight: bold; fill: #2c3e50; }
+      .stage-subtitle { font-family: 'Times New Roman', serif; font-size: 12px; fill: #34495e; }
+      .content-text { font-family: 'SimSun', serif; font-size: 11px; fill: #2c3e50; }
+      .formula-text { font-family: 'Times New Roman', serif; font-size: 10px; fill: #7f8c8d; }
+      .duration-text { font-family: 'Times New Roman', serif; font-size: 10px; fill: #e74c3c; font-weight: bold; }
+      
+      .stage-bg { fill: #f8f9fa; stroke: #dee2e6; stroke-width: 2; }
+      .icon-bg { fill: #ffffff; stroke: #3498db; stroke-width: 2; }
+      .content-bg { fill: #ffffff; stroke: #bdc3c7; stroke-width: 1; }
+      .formula-bg { fill: #fff3cd; stroke: #ffc107; stroke-width: 1; }
+      
+      .stage1 { fill: #e8f4fd; stroke: #3498db; stroke-width: 2; }
+      .stage2 { fill: #fff2e8; stroke: #f39c12; stroke-width: 2; }
+      .stage3 { fill: #f0e8ff; stroke: #9b59b6; stroke-width: 2; }
+      .stage4 { fill: #e8f8e8; stroke: #27ae60; stroke-width: 2; }
+      .stage5 { fill: #fdf2e9; stroke: #e67e22; stroke-width: 2; }
+      .stage6 { fill: #fdedec; stroke: #e74c3c; stroke-width: 2; }
+      
+      .shadow { filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1)); }
+    </style>
+  </defs>
+  
+  <!-- 主标题 -->
+  <text x="700" y="35" text-anchor="middle" class="title-text">AI Agent 构建六步流程</text>
+  
+  <!-- 第一阶段：定义 -->
+  <rect x="50" y="70" width="200" height="750" class="stage1 shadow" rx="15"/>
+  
+  <!-- 图标区域 -->
+  <rect x="70" y="90" width="160" height="60" class="icon-bg shadow" rx="10"/>
+  <text x="150" y="115" text-anchor="middle" class="stage-title">第一步：定义</text>
+  <text x="150" y="135" text-anchor="middle" class="stage-subtitle">Define Use Cases</text>
+  
+  <!-- 时长 -->
+  <text x="150" y="165" text-anchor="middle" class="duration-text">时长：1-2周</text>
+  
+  <!-- 描述 -->
+  <rect x="65" y="180" width="170" height="80" class="content-bg" rx="5"/>
+  <text x="75" y="200" class="content-text">识别现实可行的Agent</text>
+  <text x="75" y="215" class="content-text">用例，收集5-10个具体</text>
+  <text x="75" y="230" class="content-text">场景，Agent应能处理</text>
+  <text x="75" y="245" class="content-text">的任务范围</text>
+  
+  <!-- 输出 -->
+  <rect x="65" y="275" width="170" height="60" class="content-bg" rx="5"/>
+  <text x="75" y="295" class="content-text">输出：清晰的Agent任务</text>
+  <text x="75" y="310" class="content-text">范围和具体用例</text>
+  <text x="75" y="325" class="content-text">场景集合</text>
+  
+  <!-- 相关人员 -->
+  <rect x="65" y="350" width="170" height="45" class="content-bg" rx="5"/>
+  <text x="75" y="370" class="content-text">相关人员：产品负责人</text>
+  <text x="75" y="385" class="content-text">领域专家</text>
+  
+  <!-- 示例 -->
+  <rect x="65" y="410" width="170" height="120" class="content-bg" rx="5"/>
+  <text x="75" y="430" class="content-text">旅游规划Agent任务：</text>
+  <text x="75" y="445" class="content-text">• 根据预算制定行程</text>
+  <text x="75" y="460" class="content-text">• 推荐景点和餐厅</text>
+  <text x="75" y="475" class="content-text">• 预订酒店和交通</text>
+  <text x="75" y="490" class="content-text">• 优化路线规划</text>
+  <text x="75" y="505" class="content-text">• 处理特殊需求</text>
+  
+  <!-- 关键公式 -->
+  <rect x="65" y="545" width="170" height="60" class="formula-bg" rx="5"/>
+  <text x="75" y="565" class="content-text">成功率评估：</text>
+  <text x="150" y="580" text-anchor="middle" class="formula-text">Success_Rate = N_completed / N_total</text>
+  <text x="150" y="595" text-anchor="middle" class="formula-text">Target: > 85%</text>
+  
+  <!-- 第二阶段：设计标准操作流程 -->
+  <rect x="270" y="70" width="200" height="750" class="stage2 shadow" rx="15"/>
+  
+  <rect x="290" y="90" width="160" height="60" class="icon-bg shadow" rx="10"/>
+  <text x="370" y="115" text-anchor="middle" class="stage-title">第二步：设计SOP</text>
+  <text x="370" y="135" text-anchor="middle" class="stage-subtitle">Standard Operating Procedure</text>
+  
+  <text x="370" y="165" text-anchor="middle" class="duration-text">时长：1-2周</text>
+  
+  <rect x="285" y="180" width="170" height="80" class="content-bg" rx="5"/>
+  <text x="295" y="200" class="content-text">创建分步骤流程，</text>
+  <text x="295" y="215" class="content-text">将任务分解为人工</text>
+  <text x="295" y="230" class="content-text">可执行的清晰步骤</text>
+  <text x="295" y="245" class="content-text">和决策点</text>
+  
+  <rect x="285" y="275" width="170" height="60" class="content-bg" rx="5"/>
+  <text x="295" y="295" class="content-text">输出：详细的分步骤</text>
+  <text x="295" y="310" class="content-text">工作流程，包含识别</text>
+  <text x="295" y="325" class="content-text">的场景要素</text>
+  
+  <rect x="285" y="350" width="170" height="45" class="content-bg" rx="5"/>
+  <text x="295" y="370" class="content-text">相关人员：产品经理</text>
+  <text x="295" y="385" class="content-text">领域专家</text>
+  
+  <rect x="285" y="410" width="170" height="150" class="content-bg" rx="5"/>
+  <text x="295" y="430" class="content-text">分步流程示例：</text>
+  <text x="295" y="445" class="content-text">• 分析用户需求和</text>
+  <text x="295" y="460" class="content-text">  预算约束</text>
+  <text x="295" y="475" class="content-text">• 搜索目的地信息</text>
+  <text x="295" y="490" class="content-text">  和可用资源</text>
+  <text x="295" y="505" class="content-text">• 生成个性化行程</text>
+  <text x="295" y="520" class="content-text">• 用户确认和调整</text>
+  <text x="295" y="535" class="content-text">• 执行预订操作</text>
+  
+  <rect x="285" y="575" width="170" height="60" class="formula-bg" rx="5"/>
+  <text x="295" y="595" class="content-text">复杂度评估：</text>
+  <text x="370" y="610" text-anchor="middle" class="formula-text">Complexity = Σ(steps × decisions)</text>
+  <text x="370" y="625" text-anchor="middle" class="formula-text">Target: ≤20 points</text>
+  
+  <!-- 第三阶段：构建核心提示MVP -->
+  <rect x="490" y="70" width="200" height="750" class="stage3 shadow" rx="15"/>
+  
+  <rect x="510" y="90" width="160" height="60" class="icon-bg shadow" rx="10"/>
+  <text x="590" y="115" text-anchor="middle" class="stage-title">第三步：构建MVP</text>
+  <text x="590" y="135" text-anchor="middle" class="stage-subtitle">Build MVP for Core Prompts</text>
+  
+  <text x="590" y="165" text-anchor="middle" class="duration-text">时长：1-2周</text>
+  
+  <rect x="505" y="180" width="170" height="80" class="content-bg" rx="5"/>
+  <text x="515" y="200" class="content-text">设计Agent架构；</text>
+  <text x="515" y="215" class="content-text">构建处理核心推理</text>
+  <text x="515" y="230" class="content-text">任务的提示词</text>
+  <text x="515" y="245" class="content-text">（Prompt）</text>
+  
+  <rect x="505" y="275" width="170" height="60" class="content-bg" rx="5"/>
+  <text x="515" y="295" class="content-text">输出：Agent架构和</text>
+  <text x="515" y="310" class="content-text">与静态数据配合</text>
+  <text x="515" y="325" class="content-text">的核心提示词</text>
+  
+  <rect x="505" y="350" width="170" height="45" class="content-bg" rx="5"/>
+  <text x="515" y="370" class="content-text">相关人员：产品经理</text>
+  <text x="515" y="385" class="content-text">AI和提示工程师</text>
+  
+  <rect x="505" y="410" width="170" height="130" class="content-bg" rx="5"/>
+  <text x="515" y="430" class="content-text">旅游Agent架构设计</text>
+  <text x="515" y="445" class="content-text">包含核心提示词，包括</text>
+  <text x="515" y="460" class="content-text">需求理解和行程生成；</text>
+  <text x="515" y="475" class="content-text">使用人工提供的目的地</text>
+  <text x="515" y="490" class="content-text">信息和示例行程数据</text>
+  <text x="515" y="505" class="content-text">进行测试验证</text>
+  
+  <rect x="505" y="555" width="170" height="75" class="formula-bg" rx="5"/>
+  <text x="515" y="575" class="content-text">提示词效果评估：</text>
+  <text x="590" y="590" text-anchor="middle" class="formula-text">Accuracy = TP / (TP + FP)</text>
+  <text x="590" y="605" text-anchor="middle" class="formula-text">Precision = TP / (TP + FP)</text>
+  <text x="590" y="620" text-anchor="middle" class="formula-text">F1 = 2 × P × R / (P + R)</text>
+  
+  <!-- 第四阶段：连接与编排 -->
+  <rect x="710" y="70" width="200" height="750" class="stage4 shadow" rx="15"/>
+  
+  <rect x="730" y="90" width="160" height="60" class="icon-bg shadow" rx="10"/>
+  <text x="810" y="115" text-anchor="middle" class="stage-title">第四步：连接编排</text>
+  <text x="810" y="135" text-anchor="middle" class="stage-subtitle">Connect And Orchestrate</text>
+  
+  <text x="810" y="165" text-anchor="middle" class="duration-text">时长：2-3周</text>
+  
+  <rect x="725" y="180" width="170" height="80" class="content-bg" rx="5"/>
+  <text x="735" y="200" class="content-text">连接实时数据源</text>
+  <text x="735" y="215" class="content-text">并构建编排逻辑</text>
+  <text x="735" y="230" class="content-text">实现端到端的</text>
+  <text x="735" y="245" class="content-text">Agent系统</text>
+  
+  <rect x="725" y="275" width="170" height="60" class="content-bg" rx="5"/>
+  <text x="735" y="295" class="content-text">输出：具备实时数据</text>
+  <text x="735" y="310" class="content-text">连接的端到端</text>
+  <text x="735" y="325" class="content-text">Agent系统</text>
+  
+  <rect x="725" y="350" width="170" height="45" class="content-bg" rx="5"/>
+  <text x="735" y="370" class="content-text">相关人员：</text>
+  <text x="735" y="385" class="content-text">工程师</text>
+  
+  <rect x="725" y="410" width="170" height="120" class="content-bg" rx="5"/>
+  <text x="735" y="430" class="content-text">集成示例：</text>
+  <text x="735" y="445" class="content-text">• 天气平台API</text>
+  <text x="735" y="460" class="content-text">• 订票平台API</text>
+  <text x="735" y="475" class="content-text">• 高德、百度地图</text>
+  <text x="735" y="490" class="content-text">• 点评网站获取</text>
+  <text x="735" y="505" class="content-text">  景点和餐厅信息</text>
+  
+  <rect x="725" y="545" width="170" height="75" class="formula-bg" rx="5"/>
+  <text x="735" y="565" class="content-text">系统响应时间：</text>
+  <text x="810" y="580" text-anchor="middle" class="formula-text">Response_Time = T_processing + T_io</text>
+  <text x="810" y="595" text-anchor="middle" class="formula-text">SLA Target: ≤ 2000ms</text>
+  <text x="810" y="610" text-anchor="middle" class="formula-text">Availability: > 99.5%</text>
+  
+  <!-- 第五阶段：测试与迭代 -->
+  <rect x="930" y="70" width="200" height="750" class="stage5 shadow" rx="15"/>
+  
+  <rect x="950" y="90" width="160" height="60" class="icon-bg shadow" rx="10"/>
+  <text x="1030" y="115" text-anchor="middle" class="stage-title">第五步：测试迭代</text>
+  <text x="1030" y="135" text-anchor="middle" class="stage-subtitle">Test And Iterate</text>
+  
+  <text x="1030" y="165" text-anchor="middle" class="duration-text">时长：1-2个月</text>
+  
+  <rect x="945" y="180" width="170" height="80" class="content-bg" rx="5"/>
+  <text x="955" y="200" class="content-text">针对示例评估Agent；</text>
+  <text x="955" y="215" class="content-text">识别失败案例并</text>
+  <text x="955" y="230" class="content-text">迭代改进可靠性</text>
+  <text x="955" y="245" class="content-text">和性能</text>
+  
+  <rect x="945" y="275" width="170" height="60" class="content-bg" rx="5"/>
+  <text x="955" y="295" class="content-text">输出：经过系统化</text>
+  <text x="955" y="310" class="content-text">测试，性能得到</text>
+  <text x="955" y="325" class="content-text">验证的Agent</text>
+  
+  <rect x="945" y="350" width="170" height="45" class="content-bg" rx="5"/>
+  <text x="955" y="370" class="content-text">相关人员：产品经理</text>
+  <text x="955" y="385" class="content-text">QA工程师</text>
+  
+  <rect x="945" y="410" width="170" height="120" class="content-bg" rx="5"/>
+  <text x="955" y="430" class="content-text">根据成功标准评估</text>
+  <text x="955" y="445" class="content-text">旅游规划：行程合理性</text>
+  <text x="955" y="460" class="content-text">预算准确性和用户</text>
+  <text x="955" y="475" class="content-text">满意度评分</text>
+  
+  <rect x="945" y="545" width="170" height="75" class="formula-bg" rx="5"/>
+  <text x="955" y="565" class="content-text">质量指标：</text>
+  <text x="1030" y="580" text-anchor="middle" class="formula-text">Quality_Score = w₁A + w₂P + w₃R</text>
+  <text x="1030" y="595" text-anchor="middle" class="formula-text">A = Accuracy, P = Precision</text>
+  <text x="1030" y="610" text-anchor="middle" class="formula-text">R = Response_Quality</text>
+  
+  <!-- 第六阶段：部署、扩展与优化 -->
+  <rect x="1150" y="70" width="200" height="750" class="stage6 shadow" rx="15"/>
+  
+  <rect x="1170" y="90" width="160" height="60" class="icon-bg shadow" rx="10"/>
+  <text x="1250" y="115" text-anchor="middle" class="stage-title">第六步：部署优化</text>
+  <text x="1250" y="135" text-anchor="middle" class="stage-subtitle">Deploy, Scale And Refine</text>
+  
+  <text x="1250" y="165" text-anchor="middle" class="duration-text">时长：持续进行</text>
+  
+  <rect x="1165" y="180" width="170" height="80" class="content-bg" rx="5"/>
+  <text x="1175" y="200" class="content-text">部署Agent并监控</text>
+  <text x="1175" y="215" class="content-text">用户交互情况；</text>
+  <text x="1175" y="230" class="content-text">基于真实使用模式</text>
+  <text x="1175" y="245" class="content-text">持续优化</text>
+  
+  <rect x="1165" y="275" width="170" height="60" class="content-bg" rx="5"/>
+  <text x="1175" y="295" class="content-text">输出：功能扩展的</text>
+  <text x="1175" y="310" class="content-text">改进型Agent</text>
+  
+  <rect x="1165" y="350" width="170" height="45" class="content-bg" rx="5"/>
+  <text x="1175" y="370" class="content-text">相关人员：产品经理</text>
+  <text x="1175" y="385" class="content-text">工程师，技术支持</text>
+  
+  <rect x="1165" y="410" width="170" height="120" class="content-bg" rx="5"/>
+  <text x="1175" y="430" class="content-text">监控用户行程执行</text>
+  <text x="1175" y="445" class="content-text">情况和反馈。迭代</text>
+  <text x="1175" y="460" class="content-text">优化推荐算法并</text>
+  <text x="1175" y="475" class="content-text">扩展目的地覆盖</text>
+  
+  <rect x="1165" y="545" width="170" height="75" class="formula-bg" rx="5"/>
+  <text x="1175" y="565" class="content-text">运营指标：</text>
+  <text x="1250" y="580" text-anchor="middle" class="formula-text">ROI = (Benefits - Costs) / Costs</text>
+  <text x="1250" y="595" text-anchor="middle" class="formula-text">MTBF = Total_Time / Failures</text>
+  <text x="1250" y="610" text-anchor="middle" class="formula-text">User_Satisfaction > 4.5/5</text>
+  
+  <!-- 流程箭头指示 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3498db"/>
+    </marker>
+  </defs>
+  
+  <!-- 水平流程指示箭头 -->
+  <path d="M 250 445 Q 265 440 280 445" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 470 445 Q 485 440 500 445" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 690 445 Q 705 440 720 445" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 910 445 Q 925 440 940 445" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 1130 445 Q 1145 440 1160 445" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- 底部总结 -->
+  <rect x="50" y="840" width="1300" height="50" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" rx="10"/>
+  <text x="700" y="860" text-anchor="middle" class="stage-title">核心原则</text>
+  <text x="700" y="880" text-anchor="middle" class="content-text">从现实用例出发 → 分步骤设计 → MVP验证 → 系统集成 → 持续测试 → 生产优化</text>
+</svg>
