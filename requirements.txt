@@ -1,0 +1,182 @@
+# AIAgent101 智能体项目依赖总览
+# 说明：各版本均源自仓库现有配置，旨在帮助大模型技术初学者理解依赖职责并快速上手。
+
+# --- LangGraph 多角色智能体栈 ---
+# LangGraph 通过图结构协调多角色流程，下列组件负责链式调度、状态管理与工具扩展。
+# 定义 LangChain 链式调用、消息与工具接口的核心抽象，为图结构智能体提供统一调度基础。
+langchain-core==0.3.75
+# 提供社区维护的工具与向量数据库适配器，方便智能体快速连接常用外部能力。
+langchain-community==0.3.29
+# 封装 OpenAI 模型在 LangChain 中的调用流程，简化大模型接入与参数管理。
+langchain-openai==0.3.32
+# LangChain 入口合集，负责组合链式组件、提示模板与记忆模块，搭建完整智能体工作流。
+langchain==0.3.27
+# 提供图结构工作流引擎，可将复杂智能体拆分为节点与边，实现可视化的任务控制。
+langgraph==0.6.7
+# 内置官方预构建节点与函数，助力初学者复用成熟图谱模板加速落地。
+langgraph-prebuilt==0.6.4
+# 为 LangGraph 提供 SQLite 检查点后端，使对话状态得以持久化与复盘。
+langgraph-checkpoint-sqlite==2.0.11
+# LangGraph CLI 工具（含内存后端），用于本地调试、部署打包与运行期观测。
+langgraph-cli==0.4.2
+# LangGraph 官方 SDK，统一托管环境中的调用、版本管理与遥测上报。
+langgraph-sdk==0.2.6
+# LangSmith 观测平台 SDK，用于记录链路日志、自动评估与回放智能体表现。
+langsmith==0.4.31
+# 接入 Tavily 实时搜索 API，增强智能体的网页检索与事实查证能力。
+tavily-python==0.7.12
+# 访问维基百科语料，满足多轮对话中的通识问答与背景信息诉求。
+wikipedia==1.4.0
+# 提供结构化信息抽取能力，帮助智能体更新用户画像与长期记忆。
+trustcall==0.0.39
+# OpenAI 兼容分词器，用于估算 token 成本并精准控制提示长度。
+tiktoken==0.11.0
+
+# --- MCP 集成栈 ---
+# Model Context Protocol 负责标准化模型与外部上下文通信，以下依赖完善其网络与适配能力。
+# MCP 官方 SDK，搭建模型上下文服务器、统一工具调用协议的基础。
+mcp==1.5.0
+# 现代异步 HTTP 客户端，为智能体访问 REST 服务与 MCP 后端提供高性能管道。
+httpx==0.28.1
+# Python 原生异步事件循环库，支撑多路并发任务与流式响应处理。
+asyncio==3.4.3
+# OpenAI 官方客户端，调用 GPT 系列模型执行对话、工具规划与评测。
+openai==1.107.0
+# LangChain 与 MCP 的适配层，使图工作流可以无缝复用 MCP 工具生态。
+langchain-mcp-adapters==0.0.9
+
+# --- Langfuse 观测评估栈 ---
+# 该组合用于记录调用链、监控安全风险，并对智能体输出进行制度化评估。
+# Langfuse 平台 SDK，采集模型日志、指标与标签，构建可视化评估面板。
+langfuse==3.3.0
+# 提供输入输出安全过滤策略，防御越权提问与敏感信息泄露。
+llm-guard==0.3.16
+
+# --- LLaMA Factory 微调与服务栈 ---
+# 支撑国产加速环境中的大模型微调、部署与运维，是离线训练与在线推理的核心依赖。
+# Hugging Face Transformers 主库，提供主流模型结构与推理 API。
+transformers==4.45.0
+# Rust 实现的高性能分词器，为大模型训练提供高吞吐文本编码。
+tokenizers==0.20.3
+# 管理大规模数据集的加载、切分与缓存，简化训练样本处理流程。
+datasets==3.2.0
+# 多卡与混合精度训练调度器，自动适配不同硬件资源。
+accelerate==1.3.0
+# Parameter-Efficient Fine-Tuning 工具箱，实现 LoRA 等轻量微调策略。
+peft==0.15.1
+# 基于强化学习的训练框架，用于执行 PPO、DPO 等对齐算法。
+trl==0.9.6
+# 采用安全内存映射格式保存权重，提升加载速度并规避 pickle 风险。
+safetensors==0.5.3
+# 通用子词分词器，实现多语言数据的统一编码。
+sentencepiece==0.2.0
+# 科学计算基础库，为张量运算与特征工程提供底层数组结构。
+numpy==1.25.0
+# 提供优化、积分等高级数值算法，支撑训练过程中的数学运算。
+scipy==1.15.3
+# 处理标注数据与评估结果的表格结构，方便特征统计与可视化。
+pandas==2.2.3
+# 机器学习工具箱，支持数据预处理与评测指标计算。
+scikit-learn==1.6.1
+# 异步 Web 框架，用于封装推理 API 与管理微调服务。
+fastapi==0.115.12
+# 高性能 ASGI 服务器，部署 FastAPI 推理端点的运行时。
+uvicorn==0.34.2
+# 快速搭建交互式前端界面，便于展示模型能力与收集反馈。
+gradio==5.25.0
+# 经典同步 HTTP 客户端，适合调用第三方同步服务。
+requests==2.32.5
+# 异步 HTTP 客户端，实现批量测试与流式推理请求。
+aiohttp==3.11.18
+# 异步文件读写库，便于非阻塞地处理上传数据与日志。
+aiofiles==24.1.0
+# 解析 YAML 配置文件，管理训练与部署参数。
+pyyaml==6.0.2
+# 从 .env 文件加载密钥与环境变量，确保配置与代码解耦。
+python-dotenv==1.1.0
+# 支持层次化合并的配置系统，方便管理多实验超参。
+omegaconf==2.3.0
+# 魔搭 ModelScope 平台 SDK，用于下载模型、数据集与工具链。
+modelscope==1.28.2
+# 数据校验与序列化框架，保证配置、请求与响应结构的正确性。
+pydantic==2.10.6
+# 监控 CPU、内存等系统资源，便于推理服务做健康检查。
+psutil==7.0.0
+# 暴露 Prometheus 指标，支持生产环境中的可观测性需求。
+prometheus-client==0.22.0
+# 国产训练监控平台客户端，记录实验指标与曲线。
+swanlab==0.6.4
+# 终端富文本渲染库，使日志输出更易读且便于调试。
+rich==14.0.0
+# 进度条组件，实时展示数据处理与训练进度。
+tqdm==4.67.1
+# Python 测试框架，保障智能体组件的单元级可靠性。
+pytest==8.3.5
+# 为 pytest 提供异步测试支持，覆盖协程逻辑。
+pytest-asyncio==0.26.0
+# 静态代码分析与格式检查工具，维护代码风格与质量。
+ruff==0.11.11
+
+# --- vLLM 压测与可视化栈 ---
+# 面向推理性能评估所需的数据处理与图表展示工具，辅助定位吞吐瓶颈。
+# 支持列式数据与内存共享，提升大规模评测结果的读写效率。
+pyarrow==15.0.2
+# 生成静态可视化图表，用于对比不同模型与参数设置。
+matplotlib==3.7.0
+# 基于 matplotlib 的统计绘图库，突出分布特征与相关性。
+seaborn==0.11.0
+# 交互式可视化工具，方便在浏览器中探索压测指标。
+plotly==5.0.0
+# 图像处理库，用于生成与保存多模态评测样本。
+pillow==11.3.0
+# 管理模型与数据的云端版本，便于共享评测工件。
+huggingface-hub==0.34.1
+
+# --- 通用数据与检索工具 ---
+# 支撑文档解析、向量检索与语言识别的常用库，丰富智能体的知识入口。
+# 解析 HTML 文档，帮助智能体提取网页结构化内容。
+beautifulsoup4==4.14.2
+# 访问 LangChain Hub 上的提示模板与链路配置，便于复用社区资源。
+langchainhub==0.1.20
+# 提供多种文本切分策略，为向量化检索准备合适的片段。
+langchain-text-splitters==0.2.1
+# 连接 Anthropic Claude 系列模型，为多供应商策略提供选择。
+langchain-anthropic==0.1.15
+# Chroma 向量数据库适配器，实现本地知识库的高效检索。
+langchain-chroma==0.1.2
+# 自动检测文本语言，便于多语言场景下选择合适模型与提示。
+langdetect==1.0.9
+
+# --- 【大模型微调-海光DCU版本】 ---
+# 以下链接指向 DAS 优化版本的二进制包，需在匹配的 DTK2504 环境中手动安装。
+# # vLLM 推理引擎的 DCU 优化版本，用于压测与服务部署。
+# https://download.sourcefind.cn:65024/file/4/vllm/DAS1.5/vllm-0.6.2+das.opt3.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # PyTorch 主库的 DAS 定制版，为 DCU 提供算子优化。
+# https://download.sourcefind.cn:65024/file/4/pytorch/DAS1.5/torch-2.4.1+das.opt2.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # TorchVision DAS 版本，支持视觉模型推理与数据增强。
+# https://download.sourcefind.cn:65024/file/4/vision/DAS1.5/torchvision-0.19.1+das.opt2.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # LMSlim 内存优化组件，提升大模型在 DCU 上的加载效率。
+# https://download.sourcefind.cn:65024/file/4/lmslim/DAS1.5/lmslim-0.2.1+das.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # FlashAttention DAS 版本，加速注意力计算以减轻延迟。
+# https://download.sourcefind.cn:65024/file/4/flash_attn/DAS1.5/flash_attn-2.6.1+das.opt4.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # DeepSpeed DAS 发行版，提供 ZeRO 等分布式优化策略。
+# https://download.sourcefind.cn:65024/file/4/deepspeed/DAS1.5/deepspeed-0.14.2+das.opt2.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # Triton 编译器定制版，支持高性能自定义算子开发。
+# https://download.sourcefind.cn:65024/file/4/triton/DAS1.5/triton-3.0.0+das.opt4.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+# # Transformer Engine DAS 版本，优化半精度矩阵运算。
+# https://download.sourcefind.cn:65024/file/4/transformer_engine/DAS1.5/transformer_engine-1.9.0+das.opt2.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
+
+# --- 可选：Travel Agent 旧版栈（需独立环境，避免与主栈冲突） ---
+# langchain==0.2.3  # 旧版 LangChain 主包，对应早期 Travel Agent 示例。
+# langchain-anthropic==0.1.15  # 旧版 Claude 适配层，仅在复刻演示时使用。
+# langchain-chroma==0.1.2  # 早期 Chroma 接口签名，可能与新版本不兼容。
+# langchain-community==0.2.4  # 旧版社区集成，依赖结构与当前主线不同。
+# langchain-core==0.2.5  # 旧版核心抽象，仅用于回溯历史教程。
+# langchain-openai==0.1.13  # 旧版 OpenAI 适配层，请勿与主线混用。
+# langchain-text-splitters==0.2.1  # 旧版文本切分策略，与主线版本一致可复用。
+# langchainhub==0.1.20  # 与主线一致，保留以兼容旧教程配置。
+# langdetect==1.0.9  # 与主线一致，可直接复用。
+# langgraph==0.1.5  # 早期 LangGraph 版本，API 差异较大。
+# numpy==1.26.4  # Travel Agent 栈使用的数值库版本。
+# openai==1.35.7  # 与旧版示例配套的 OpenAI 客户端。
+# python-dotenv==1.0.1  # 旧版配置加载库，可与主线共存。
