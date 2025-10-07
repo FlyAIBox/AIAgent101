@@ -187,7 +187,7 @@ def setup_notebook_environment():
         print("📦 正在安装OpenAI库...")
         import subprocess
         import sys
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "openai==1.61.0"])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "openai==1.107.0"])
         import openai
     
     # 设置客户端
