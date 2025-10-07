@@ -10,24 +10,24 @@
 
 2. **激活**您要使用的 Conda 环境。
 
-   - 如果环境已存在（例如 `flyai_agent_in_action`）：
+   - 如果环境已存在（例如 `agent101`）：
 
      ```Bash
-     conda activate flyai_agent_in_action
+     conda activate agent101
      ```
 
    - **（可选）** 如果您需要创建一个全新的环境：
 
      ```Bash
-     conda create -n flyai_agent_in_action python=3.12.11 -y
-     conda activate flyai_agent_in_action
+     conda create -n agent101 python=3.12.11 -y
+     conda activate agent101
      ```
 
 #### 步骤二：安装 Jupyter 内核桥梁 (`ipykernel`)
 
 Jupyter Notebook 需要一个特殊的包来与您的 Conda 环境进行通信，这个包就是 `ipykernel`。
 
-在您**已激活**的 Conda 环境（例如 `(flyai_agent_in_action)`）中执行以下命令：
+在您**已激活**的 Conda 环境（例如 `(agent101)`）中执行以下命令：
 
 ```Bash
 conda install ipykernel -y
@@ -45,19 +45,19 @@ conda install ipykernel -y
 在**已激活**的环境中执行注册命令：
 
 ```Bash
-python -m ipykernel install --user --name=flyai_agent_in_action --display-name="Python (flyai_agent_in_action)"
+python -m ipykernel install --user --name=agent101 --display-name="Python (agent101)"
 ```
 
 | 参数              | 解释 (初学者友好)                                            | 建议值                   |
 | ----------------- | ------------------------------------------------------------ | ------------------------ |
 | `--user`          | 允许您在自己的用户权限下安装，不需要管理员权限。             | 保持不变                 |
-| `--name=`         | 这是 Jupyter **系统内部**用来识别内核的名字，通常使用 Conda **环境名**。 | `flyai_agent_in_action`  |
+| `--name=`         | 这是 Jupyter **系统内部**用来识别内核的名字，通常使用 Conda **环境名**。 | `agent101`  |
 | `--display-name=` | 这是您在 Jupyter **菜单上看到**的名字，设置为容易理解的名称。 | `"Python (FlyAI Agent)"` |
 
 执行成功后，您会看到类似这样的提示：
 
 ```
-Installed kernel 'flyai_agent_in_action' in C:\Users\YourUser\AppData\Roaming\jupyter\kernels\flyai_agent_in_action
+Installed kernel 'agent101' in C:\Users\YourUser\AppData\Roaming\jupyter\kernels\agent101
 ```
 
 #### 步骤四：在 Jupyter Notebook 中切换内核
@@ -94,14 +94,14 @@ eval "$(conda shell.bash hook)"
 | -------------------------------------- | ------------------------------------------------------------ |
 | `%%script bash`                        | 确保整个单元格作为一个**完整的 `bash` 脚本**运行，而不是多个独立的命令。 |
 | `eval "$(conda shell.bash hook)"`      | 这是在非交互式 Shell 环境（如 Jupyter 单元格）中**启用 `conda activate` 命令**的官方且唯一的正确方法。它将 Conda 的功能加载到当前的 `bash` 会话中。 |
-| `conda activate flyai_agent_in_action` | 只有在 Conda Hook 加载成功后，这条命令才能找到您的环境并进行切换。 |
+| `conda activate agent101` | 只有在 Conda Hook 加载成功后，这条命令才能找到您的环境并进行切换。 |
 
 **什么是 Hook？** `conda shell.bash hook` 是一个 Conda 脚本，它会输出一系列环境变量设置和函数定义（即所谓的 "hook" 代码），这些代码允许 `conda` 命令（尤其是 `conda activate`）在当前 Shell 中正常工作。
 
 **`eval` 的作用：** `eval` 命令的作用是**在当前运行的 Shell 中执行**其后面的字符串（即 Conda Hook 代码）。
 
 - 通过 `eval "$(conda shell.bash hook)"`，您实际上是在**单元格的 bash 环境中**加载了 Conda 的全部功能和路径配置。
-- 一旦 Hook 加载成功，后续的 `conda activate flyai_agent_in_action` 命令就能找到并正确修改当前 `bash` 进程的环境变量，从而实现环境切换。
+- 一旦 Hook 加载成功，后续的 `conda activate agent101` 命令就能找到并正确修改当前 `bash` 进程的环境变量，从而实现环境切换。
 
 ##### Magic 命令格式
 
@@ -121,20 +121,20 @@ Jupyter/IPython 只定义了两种 Magic 命令格式：
 
 ```bash
 1、准备环境我用的命令是：
-conda create -n flyai_agent_in_action python=3.12.11 -y
-conda activate flyai_agent_in_action
+conda create -n agent101 python=3.12.11 -y
+conda activate agent101
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 2 notebook右上角选择jupyter内核：
 启动环境：请先激活预设的 Conda 环境。
 配置 Jupyter 内核（首次使用）：
 # 激活环境 
-conda activate flyai_agent_in_action
+conda activate agent101
 # 安装内核
 pip install ipykernel -i https://pypi.tuna.tsinghua.edu.cn/simple
 # 注册内核
-kernel_install --name flyai_agent_in_action --display-name "python(flyai_agent_in_action)"
-运行实验：刷新 Jupyter Notebook 界面，选择 "python(flyai_agent_in_action)" 内核
+kernel_install --name agent101 --display-name "python(agent101)"
+运行实验：刷新 Jupyter Notebook 界面，选择 "python(agent101)" 内核
 您准备了一个新环境后，如果要在notebook里 使用，需要执行者这段，只需要执行一次就可以：先激活环境，然后安装ipykernel，最后注册内核。刷新页面后，右上角就有了。
 ```
 
