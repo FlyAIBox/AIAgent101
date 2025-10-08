@@ -93,7 +93,7 @@ aiofiles==24.1.0
 # 解析 YAML 配置文件，管理训练与部署参数。
 pyyaml==6.0.2
 # 从 .env 文件加载密钥与环境变量，确保配置与代码解耦。
-python-dotenv==1.1.0
+python-dotenv==1.1.1
 # 支持层次化合并的配置系统，方便管理多实验超参。
 omegaconf==2.3.0
 # 魔搭 ModelScope 平台 SDK，用于下载模型、数据集与工具链。
@@ -165,18 +165,3 @@ langdetect==1.0.9
 # https://download.sourcefind.cn:65024/file/4/triton/DAS1.5/triton-3.0.0+das.opt4.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
 # # Transformer Engine DAS 版本，优化半精度矩阵运算。
 # https://download.sourcefind.cn:65024/file/4/transformer_engine/DAS1.5/transformer_engine-1.9.0+das.opt2.dtk2504-cp310-cp310-manylinux_2_28_x86_64.whl
-
-# --- 可选：Travel Agent 旧版栈（需独立环境，避免与主栈冲突） ---
-# langchain==0.2.3  # 旧版 LangChain 主包，对应早期 Travel Agent 示例。
-# langchain-anthropic==0.1.15  # 旧版 Claude 适配层，仅在复刻演示时使用。
-# langchain-chroma==0.1.2  # 早期 Chroma 接口签名，可能与新版本不兼容。
-# langchain-community==0.2.4  # 旧版社区集成，依赖结构与当前主线不同。
-# langchain-core==0.2.5  # 旧版核心抽象，仅用于回溯历史教程。
-# langchain-openai==0.1.13  # 旧版 OpenAI 适配层，请勿与主线混用。
-# langchain-text-splitters==0.2.1  # 旧版文本切分策略，与主线版本一致可复用。
-# langchainhub==0.1.20  # 与主线一致，保留以兼容旧教程配置。
-# langdetect==1.0.9  # 与主线一致，可直接复用。
-# langgraph==0.1.5  # 早期 LangGraph 版本，API 差异较大。
-# numpy==1.26.4  # Travel Agent 栈使用的数值库版本。
-# openai==1.35.7  # 与旧版示例配套的 OpenAI 客户端。
-# python-dotenv==1.0.1  # 旧版配置加载库，可与主线共存。
