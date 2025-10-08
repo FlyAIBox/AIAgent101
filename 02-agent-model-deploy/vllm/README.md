@@ -81,7 +81,7 @@ graph TB
 
 ## 🚀 快速开始
 
-在运行之前，请确保您具备：
+在运行之前，请确保你具备：
 
 ### 🎯 必需条件
 
@@ -104,7 +104,7 @@ graph TB
 
    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FlyAIBox/Agent-101/blob/main/chapter03-llm-deploy/vllm/deepseek_r1_distill_qwen_fast_api.ipynb)
 
-2. 登录您的 Google 账户（如果还没有账户，免费注册一个）
+2. 登录你的 Google 账户（如果还没有账户，免费注册一个）
 3. 选择 GPU 运行时：`代码执行程序` → `更改运行时类型` → `T4 GPU`
 
 ### 第二步：一键运行部署
@@ -124,7 +124,7 @@ graph TB
 
 
 ### 第三步：获得可用的 API 服务
-运行完成后，您将获得：
+运行完成后，你将获得：
 - 🌐 **公网 API 地址**: `https://xxx.ngrok.io`
 - 📖 **交互式文档**: `https://xxx.ngrok.io/docs`
 - 💬 **聊天接口**: `https://xxx.ngrok.io/v1/chat/completions`

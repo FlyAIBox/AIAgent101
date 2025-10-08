@@ -2,7 +2,7 @@
 
 ## 什么是 Google Colab？
 
-Google Colab（Colaboratory）是 Google 提供的一个免费的云端 Jupyter 笔记本环境，专门为机器学习和数据科学设计。它最大的优势是**完全免费提供 GPU 和 TPU 资源**，让您无需购买昂贵的硬件就能运行深度学习模型。
+Google Colab（Colaboratory）是 Google 提供的一个免费的云端 Jupyter 笔记本环境，专门为机器学习和数据科学设计。它最大的优势是**完全免费提供 GPU 和 TPU 资源**，让你无需购买昂贵的硬件就能运行深度学习模型。
 
 ### 🎯 为什么选择 Google Colab？
 
@@ -44,7 +44,7 @@ Google Colab（Colaboratory）是 Google 提供的一个免费的云端 Jupyter 
 
 2. **填写注册信息**
    ```bash
-   姓名：输入您的真实姓名
+   姓名：输入你的真实姓名
    用户名：选择一个唯一的用户名
    密码：设置强密码（至少8位，包含字母、数字、符号）
    ```
@@ -62,7 +62,7 @@ Google Colab（Colaboratory）是 Google 提供的一个免费的云端 Jupyter 
 
 1. **打开 Colab 官网**
    - 访问 [colab.research.google.com](https://colab.research.google.com)
-   - 使用您的 Google 账户登录
+   - 使用你的 Google 账户登录
 
 2. **初次使用设置**
    - 首次访问会显示欢迎页面
@@ -144,7 +144,7 @@ Google Colab（Colaboratory）是 Google 提供的一个免费的云端 Jupyter 
 
 2. **授权访问**
    - 点击生成的链接
-   - 选择您的 Google 账户
+   - 选择你的 Google 账户
    - 点击"允许"授权访问
 
 3. **验证挂载**

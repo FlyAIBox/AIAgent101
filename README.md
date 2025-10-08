@@ -501,7 +501,7 @@ python 00-agent-env/first_llm_app.py
 请告诉我你想去哪里旅行？
 
 👤 用户输入：我想去北京玩3天
-🤖 AI助手：为您推荐北京3日游行程...
+🤖 AI助手：为你推荐北京3日游行程...
 第一天：天安门广场 → 故宫博物院 → 王府井
 第二天：长城一日游 → 鸟巢水立方夜景
 第三天：颐和园 → 圆明园 → 南锣鼓巷
@@ -652,7 +652,7 @@ python client/mcp_client_deepseek.py
 <div align="center">
 
 
-**⭐ 如果这个项目对您有帮助，请给个Star支持！⭐**
+**⭐ 如果这个项目对你有帮助，请给个Star支持！⭐**
 
 <a href="https://star-history.com/#FlyAIBox/AIAgent101&Date">
 

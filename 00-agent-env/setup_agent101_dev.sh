@@ -272,7 +272,7 @@ echo "📋 Jupyter Lab 使用说明："
 echo "1. 后台启动命令: nohup jupyter lab --port=8000 --NotebookApp.token='your_password' --notebook-dir=./ &"
 echo "2. 日志文件: nohup.out"
 echo "3. 访问地址: http://your_server_ip:8000"
-echo "4. 请将 'your_password' 替换为您的密码"
+echo "4. 请将 'your_password' 替换为你的密码"
 echo ""
 
 # 安装开发工具
@@ -296,8 +296,8 @@ fi
 # 检查 Git 用户名是否已配置
 if [[ -z $(git config --global user.name) ]]; then
     echo "🔧 配置 Git 用户信息..."
-    read -p "请输入您的 Git 用户名: " git_name
-    read -p "请输入您的 Git 邮箱: " git_email
+    read -p "请输入你的 Git 用户名: " git_name
+    read -p "请输入你的 Git 邮箱: " git_email
     git config --global user.name "$git_name"
     git config --global user.email "$git_email"
     echo "✅ Git 用户信息配置完成！"
@@ -313,7 +313,7 @@ if [ ! -f "env.template" ]; then
     exit 1
 fi
 
-echo "📝 请复制 env.template 为 .env 并填入您的 API Keys"
+echo "📝 请复制 env.template 为 .env 并填入你的 API Keys"
 
 # 完成提示
 echo ""
@@ -323,7 +323,7 @@ echo "📋 下一步操作："
 echo "1. 重新加载环境变量: source ~/.bashrc"
 echo "2. 激活虚拟环境: conda activate agent101"
 echo "3. 复制环境变量: cp env.template .env"
-echo "4. 编辑 .env 文件，填入您的 API Keys"
+echo "4. 编辑 .env 文件，填入你的 API Keys"
 echo "5. 检查GPU和CUDA环境: python chapter01-llm-env/linux_ops/check_gpu_cuda.py"
 echo "6. 启动 Jupyter Lab: ./chapter01-llm-env/jupyter-ops/start_jupyter.sh your_password"
 echo "7. 运行第一个应用: python first_llm_app.py"
@@ -339,4 +339,4 @@ echo ""
 echo "🔗 更多信息请查看 README.md"
 echo "💡 如有问题，请访问项目 GitHub 仓库获取帮助"
 echo ""
-echo "⭐ 如果这个项目对您有帮助，请给个 Star 支持！" 
+echo "⭐ 如果这个项目对你有帮助，请给个 Star 支持！" 

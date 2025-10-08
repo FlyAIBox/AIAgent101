@@ -257,7 +257,7 @@ class MCPClient:
         
         while True:
             try:
-                query = input("\n请输入您的问题 (输入 'quit' 或 'exit' 退出): ").strip()
+                query = input("\n请输入你的问题 (输入 'quit' 或 'exit' 退出): ").strip()
                 
                 if query.lower() in ['quit', 'exit']:
                     logger.info("结束聊天会话...")

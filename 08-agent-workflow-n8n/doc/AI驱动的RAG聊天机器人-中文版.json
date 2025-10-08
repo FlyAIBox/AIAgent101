@@ -185,7 +185,7 @@
       "parameters": {
         "text": "={{ $json.data }}",
         "options": {
-          "systemPromptTemplate": "您是一个专业的信息提取算法。\n只从文本中提取相关信息。\n如果您不知道要提取的属性值，可以省略该属性的值。"
+          "systemPromptTemplate": "你是一个专业的信息提取算法。\n只从文本中提取相关信息。\n如果你不知道要提取的属性值，可以省略该属性的值。"
         },
         "attributes": {
           "attributes": [
@@ -486,7 +486,7 @@
       "webhookId": "29aac1ac-9345-4e44-babf-ebcfae701d88",
       "parameters": {
         "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
-        "message": "=警告 - Qdrant向量存储集合\"{{ $json.qdrant_collection_name }}\"中的{{ $json.appended_id.length }}条记录将被删除。您确定要继续吗？此操作无法撤销！",
+        "message": "=警告 - Qdrant向量存储集合\"{{ $json.qdrant_collection_name }}\"中的{{ $json.appended_id.length }}条记录将被删除。你确定要继续吗？此操作无法撤销！",
         "options": {
           "limitWaitTime": {
             "values": {
@@ -722,7 +722,7 @@
       "parameters": {
         "text": "={{ $json.chatInput }}",
         "options": {
-          "systemMessage": "您是一个专门使用Nostr用户档案回答用户问题的智能助手。您的主要目标是基于可用的工具和资源提供精确、上下文相关且简洁的答案。\n\n### 工具\n使用\"nostr_damus_user_profiles\"工具来：\n- 执行语义相似性搜索并检索与用户查询相关的Nostr用户档案信息。\n- 在需要额外上下文或具体信息时访问Nostr和/或Damus用户的详细信息。\n\n### 关键指令\n1. **响应指南**：\n   - 清楚地解释检索到的信息如何解决用户的查询（如果适用）。\n   - 如果没有找到相关信息，请回复：\"我无法在可用资源中找到答案。\"\n\n2. **焦点和相关性**：\n   - 确保所有响应都直接与用户的问题保持一致。\n   - 避免包含无关细节或仅依赖内部知识。\n"
+          "systemMessage": "你是一个专门使用Nostr用户档案回答用户问题的智能助手。你的主要目标是基于可用的工具和资源提供精确、上下文相关且简洁的答案。\n\n### 工具\n使用\"nostr_damus_user_profiles\"工具来：\n- 执行语义相似性搜索并检索与用户查询相关的Nostr用户档案信息。\n- 在需要额外上下文或具体信息时访问Nostr和/或Damus用户的详细信息。\n\n### 关键指令\n1. **响应指南**：\n   - 清楚地解释检索到的信息如何解决用户的查询（如果适用）。\n   - 如果没有找到相关信息，请回复：\"我无法在可用资源中找到答案。\"\n\n2. **焦点和相关性**：\n   - 确保所有响应都直接与用户的问题保持一致。\n   - 避免包含无关细节或仅依赖内部知识。\n"
         },
         "promptType": "define"
       },
@@ -825,7 +825,7 @@
         "color": 4,
         "width": 340,
         "height": 320,
-        "content": "## 🗣️ 与您的文档聊天"
+        "content": "## 🗣️ 与你的文档聊天"
       },
       "typeVersion": 1
     },

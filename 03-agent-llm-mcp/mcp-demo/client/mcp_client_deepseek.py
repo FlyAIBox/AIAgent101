@@ -347,15 +347,15 @@ class MCPClient:
                 else:
                     # 发生未知情况或错误
                     logger.error(f"模型返回意外的 finish_reason: {finish_reason}")
-                    return f"处理您的查询时遇到意外情况 ({finish_reason})"
+                    return f"处理你的查询时遇到意外情况 ({finish_reason})"
 
             except Exception as e:
                 logger.error(f"处理查询时出错: {str(e)}")
-                return f"处理您的查询时发生错误: {str(e)}"
+                return f"处理你的查询时发生错误: {str(e)}"
 
         # 如果循环达到最大次数仍未得到最终回复
         logger.warning("达到最大工具调用回合数，未能获得最终回复")
-        return "抱歉，处理您的请求时出现问题，未能获得最终结果。"
+        return "抱歉，处理你的请求时出现问题，未能获得最终结果。"
 
     async def chat_loop(self) -> None:
         """运行交互式聊天循环"""
@@ -363,7 +363,7 @@ class MCPClient:
         
         while True:
             try:
-                query = input("\n请输入您的问题 (输入 'quit' 或 'exit' 退出): ").strip()
+                query = input("\n请输入你的问题 (输入 'quit' 或 'exit' 退出): ").strip()
                 
                 if query.lower() in ['quit', 'exit']:
                     logger.info("结束聊天会话...")

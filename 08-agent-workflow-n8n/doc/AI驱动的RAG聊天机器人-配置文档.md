@@ -128,7 +128,7 @@ docker run -d \
 
 ##### 访问 Web UI
 
-Qdrant 的 Web UI 是您的 Qdrant 集合、REST API 和数据点的直观、高效的图形界面。
+Qdrant 的 Web UI 是你的 Qdrant 集合、REST API 和数据点的直观、高效的图形界面。
 
 > Qdrant 的 Web UI 地址：`ip:6333/dashboard`
 
@@ -150,7 +150,7 @@ Qdrant 的 Web UI 是您的 Qdrant 集合、REST API 和数据点的直观、高
 4. 记录bot token
 
 #### 步骤2：获取聊天ID
-1. 将bot添加到您的聊天或群组
+1. 将bot添加到你的聊天或群组
 2. 发送消息给bot
 3. 访问：`https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates`
 4. 从响应中找到chat_id
@@ -235,7 +235,7 @@ Qdrant 的 Web UI 是您的 Qdrant 集合、REST API 和数据点的直观、高
 #### 系统提示配置
 可以在"AI代理"节点中自定义系统提示：
 ```
-您是一个专门使用文档回答用户问题的智能助手。
+你是一个专门使用文档回答用户问题的智能助手。
 请基于检索到的上下文提供准确、相关的答案。
 如果无法在文档中找到答案，请明确说明。
 ```

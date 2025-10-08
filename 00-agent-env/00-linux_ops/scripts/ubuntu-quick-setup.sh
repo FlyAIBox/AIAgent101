@@ -70,8 +70,8 @@ install_basic_tools() {
 configure_git() {
     log_step "配置Git环境..."
     
-    read -p "请输入您的Git用户名: " git_username
-    read -p "请输入您的Git邮箱: " git_email
+    read -p "请输入你的Git用户名: " git_username
+    read -p "请输入你的Git邮箱: " git_email
     
     git config --global user.name "$git_username"
     git config --global user.email "$git_email"
@@ -87,7 +87,7 @@ configure_git() {
         
         echo -e "\n${GREEN}SSH公钥内容:${NC}"
         cat ~/.ssh/id_ed25519.pub
-        echo -e "\n${YELLOW}请将上述公钥添加到您的Git服务商（GitHub/GitLab/Gitee）${NC}"
+        echo -e "\n${YELLOW}请将上述公钥添加到你的Git服务商（GitHub/GitLab/Gitee）${NC}"
     else
         log_info "SSH密钥已存在，跳过生成"
     fi

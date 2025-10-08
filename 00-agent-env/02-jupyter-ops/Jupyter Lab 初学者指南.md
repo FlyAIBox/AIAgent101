@@ -8,9 +8,9 @@ Jupyter Lab 是一个基于 Web 的交互式开发环境，适用于 Jupyter Not
 
 #### 2.1 安装 Jupyter Lab
 
-建议使用 Miniconda 或 Anaconda 管理您的 Python 环境和 Jupyter Lab。
+建议使用 Miniconda 或 Anaconda 管理你的 Python 环境和 Jupyter Lab。
 
-1. **安装 Miniconda/Anaconda**： 请根据您的操作系统从 Miniconda 或 Anaconda 官网下载并安装。
+1. **安装 Miniconda/Anaconda**： 请根据你的操作系统从 Miniconda 或 Anaconda 官网下载并安装。
 
 2. **使用 Conda 安装 Jupyter Lab**： 安装完 Miniconda 后，打开终端或 Anaconda Prompt，运行以下命令安装 Jupyter Lab：
 
@@ -22,7 +22,7 @@ Jupyter Lab 是一个基于 Web 的交互式开发环境，适用于 Jupyter Not
 
 #### 2.2 生成 Jupyter Lab 配置文件
 
-为了更好地管理 Jupyter Lab，特别是当您需要在后台运行或进行特定配置时，生成配置文件是最佳实践 。
+为了更好地管理 Jupyter Lab，特别是当你需要在后台运行或进行特定配置时，生成配置文件是最佳实践 。
 
 1. **生成默认配置文件**： 在终端中运行以下命令生成 Jupyter Lab 的默认配置文件：
 
@@ -30,32 +30,32 @@ Jupyter Lab 是一个基于 Web 的交互式开发环境，适用于 Jupyter Not
    jupyter lab --generate-config 
    ```
 
-   成功执行后，您会看到类似如下的输出信息，其中包含了配置文件的路径：
+   成功执行后，你会看到类似如下的输出信息，其中包含了配置文件的路径：
 
    ```Bash
    Writing default config to: /root/.jupyter/jupyter_lab_config.py 
    ```
 
-   这个文件通常位于您的用户主目录下的 `.jupyter` 文件夹中。
+   这个文件通常位于你的用户主目录下的 `.jupyter` 文件夹中。
 
 #### 2.3 修改 Jupyter Lab 配置文件
 
 打开上一步生成的 `jupyter_lab_config.py` 文件（例如，`/root/.jupyter/jupyter_lab_config.py`），根据需求修改以下常用配置项：
 
-- **允许 Root 用户启动**： 如果您需要在 `root` 用户下运行 Jupyter Lab（不推荐在生产环境中使用 `root` 用户运行服务），请将 `c.ServerApp.allow_root` 设置为 `True`。
+- **允许 Root 用户启动**： 如果你需要在 `root` 用户下运行 Jupyter Lab（不推荐在生产环境中使用 `root` 用户运行服务），请将 `c.ServerApp.allow_root` 设置为 `True`。
 
   ```Python
   c.ServerApp.allow_root = True 
   ```
 
-- **设置工作目录**： `c.ServerApp.root_dir` 用于指定 Jupyter Lab 启动后的默认工作目录。您可以将其设置为您存放 Notebook 和代码的目录。
+- **设置工作目录**： `c.ServerApp.root_dir` 用于指定 Jupyter Lab 启动后的默认工作目录。你可以将其设置为你存放 Notebook 和代码的目录。
 
   ```Python
   # 例如，设置为 /root/AI-Box/code
   c.ServerApp.root_dir = '/root/AI-Box/code' 
   ```
 
-- **修改默认端口**： 默认情况下，Jupyter Lab 运行在 `8888` 端口。为了避免端口冲突或增强安全性，您可以修改默认端口。
+- **修改默认端口**： 默认情况下，Jupyter Lab 运行在 `8888` 端口。为了避免端口冲突或增强安全性，你可以修改默认端口。
 
   ```Python
   c.ServerApp.port = 8000 # 例如，修改为 8000 端口 
@@ -67,10 +67,10 @@ Jupyter Lab 是一个基于 Web 的交互式开发环境，适用于 Jupyter Not
   c.ServerApp.ip = '0.0.0.0' # 允许从任何 IP 访问 
   ```
 
-- **设置访问 Token**： `c.ServerApp.token` 用于设置访问 Jupyter Lab 的令牌（密码）。在生产环境中强烈建议设置一个强密码。如果您在本地且确保安全，也可以选择关闭密码（不推荐）。
+- **设置访问 Token**： `c.ServerApp.token` 用于设置访问 Jupyter Lab 的令牌（密码）。在生产环境中强烈建议设置一个强密码。如果你在本地且确保安全，也可以选择关闭密码（不推荐）。
 
   ```Python
-  c.ServerApp.token = 'your_secure_token' # 替换为您的安全令牌
+  c.ServerApp.token = 'your_secure_token' # 替换为你的安全令牌
   # 如果要关闭密码（不推荐，仅限本地安全环境）
   # c.ServerApp.token = '' 
   ```
@@ -97,7 +97,7 @@ nohup jupyter lab &
 
 #### 3.2 访问 Jupyter Lab
 
-启动后，您可以通过浏览器访问 Jupyter Lab。如果您的 Jupyter Lab 运行在本地，通常地址是 `http://localhost:8888` (如果修改了端口，请使用您设置的端口，例如 `http://localhost:8000`)。如果运行在远程服务器上，请使用服务器的 IP 地址或域名。
+启动后，你可以通过浏览器访问 Jupyter Lab。如果你的 Jupyter Lab 运行在本地，通常地址是 `http://localhost:8888` (如果修改了端口，请使用你设置的端口，例如 `http://localhost:8000`)。如果运行在远程服务器上，请使用服务器的 IP 地址或域名。
 
 ### 4. 设置 Jupyter Lab 开机自启 (Systemd)
 
@@ -105,7 +105,7 @@ nohup jupyter lab &
 
 #### 4.1 步骤 1: 创建 Jupyter Lab 服务单元文件
 
-使用文本编辑器（如 `nano` 或 `vim`）在 `/etc/systemd/system/` 目录下创建 `jupyterlab.service` 文件。您需要 `sudo` 权限 。
+使用文本编辑器（如 `nano` 或 `vim`）在 `/etc/systemd/system/` 目录下创建 `jupyterlab.service` 文件。你需要 `sudo` 权限 。
 
 ```Bash
 sudo vim /etc/systemd/system/jupyterlab.service 
@@ -113,7 +113,7 @@ sudo vim /etc/systemd/system/jupyterlab.service
 
 #### 4.2 步骤 2: 编辑服务单元文件
 
-将以下内容粘贴到 `jupyterlab.service` 文件中，并根据您的实际情况修改配置项 ：
+将以下内容粘贴到 `jupyterlab.service` 文件中，并根据你的实际情况修改配置项 ：
 
 ```Bash
 [Unit]
@@ -144,14 +144,14 @@ WantedBy=multi-user.target
 - `Description=Jupyter Lab Server`: 服务的描述信息，可自定义 。
 - `After=network.target`: 表示该服务在网络服务启动后启动 。
 - `Type=simple`: 服务类型为简单服务 。
-- `WorkingDirectory=/root/AI-BOX/code`: **工作目录**。Jupyter Lab 启动后的默认工作目录。请根据您的实际路径修改 。
+- `WorkingDirectory=/root/AI-BOX/code`: **工作目录**。Jupyter Lab 启动后的默认工作目录。请根据你的实际路径修改 。
 - `ExecStart=/bin/ -c "source /root/miniconda3/bin/activate langchain && exec jupyter-lab --config=/root/.jupyter/jupyter_lab_config.py --no-browser"`: **Jupyter Lab 启动命令**。
-  - `source /root/miniconda3/bin/activate langchain`: 激活您的 Conda 环境。请将 `/root/miniconda3/bin/activate` 替换为您 Miniconda 安装路径下的 `activate` 脚本路径，将 `langchain` 替换为您的 Conda 环境名称 。
+  - `source /root/miniconda3/bin/activate langchain`: 激活你的 Conda 环境。请将 `/root/miniconda3/bin/activate` 替换为你 Miniconda 安装路径下的 `activate` 脚本路径，将 `langchain` 替换为你的 Conda 环境名称 。
   - `exec jupyter-lab --config=/root/.jupyter/jupyter_lab_config.py --no-browser`: 启动 Jupyter Lab。
-    - `--config=/root/.jupyter/jupyter_lab_config.py`: 指定您自定义的配置文件路径。
+    - `--config=/root/.jupyter/jupyter_lab_config.py`: 指定你自定义的配置文件路径。
     - `--no-browser`: 启动时不会自动打开浏览器 。
     - `--port=8888`: (此文档中未明确给出，但常见配置) 可以添加此参数来指定端口，例如 `--port=8000`。请确保端口未被占用 。
-- `User=root` 和 `Group=root`: 指定运行服务的用户和组。如果您的 Jupyter Lab 不以 `root` 用户运行，请修改为实际用户和组。
+- `User=root` 和 `Group=root`: 指定运行服务的用户和组。如果你的 Jupyter Lab 不以 `root` 用户运行，请修改为实际用户和组。
 - `Restart=on-failure`: 如果 Jupyter Lab 服务意外失败退出，`systemd` 会自动尝试重启服务 。
 - `RestartSec=10`: 服务重启前等待 10 秒 。
 - `[Install] WantedBy=multi-user.target`: 表示该服务在多用户模式下启动 。
@@ -172,27 +172,27 @@ sudo systemctl start jupyterlab.service [cite: 42, 44]
 
 #### 4.5 步骤 5: 检查服务状态 (可选)
 
-您可以通过以下命令检查 Jupyter Lab 服务的运行状态:
+你可以通过以下命令检查 Jupyter Lab 服务的运行状态:
 
 ```Bash
 sudo systemctl status jupyterlab.service 
 ```
 
-如果服务成功启动，您应该看到类似 `active (running)` 的状态信息 。
+如果服务成功启动，你应该看到类似 `active (running)` 的状态信息 。
 
 ### 5. 将 Conda 环境添加到 Jupyter Lab 内核列表
 
-如果您的 Conda 环境没有出现在 Jupyter Lab 的内核列表中，您需要手动将其添加 。这通常涉及在您的 Conda 环境中安装 
+如果你的 Conda 环境没有出现在 Jupyter Lab 的内核列表中，你需要手动将其添加 。这通常涉及在你的 Conda 环境中安装 
 
 `ipykernel` 包并将其注册为 Jupyter 内核 。
 
-1. **激活您的 Conda 环境**：
+1. **激活你的 Conda 环境**：
 
    ```Bash
-   conda activate <您的conda环境名称> 
+   conda activate <你的conda环境名称> 
    ```
 
-   例如，如果您的 Conda 环境名称是 `myenv`，则命令为 `conda activate myenv` 。
+   例如，如果你的 Conda 环境名称是 `myenv`，则命令为 `conda activate myenv` 。
 
    
 
@@ -208,8 +208,8 @@ sudo systemctl status jupyterlab.service
    python -m ipykernel install --user --name=<内核显示名称> --display-name="<友好的内核显示名称>" 
    ```
 
-   - `<内核显示名称>`: 这是内核的内部名称，用于 Jupyter 识别。例如，您可以设置为 `myenv-kernel` 。
-   - `<友好的内核显示名称>`: 这是在 Jupyter Lab 内核列表中显示的名称，更易于理解。例如，您可以设置为 `"Python (myenv)"` 。
+   - `<内核显示名称>`: 这是内核的内部名称，用于 Jupyter 识别。例如，你可以设置为 `myenv-kernel` 。
+   - `<友好的内核显示名称>`: 这是在 Jupyter Lab 内核列表中显示的名称，更易于理解。例如，你可以设置为 `"Python (myenv)"` 。
 
    **示例**：
 
@@ -217,11 +217,11 @@ sudo systemctl status jupyterlab.service
    python -m ipykernel install --user --name langchain --display-name "Python (langchain)" 
    ```
 
-4. **重启 Jupyter Lab 并重新检查内核列表**：完成上述步骤后，重启 Jupyter Lab。再次打开 "Kernel" -> "Change Kernel" 菜单，您应该能看到新添加的内核 (例如 "Python (langchain)") 。
+4. **重启 Jupyter Lab 并重新检查内核列表**：完成上述步骤后，重启 Jupyter Lab。再次打开 "Kernel" -> "Change Kernel" 菜单，你应该能看到新添加的内核 (例如 "Python (langchain)") 。
 
 ### 6. Jupyter Lab 常用快捷键与操作
 
-Jupyter Lab 提供了丰富的快捷键和操作，可以大大提高您的工作效率。以下是一些常用的：
+Jupyter Lab 提供了丰富的快捷键和操作，可以大大提高你的工作效率。以下是一些常用的：
 
 #### 6.1 通用快捷键
 
@@ -276,4 +276,4 @@ Jupyter Lab 提供了丰富的快捷键和操作，可以大大提高您的工�
 - **终端**：在 Jupyter Lab 中打开终端，可以直接运行 shell 命令，方便进行文件操作、环境管理等。
 - **代码控制台 (Console)**：可以打开一个独立的 Python 控制台，进行即时代码测试和调试。
 - **Markdown 编辑器**：Jupyter Lab 内置了强大的 Markdown 编辑器，支持实时预览。
-- **拖放和多标签页**：您可以将文件选项卡拖放到不同的区域，实现分屏显示，方便同时查看和编辑多个文件
+- **拖放和多标签页**：你可以将文件选项卡拖放到不同的区域，实现分屏显示，方便同时查看和编辑多个文件

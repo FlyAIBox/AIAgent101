@@ -48,7 +48,7 @@ echo "------------------------"
 # 检查 .bashrc 文件是否存在，如果不存在则创建
 if [ ! -f "${BASHRC_FILE}" ]; then
     touch "${BASHRC_FILE}"
-    echo "注意: '${BASHRC_FILE}' 文件不存在，已为您创建。"
+    echo "注意: '${BASHRC_FILE}' 文件不存在，已为你创建。"
 fi
 
 # 检查 .bashrc 文件是否有写入权限

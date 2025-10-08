@@ -10,7 +10,7 @@ Transformers 是一个用于推理和训练的预训练自然语言处理库。�
 
 ## 基本用法
 
-您可以使用 `pipeline()` 接口或 `generate()` 接口在 transformers 中通过 Qwen3 生成文本。
+你可以使用 `pipeline()` 接口或 `generate()` 接口在 transformers 中通过 Qwen3 生成文本。
 
 通常，pipeline 接口需要的样板代码更少，如下所示。以下展示了一个使用 pipeline 进行多轮对话的基本示例：
 
@@ -47,17 +47,17 @@ messages = generator(messages, max_new_tokens=32768)[0]["generated_text"]
   huggingface-cli download --local-dir ./Qwen3-8B Qwen/Qwen3-8B
   ```
 
-  如果您在中国大陆，还可以使用 ModelScope 下载模型文件
+  如果你在中国大陆，还可以使用 ModelScope 下载模型文件
 
   ```bash
   modelscope download --local_dir ./Qwen3-8B Qwen/Qwen3-8B
   ```
 
-- **设备分配**：如果可用，`device_map="auto"` 将自动将模型参数加载到多个设备上。它依赖于 `accelerate` 包。如果您想使用单个设备，可以传递 `device` 而不是 `device_map`。`device=-1` 或 `device="cpu"` 表示使用 CPU，`device="cuda"` 表示使用当前 GPU，`device="cuda:1"` 或 `device=1` 表示使用第二个 GPU。不要同时使用 `device_map` 和 `device`！
+- **设备分配**：如果可用，`device_map="auto"` 将自动将模型参数加载到多个设备上。它依赖于 `accelerate` 包。如果你想使用单个设备，可以传递 `device` 而不是 `device_map`。`device=-1` 或 `device="cpu"` 表示使用 CPU，`device="cuda"` 表示使用当前 GPU，`device="cuda:1"` 或 `device=1` 表示使用第二个 GPU。不要同时使用 `device_map` 和 `device`！
 
 - **计算精度**：`torch_dtype="auto"` 将根据检查点的原始精度和设备支持的精度自动确定要使用的数据类型。对于现代设备，确定的精度将是 `bfloat16`。
 
-  如果您不传递 `torch_dtype="auto"`，默认数据类型为 `float32`，这将占用两倍的内存并且计算速度较慢。
+  如果你不传递 `torch_dtype="auto"`，默认数据类型为 `float32`，这将占用两倍的内存并且计算速度较慢。
 
 调用文本生成 pipeline 时，将使用模型文件中的生成配置，例如 `generation_config.json`。这些配置可以通过直接向调用传递参数来覆盖。默认配置等效于
 
@@ -86,7 +86,7 @@ messages = generator(messages, do_sample=True, temperature=0.6, top_k=2, top_p=0
   # print(messages[-1]["content"])
   ```
 
-- 在用户 (user) 或系统 (system) 消息中添加 `/no_think` 以禁用思考、添加 `/think` 以启用思考。此方法是有状态的，意味着在多轮对话中，模型将遵循最近的指令。您还可以使用自然语言指令。
+- 在用户 (user) 或系统 (system) 消息中添加 `/no_think` 以禁用思考、添加 `/think` 以启用思考。此方法是有状态的，意味着在多轮对话中，模型将遵循最近的指令。你还可以使用自然语言指令。
 
   ```
   messages = [
@@ -102,7 +102,7 @@ messages = generator(messages, do_sample=True, temperature=0.6, top_k=2, top_p=0
 
 ## 解析思考内容
 
-如果您希望获得更结构化的助手消息格式，可以使用以下函数将思考内容提取到名为 `reasoning_content` 的字段中，该字段的格式类似于 vLLM、SGLang 等使用的格式。
+如果你希望获得更结构化的助手消息格式，可以使用以下函数将思考内容提取到名为 `reasoning_content` 的字段中，该字段的格式类似于 vLLM、SGLang 等使用的格式。
 
 ```python
 import copy
@@ -151,7 +151,7 @@ FP8 计算在计算能力 > 8.9 的 NVIDIA GPU 上受支持，即 Ada Lovelace�
 在 4.51.0 版本中，在**跨 GPU**的情况下运行 FP8 存在一些与 Transformers 相关的问题。可以使用以下方法来解决这些问题：
 
 - 在运行脚本之前设置环境变量 `CUDA_LAUNCH_BLOCKING=1`；或者
-- 取消注释您本地安装的 `transformers` 中的[这一行](https://github.com/huggingface/transformers/blob/0720e206c6ba28887e4d60ef60a6a089f6c1cc76/src/transformers/integrations/finegrained_fp8.py#L340)。
+- 取消注释你本地安装的 `transformers` 中的[这一行](https://github.com/huggingface/transformers/blob/0720e206c6ba28887e4d60ef60a6a089f6c1cc76/src/transformers/integrations/finegrained_fp8.py#L340)。
 
 ## 启用长上下文
 
@@ -202,11 +202,11 @@ Transformers 支持 YaRN，可以通过修改模型文件或在加载模型时�
 
 备注
 
-Transformers 实现了静态 YaRN，这意味着无论输入长度如何，缩放因子保持不变，**这可能会对较短文本的性能产生影响。** 我们建议仅在需要处理长上下文时添加 `rope_scaling` 配置。还建议根据需要修改 `factor`。例如，如果您的应用程序的典型上下文长度为 65,536 个 token，则最好将 `factor` 设置为 2.0。
+Transformers 实现了静态 YaRN，这意味着无论输入长度如何，缩放因子保持不变，**这可能会对较短文本的性能产生影响。** 我们建议仅在需要处理长上下文时添加 `rope_scaling` 配置。还建议根据需要修改 `factor`。例如，如果你的应用程序的典型上下文长度为 65,536 个 token，则最好将 `factor` 设置为 2.0。
 
 ## 流式输出
 
-借助 `TextStreamer` ，您可以将与 Qwen3 的对话切换到流式传输模式。下面是一个关于如何使用它的示例：
+借助 `TextStreamer` ，你可以将与 Qwen3 的对话切换到流式传输模式。下面是一个关于如何使用它的示例：
 
 ```
 from transformers import pipeline, TextStreamer
@@ -285,4 +285,4 @@ batch = [result[0]["generated_text"] for result in results]
 
 ## 常见问题解答
 
-您可能会发现使用 Transformers 进行分布式推理的速度不如预期。Transformers 使用 `device_map="auto"` 时并未应用张量并行 (Tensor Parallelism)，且一次仅使用一个 GPU。如需支持张量并行的 Transformers，请参阅[其文档](https://huggingface.co/docs/transformers/v4.51.3/en/perf_infer_gpu_multi)。
+你可能会发现使用 Transformers 进行分布式推理的速度不如预期。Transformers 使用 `device_map="auto"` 时并未应用张量并行 (Tensor Parallelism)，且一次仅使用一个 GPU。如需支持张量并行的 Transformers，请参阅[其文档](https://huggingface.co/docs/transformers/v4.51.3/en/perf_infer_gpu_multi)。

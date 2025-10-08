@@ -31,9 +31,9 @@ Run the following command to add your authtoken to the default **ngrok.yml** [co
 ngrok config add-authtoken 2zo0ukGSh7rLCwIJLcyEEqQEcyC_5DPqPXokBtt3MbofiUTJ5
 ```
 
-#### 在线部署您的应用
+#### 在线部署你的应用
 
-将您的应用放在一个[临时域名](https://ngrok.com/docs/network-edge/domains-and-tcp-addresses/#ephemeral-domains)上线，并转发到您的上游服务。例如，如果它正在监听端口，请运行： `http://localhost:8080`
+将你的应用放在一个[临时域名](https://ngrok.com/docs/network-edge/domains-and-tcp-addresses/#ephemeral-domains)上线，并转发到你的上游服务。例如，如果它正在监听端口，请运行： `http://localhost:8080`
 
 ```bash
 ngrok http http://localhost:5678
@@ -172,7 +172,7 @@ n8n 的自部署社区版（又或称开源版）完成部署后，你能见到�
 
 - 在 n8n 中使用[节点面板](https://docs.n8n.io/integrations/community-nodes/installation/verified-install/)（仅适用于已验证的社区节点）。
 - 在 n8n 中[使用 GUI](https://docs.n8n.io/integrations/community-nodes/installation/gui-install/)：使用此方法从 npm 注册表安装社区节点。
-- [从命令行手动](https://docs.n8n.io/integrations/community-nodes/installation/manual-install/)：如果您的 n8n 实例不支持通过应用内 GUI 安装，请使用此方法从 npm 安装社区节点。
+- [从命令行手动](https://docs.n8n.io/integrations/community-nodes/installation/manual-install/)：如果你的 n8n 实例不支持通过应用内 GUI 安装，请使用此方法从 npm 安装社区节点。
 
 
 

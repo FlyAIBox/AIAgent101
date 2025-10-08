@@ -6,8 +6,8 @@
 
 #### 1.1 检查N8N实例
 ```bash
-# 确保您的N8N实例正在运行
-# 访问 http://localhost:5678 或您的N8N地址
+# 确保你的N8N实例正在运行
+# 访问 http://localhost:5678 或你的N8N地址
 ```
 
 #### 1.2 获取Gemini API密钥
@@ -31,9 +31,9 @@ https://aistudio.google.com/app/apikey
 ```
 
 #### 2.2 验证导入结果
-导入成功后，您应该看到以下节点：
+导入成功后，你应该看到以下节点：
 - 📱 示例聊天 (ChatTrigger)
-- 🤖 您的第一个AI智能体 (Agent)
+- 🤖 你的第一个AI智能体 (Agent)
 - 🌤️ 获取天气 (Weather Tool)
 - 📰 获取新闻 (News Tool)
 - 🧠 对话记忆 (Memory)
@@ -47,14 +47,14 @@ https://aistudio.google.com/app/apikey
 2. 在 "Credential" 下拉菜单中选择 "Create New"
 3. 在弹出的对话框中：
    - Name: "Google Gemini API"
-   - API Key: 粘贴您复制的API密钥
+   - API Key: 粘贴你复制的API密钥
 4. 点击 "Save"
 5. 点击 "Test" 验证连接
 ```
 
 #### 3.2 验证配置
 ```bash
-# 如果配置成功，您会看到：
+# 如果配置成功，你会看到：
 ✅ Connection successful
 ```
 
@@ -205,7 +205,7 @@ https://aistudio.google.com/app/apikey
 
 ## 🎉 恭喜！
 
-您已经成功构建了第一个AI智能体！现在您可以：
+你已经成功构建了第一个AI智能体！现在你可以：
 
 ✅ **基础功能**: 与智能体对话，获取天气和新闻  
 ✅ **扩展能力**: 添加更多工具和功能  
@@ -216,4 +216,4 @@ https://aistudio.google.com/app/apikey
 
 ---
 
-**💡 提示**: 如果您在使用过程中遇到任何问题，请参考详细的README.md文档或联系技术支持。
+**💡 提示**: 如果你在使用过程中遇到任何问题，请参考详细的README.md文档或联系技术支持。

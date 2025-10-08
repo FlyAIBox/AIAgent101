@@ -47,7 +47,7 @@
 ### **2. 配置文档来源**
 
 - **Google Drive 文件夹 ID：**
-  - 设置您希望机器人检索文档的 Google Drive 文件夹 ID。
+  - 设置你希望机器人检索文档的 Google Drive 文件夹 ID。
 - **Qdrant 集合名称：**
   - 定义用于存储文档向量的 Qdrant 集合名称。
 - **文档处理参数：**

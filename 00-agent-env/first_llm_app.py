@@ -63,7 +63,7 @@ def print_welcome():
     print("🤖 欢迎使用AI助手！")
     print("="*60)
     print("💡 使用说明：")
-    print("   • 直接输入您的问题或想法")
+    print("   • 直接输入你的问题或想法")
     print("   • 输入 'quit'、'exit' 或 'q' 退出程序")
     print("   • 输入 'clear' 清空对话历史")
     print("   • 输入 'help' 查看帮助信息")
@@ -93,7 +93,7 @@ def print_stats(total_messages, total_tokens):
 def get_user_input():
     """获取用户输入"""
     try:
-        user_input = input("\n👤 您: ").strip()
+        user_input = input("\n👤 你: ").strip()
         return user_input
     except KeyboardInterrupt:
         print("\n\n👋 检测到Ctrl+C，正在退出...")
@@ -188,7 +188,7 @@ def main():
             print_stats(total_messages, total_tokens)
             continue
         elif not user_input:
-            print("⚠️  请输入您的问题，或输入 'help' 查看帮助")
+            print("⚠️  请输入你的问题，或输入 'help' 查看帮助")
             continue
         
         # 添加用户消息到对话历史

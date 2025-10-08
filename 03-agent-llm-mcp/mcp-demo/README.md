@@ -347,7 +347,7 @@ python client/mcp_client_deepseek.py
 2025-05-03 14:25:12,273 - INFO - 成功连接到 MCP 服务器
 2025-05-03 14:25:12,273 - INFO - 开始聊天会话...
 
-请输入您的问题 (输入 'quit' 或 'exit' 退出): 北京今天天气怎么样？
+请输入你的问题 (输入 'quit' 或 'exit' 退出): 北京今天天气怎么样？
 2025-05-03 14:25:20,775 - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
 2025-05-03 14:25:25,736 - INFO - 执行工具 get_daily_forecast，参数: {'location': 101010100, 'days': 1}
 2025-05-03 14:25:26,850 - INFO - 工具执行完成: get_daily_forecast
@@ -364,7 +364,7 @@ python client/mcp_client_deepseek.py
 
 日出时间05:13，日落时间19:11。今天无降水概率，适合户外活动。
 
-请输入您的问题 (输入 'quit' 或 'exit' 退出): 
+请输入你的问题 (输入 'quit' 或 'exit' 退出): 
 ```
 
 #### 复杂天气查询
@@ -384,7 +384,7 @@ python client/mcp_client_deepseek.py
 2025-05-03 15:03:51,662 - INFO - 成功连接到 MCP 服务器
 2025-05-03 15:03:51,662 - INFO - 开始聊天会话...
 
-请输入您的问题 (输入 'quit' 或 'exit' 退出): 最近一周郑州有没有高温或大风预警？周末适合户外活动吗？
+请输入你的问题 (输入 'quit' 或 'exit' 退出): 最近一周郑州有没有高温或大风预警？周末适合户外活动吗？
 2025-05-03 15:04:05,807 - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
 2025-05-03 15:04:11,979 - INFO - 执行工具 get_weather_warning，参数: {'location': '101180101'}
 2025-05-03 15:04:12,244 - INFO - 工具执行完成: get_weather_warning
@@ -494,7 +494,7 @@ python client/mcp_client_langchain_chat.py
 
 **智能助手**：
 ```bash
-请输入您的问题 (输入 'quit' 或 'exit' 退出): 最近一周郑州有没有高温或大风预警？周末适合户外活动吗？
+请输入你的问题 (输入 'quit' 或 'exit' 退出): 最近一周郑州有没有高温或大风预警？周末适合户外活动吗？
 2025-05-04 19:10:36,485 - INFO - 成功加载工具: ['get_weather_warning', 'get_daily_forecast']
 2025-05-04 19:10:36,485 - INFO - 正在创建agent...
 2025-05-04 19:10:36,494 - INFO - Agent创建成功
