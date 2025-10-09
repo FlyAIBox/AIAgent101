@@ -219,3 +219,6 @@ LangChain赋予了开发人员将LLM与其他计算和知识来源相结合以�
 一图带你了解 LangChain 的内部结构！
 
 [https://www.bilibili.com/video/BV1214y1X7Aq/?spm_id_from=333.337.search-card.all.click&vd_source=f27f081fc77389ca006fcebf41bede2dhttps://space.bilibili.com/28357052/channel/collectiondetail?sid=1611560](https://www.baihezi.com/goto?url=https%3A%2F%2Fwww.bilibili.com%2Fvideo%2FBV1214y1X7Aq%2F%3Fspm_id_from%3D333.337.search-card.all.click%26amp%3Bamp%3Bvd_source%3Df27f081fc77389ca006fcebf41bede2dhttps%3A%2F%2Fspace.bilibili.com%2F28357052%2Fchannel%2Fcollectiondetail%3Fsid%3D1611560)
+
+## 参考
+[构建高效 Agent [译]](https://baoyu.io/translations/building-effective-agents)

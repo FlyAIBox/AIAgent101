@@ -42,6 +42,24 @@
 
 ## 📖 课程内容
 
+### 🧭 课程大纲速览
+
+|  | 课程主题 | 配套资料 | 能力产出 |
+|---|----------|----------|----------|
+| 1️⃣ ✨宏观认知 | 行业趋势梳理<br>AI Agent 全局视角 | `10-agent-docs` | 搭建学习主线、明确项目定位 |
+| 2️⃣ 🛠️环境与API | 本地/云端环境搭建<br>首次调用大模型 API | `00-agent-env/` | 配好开发栈，能拉起基础推理服务 |
+| 3️⃣ 🧠提示词核心 | Prompt 结构设计<br>上下文记忆策略 | `01-agent-prompt-or-context/` | 写出稳健提示词，控制模型行为 |
+| 4️⃣ ⚡推理部署 | Transformers 入门<br>vLLM 性能调优 | `02-agent-model-deploy/` | 部署高吞吐推理服务，掌握性能杠杆 |
+| 5️⃣ 🔌MCP工具链 | MCP 协议机制<br>工具调用 Demo | `03-agent-llm-mcp/mcp-demo/` | 让智能体接入外部工具，扩展能力 |
+| 6️⃣ 🤝多角色协作 | LangChain 流程<br>LangGraph 状态机 | `04-agent-multi-role/` | 构建旅行规划智能体 |
+| 7️⃣ 🎯高效微调 | LlamaFactory 训练<br>PEFT/LoRA 策略 | `05-agent-model-finetuning/` | 打造垂直领域定制模型适配器 |
+| 8️⃣ 🚢端到端上线 | 架构拆分与部署<br>成本与运维策略 | `04-agent-multi-role/langgraph/6-Deployment/`, `00-agent-env/setup_agent101_dev.sh` | 输出可上线的端到端旅行 Agent |
+| 9️⃣ 📊评估体系 | Langfuse 监控指标<br>安全合规基线 | `06-agent-evaluation/langfuse/` | 建立质量与安全评估闭环 |
+| 🔟 🧩零代码工作流 | n8n 工作流编排<br>模版化复用 | `08-agent-workflow-n8n/` | 零代码快速接入业务流程 |
+| 1️⃣1️⃣ 🚀性能压测 | 压测指标体系<br>可视化分析 | `07-agent-llm_benchmark/` | 定量衡量推理性能并持续优化 |
+| 1️⃣2️⃣ 🧭职业发展 | 高频面试题精讲<br>项目复盘方法 | `09-agent-review/` | 沟通项目价值，准备求职答辩 |
+| 1️⃣3️⃣ 🏁课程收官 | 知识体系串联<br>延展学习路线 | `10-agent-docs/` | 固化方法论，规划后续进阶路径 |
+
 ### 🏆 课程收获
 
 | 收获类别 | 具体内容 |
