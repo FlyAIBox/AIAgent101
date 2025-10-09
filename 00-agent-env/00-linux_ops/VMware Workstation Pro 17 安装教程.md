@@ -1,4 +1,4 @@
-# VMware Workstation Pro 17 安装教程 (超详细-附16版本)
+# VMware Workstation Pro 17 安装教程 
 
 > 原文链接：https://zhuanlan.zhihu.com/p/685829787
 
@@ -36,21 +36,7 @@
 
 ![img](https://picx.zhimg.com/v2-b721aec6b7d58a2232fca34758c4337f_1440w.jpg)
 
-**个人用途是免费使用的，以下是商业用途[激活码](https://zhida.zhihu.com/search?content_id=240536628&content_type=Article&match_order=1&q=激活码&zhida_source=entity)（全部已测可用）：**
-
-**pro 17密钥：MC60H-DWHD5-H80U9-6V85M-8280D**
-
-pro 17密钥：4A4RR-813DK-M81A9-4U35H-06KND（备用）
-
-pro 17密钥：NZ4RR-FTK5H-H81C1-Q30QH-1V2LA（备用）
-
-pro 17密钥：JU090-6039P-08409-8J0QH-2YR7F（备用）
-
-pro 17密钥：4Y09U-AJK97-089Z0-A3054-83KLA（备用）
-
-pro 17密钥：4C21U-2KK9Q-M8130-4V2QH-CF810（备用）
-
-pro 17密钥：MC60H-DWHD5-H80U9-6V85M-8280D（备用）
+**个人用途是免费使用的
 
 ![img](https://cdn.jsdelivr.net/gh/Fly0905/note-picture@main/imag/202509202306811.jpeg)
 
