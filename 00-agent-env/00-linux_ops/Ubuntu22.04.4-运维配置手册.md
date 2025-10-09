@@ -1128,7 +1128,7 @@ find /backup/configs/ -type d -mtime +30 -exec rm -rf {} \;
 
 如需技术支持，请联系：fly910905@sina.com
 
-**🎯 项目地址**: [Agent-101](https://github.com/your-repo/Agent-101)
+**🎯 项目地址**: [AIAgent101](https://github.com/FlyAIBox/AIAgent101)
 
 ---
 
