@@ -189,7 +189,23 @@ npm install -g @modelcontextprotocol/inspector
 推荐使用简化命令 `mcp dev`：
 
 ```bash
+pip install mcp[cli]
 mcp dev server/weather_server.py
+```
+
+执行过程
+```
+(agent101) root@fly:/Agent101/code/AIAgent101/02-agent-llm-mcp/mcp-demo# mcp dev server/weather_server.py
+Starting MCP inspector...
+⚙️ Proxy server listening on localhost:6277
+🔑 Session token: e291634cdaa8ab8b6601b61bd228cff4245a492db8f35fad431071cd1dc2f38f
+   Use this token to authenticate requests or set DANGEROUSLY_OMIT_AUTH=true to disable auth
+
+🚀 MCP Inspector is up and running at:
+   http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=e291634cdaa8ab8b6601b61bd228cff4245a492db8f35fad431071cd1dc2f38f
+
+🌐 Opening browser...
+
 ```
 
 或者使用 npx（如果未全局安装）：
