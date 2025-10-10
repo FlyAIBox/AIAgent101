@@ -44,21 +44,20 @@
 
 ### 🧭 课程大纲速览
 
-|  | 课程主题 | 配套资料 | 能力产出 |
-|---|----------|----------|----------|
-| 1️⃣ ✨宏观认知 | 行业趋势梳理<br>AI Agent 全局视角 | `10-agent-docs` | 搭建学习主线、明确项目定位 |
-| 2️⃣ 🛠️环境与API | 本地/云端环境搭建<br>首次调用大模型 API | `00-agent-env/` | 配好开发栈，能拉起基础推理服务 |
-| 3️⃣ 🧠提示词核心 | Prompt 结构设计<br>上下文记忆策略 | `01-agent-prompt-or-context/` | 写出稳健提示词，控制模型行为 |
-| 4️⃣ ⚡推理部署 | Transformers 入门<br>vLLM 性能调优 | `02-agent-model-deploy/` | 部署高吞吐推理服务，掌握性能杠杆 |
-| 5️⃣ 🔌MCP工具链 | MCP 协议机制<br>工具调用 Demo | `03-agent-llm-mcp/mcp-demo/` | 让智能体接入外部工具，扩展能力 |
-| 6️⃣ 🤝多角色协作 | LangChain 流程<br>LangGraph 状态机 | `04-agent-multi-role/` | 构建旅行规划智能体 |
-| 7️⃣ 🎯高效微调 | LlamaFactory 训练<br>PEFT/LoRA 策略 | `05-agent-model-finetuning/` | 打造垂直领域定制模型适配器 |
-| 8️⃣ 🚢端到端上线 | 架构拆分与部署<br>成本与运维策略 | `04-agent-multi-role/langgraph/6-Deployment/`, `00-agent-env/setup_agent101_dev.sh` | 输出可上线的端到端旅行 Agent |
-| 9️⃣ 📊评估体系 | Langfuse 监控指标<br>安全合规基线 | `06-agent-evaluation/langfuse/` | 建立质量与安全评估闭环 |
-| 🔟 🧩零代码工作流 | n8n 工作流编排<br>模版化复用 | `08-agent-workflow-n8n/` | 零代码快速接入业务流程 |
-| 1️⃣1️⃣ 🚀性能压测 | 压测指标体系<br>可视化分析 | `07-agent-llm_benchmark/` | 定量衡量推理性能并持续优化 |
-| 1️⃣2️⃣ 🧭职业发展 | 高频面试题精讲<br>项目复盘方法 | `09-agent-review/` | 沟通项目价值，准备求职答辩 |
-| 1️⃣3️⃣ 🏁课程收官 | 知识体系串联<br>延展学习路线 | `10-agent-docs/` | 固化方法论，规划后续进阶路径 |
+| 序号 | 课程主题 | 配套资料 | 能力产出 |
+|------|----------|----------|----------|
+| 00 | 🛠️ 环境与API | `00-agent-env/` | 配好开发栈，能拉起基础推理服务 |
+| 01 | 🧠 提示词核心 | `01-agent-prompt-or-context/` | 写出稳健提示词，控制模型行为 |
+| 02 | 🔌 工具链集成 | `02-agent-llm-mcp/` | 让智能体接入外部工具，拓展执行边界 |
+| 03 | 🤝 多角色协作 | `03-agent-multi-role/` | 搭建旅行智能体的协作骨架 |
+| 04 | 🏗️ 系统搭建 | `04-agent-build-docker-deploy/` | 组装前后端与容器化部署方案 |
+| 05 | 🔧 模型微调 | `05-agent-model-finetuning/` | 打造垂直领域定制模型适配器 |
+| 06 | 📊 评估体系 | `06-agent-evaluation/` | 建立质量与安全评估闭环 |
+| 07 | 🎯 模型推理 | `07-agent-model-deploy/` | 部署高吞吐推理服务，掌握性能杠杆 |
+| 08 | 🚀 性能压测 | `08-agent-llm_benchmark/` | 定量衡量推理性能并持续优化 |
+| 09 | 🔄 业务编排 | `09-agent-workflow-n8n/` | 零代码快速接入业务流程 |
+| 10 | 🧭 职业发展 | `10-agent-review/` | 沟通项目价值，准备求职答辩 |
+| 11 | ✨ 行业洞察 | `11-agent-docs/` | 固化方法论，规划后续进阶路径 |
 
 ### 🏆 课程收获
 
@@ -75,163 +74,114 @@
 #### 📁 00. 环境准备阶段
 ```
 📂 00-agent-env/
-├── 🐧 Linux运维基础 - Ubuntu 22.04配置手册
-├── 🐍 Python基础环境 - Python 3.10.18开发环境
-├── 📓 Jupyter Lab配置 - 交互式开发环境
-├── 🎯 Cursor开发工具 - AI辅助编程环境
-├── 🐳 Docker容器化 - Milvus向量数据库部署
-└── ☁️ Google Colab - 云端开发环境配置
+├── 🐧 00-linux_ops/                 - Ubuntu 22.04 运维脚本与常用命令
+├── 🐍 01-python-base/               - Python 3.10.18 环境与依赖管理
+├── 📓 02-jupyter-ops/               - JupyterLab 扩展与多内核配置
+├── 🎯 03-cursor-ops/                - Cursor 辅助开发配置与实践
+├── 🐳 04-docker-ops/                - Milvus 等核心服务的容器化部署
+├── ☁️ 05-colab-ops/                 - Google Colab 云端开发环境
+├── 🧪 first_llm_app.py              - 第一次调用大模型 API 的示例
+└── ⚙️ setup_agent101_dev.sh         - 本地一键环境初始化脚本
 ```
 
 #### 🧠 01. 提示词与上下文工程
 ```
 📂 01-agent-prompt-or-context/
-├── 📝 提示词工程基础
-│   ├── 基础提示词结构设计
-│   ├── 角色扮演与少样本学习
-│   ├── 思维链推理与工具使用
-│   └── 避免幻觉的最佳实践
-├── 🔄 上下文工程进阶
-│   ├── 上下文管理策略
-│   ├── 记忆机制设计
-│   ├── 信息压缩与检索
-│   └── 多轮对话上下文保持
-└── 💡 最佳实践案例
-    ├── 提示词优化技巧
-    ├── 图表与视频案例分析
-    └── 逻辑思维训练
+├── 🧱 prompt-enginner/              - 提示词结构化设计与角色模板
+├── 🔁 context-engineer/             - 上下文记忆管理与检索策略
+├── 🌟 prompts_best_practice/        - 图文与视频提示词最佳实践合集
+└── 📚 docs/                         - 理论笔记与案例解析
 ```
 
-#### 🚀 02. 大模型推理部署
+#### 🔌 02. 工具链集成与 MCP
 ```
-📂 02-agent-model-deploy/
-├── 🤖 Transformers基础
-│   ├── 模型加载与使用
-│   ├── Tokenizer处理
-│   └── 快速入门教程
-├── ⚡ vLLM高性能推理
-│   ├── 部署配置优化
-│   ├── 推理性能调优
-│   ├── 批处理与并发
-│   └── 内存管理策略
-└── 📊 推理性能评估
-    ├── 核心概念与挑战
-    ├── 优化方案对比
-    └── 生产环境部署
+📂 02-agent-llm-mcp/
+├── 📚 docs/                         - MCP Illustrated Guidebook 等资料
+└── 🧪 mcp-demo/                     - 完整的工具调用 Demo
+    ├── server/                      - MCP 服务端实现
+    ├── client/                      - MCP 客户端示例
+    └── doc/                         - 流程说明与操作指南
 ```
 
-#### 🔗 03. MCP协议集成
+#### 🤝 03. 多角色智能体系统
 ```
-📂 03-agent-llm-mcp/
-├── 📖 MCP协议原理
-│   ├── 协议架构设计
-│   ├── 通信模式详解
-│   └── 安全机制分析
-├── 🛠️ 实战Demo开发
-│   ├── 天气服务器实现
-│   ├── 客户端开发
-│   ├── 调试工具使用
-│   └── DeepSeek模型集成
-└── 🎯 实际应用场景
-    ├── 工具调用实现
-    ├── 多轮对话支持
-    └── LangChain集成
+📂 03-agent-multi-role/
+├── 🖼️ img/                          - 多角色协作流程图与示例
+└── 🕸️ langgraph/                    - LangGraph 多角色示例工程
+    ├── 0-Introduce/                 - 课程引导与环境说明
+    ├── 1-Base/                      - 基础节点与状态管理
+    ├── 2-StateAndMemory/            - 记忆与上下文持久化策略
+    ├── 3-HumanInTheLoop/            - 人在回路的交互设计
+    ├── 4-BuildYourAssiant/          - 多角色旅行助手搭建
+    └── 5-LongTermMemroy/            - 长期记忆与回访机制
 ```
 
-#### 👥 04. 多角色智能体系统
+#### 🏗️ 04. 系统搭建与容器化
 ```
-📂 04-agent-multi-role/
-├── 🔗 LangChain基础
-│   ├── 核心概念理解
-│   ├── 链式调用设计
-│   └── 工具集成方案
-├── 🕸️ LangGraph状态管理
-│   ├── 图结构设计
-│   ├── 状态机管理
-│   ├── 并行执行模式
-│   ├── 人机交互循环
-│   ├── 长期记忆管理
-│   └── 生产环境部署
-└── 🏨 旅行智能体实现
-    ├── 多角色协作机制
-    ├── 决策流程设计
-    └── 个性化推荐算法
+📂 04-agent-build-docker-deploy/
+├── ⚙️ backend/                      - FastAPI 等后端服务实现
+├── 💻 frontend/                     - Web 前端界面与交互
+├── 🐳 docker/                       - Docker 与 Compose 部署配置
+├── 📚 docs/                         - 架构说明与运维手册
+├── 🚀 setup_environment.sh          - 环境初始化脚本
+├── ▶️ start_backend.sh              - 后端启动脚本
+└── ▶️ start_frontend.sh             - 前端启动脚本
 ```
 
 #### 🔧 05. 模型微调与优化
 ```
 📂 05-agent-model-finetuning/
-├── 🦙 LlamaFactory微调框架
-│   ├── 微调策略选择
-│   ├── 数据预处理流程
-│   ├── 训练监控与调优
-│   └── 模型评估方法
-├── 📊 PEFT参数高效微调
-│   ├── LoRA技术原理
-│   ├── 适配器设计
-│   └── 性能对比分析
-└── 🏥 医疗领域应用案例
-    ├── 眼科诊断助手
-    ├── 数据集构建方法
-    └── Easy Dataset工具使用
+├── 🦙 llamafactory/                 - LlamaFactory 微调流程与实验记录
+└── 📊 peft/                         - LoRA/PEFT 策略与适配器示例
 ```
 
 #### 📈 06. 智能体评估体系
 ```
 📂 06-agent-evaluation/
-├── 📊 Langfuse评估平台
-│   ├── 性能监控指标
-│   ├── 对话质量评估
-│   ├── 成本效益分析
-│   └── A/B测试框架
-└── 🔒 安全性评估
-    ├── 提示词注入检测
-    ├── 输出内容过滤
-    └── 隐私保护机制
+└── 📊 langfuse/                     - Langfuse 指标、评估流程与图示
 ```
 
-#### 🏃 07. 性能压测框架
+#### 🎯 07. 模型推理部署
 ```
-📂 07-agent-llm_benchmark/
-├── 🚀 vLLM压测工具
-│   ├── 吞吐量测试
-│   ├── 延迟性能分析
-│   ├── 并发能力评估
-│   └── 资源使用监控
-├── 📊 性能指标分析
-│   ├── TTFT首Token时间
-│   ├── TPOT每Token时间
-│   ├── ITL Token间延迟
-│   └── 端到端延迟评估
-└── 📈 可视化报告
-    ├── 性能图表生成
-    ├── 趋势分析报告
-    └── 优化建议输出
+📂 07-agent-model-deploy/
+├── 📘 Transformers.md               - Transformers 入门与速查
+├── 🤖 transformer/                  - 基础示例与 Notebook
+├── ⚡ vllm/                          - vLLM 部署、扩展与性能调优
+└── 🧭 大语言模型推理：核心概念、挑战与优化方案.md
 ```
 
-#### 🔄 08. 工作流自动化
+#### 🚀 08. 性能压测框架
 ```
-📂 08-agent-workflow-n8n/
-├── 🔧 n8n平台介绍
-│   ├── 可视化工作流设计
-│   ├── 节点生态系统
-│   └── 社区资源利用
-├── 🤖 AI工作流构建
-│   ├── 多模态数据处理
-│   ├── 自动化任务调度
-│   └── 第三方系统集成
-└── 📋 模板与最佳实践
-    ├── 常用工作流模板
-    ├── 性能优化技巧
-    └── 故障排查方法
+📂 08-agent-llm_benchmark/
+└── 📈 llm_benchmark/                - 压测脚本、配置与报告
+    ├── src/                         - 指标采集与分析代码
+    ├── reports/                     - 测试报告与总结
+    ├── charts/                      - 可视化素材
+    ├── docs/                        - 使用说明
+    ├── main.py                      - 压测入口
+    └── config.yaml                  - 参数配置
 ```
 
-#### 📝 09. 项目总结与复盘(分享面试考点和经验)
+#### 🔄 09. 工作流自动化
 ```
-📂 09-agent-review/
-├── 💡 技术要点回顾
-├── 🎯 项目成果展示
-└── 📚 持续学习建议
+📂 09-agent-workflow-n8n/
+├── 📘 doc/                          - n8n 平台介绍与操作手册
+├── 🖼️ images/                       - 界面截图与流程示意
+└── 🧩 template/                     - n8n 工作流模板集合
+```
+
+#### 🧭 10. 职业发展与项目复盘
+```
+📂 10-agent-review/
+└── 📝 README.MD                     - 面试考点与复盘方法
+```
+
+#### ✨ 11. 行业洞察与延展阅读
+```
+📂 11-agent-docs/
+├── 📑 lecture/                      - 课程讲义与演示素材
+├── 🖼️ img/                          - 行业趋势与架构图
+└── 📄 *.pdf                         - 行业报告与白皮书合集
 ```
 
 ---
@@ -334,68 +284,87 @@ graph TB
 
 ```
 AIAgent101/
-├── 📂 00-agent-env/                    # 🏗️ 环境配置与基础设施
-│   ├── 00-linux_ops/                  # Linux运维工具和脚本
-│   ├── 01-python-base/                # Python基础环境配置
-│   ├── 02-jupyter-ops/                # Jupyter Lab配置管理
-│   ├── 03-cursor-ops/                 # Cursor开发工具配置
-│   ├── 04-docker-ops/                 # Docker容器化部署
-│   ├── 05-colab-ops/                  # Google Colab云端环境
-│   ├── setup_agent101_dev.sh          # 一键环境安装脚本
-│   └── first_llm_app.py               # 第一个LLM应用示例
+├── 00-agent-env/                     # 环境配置与基础设施
+│   ├── 00-linux_ops/
+│   ├── 01-python-base/
+│   ├── 02-jupyter-ops/
+│   ├── 03-cursor-ops/
+│   ├── 04-docker-ops/
+│   ├── 05-colab-ops/
+│   ├── first_llm_app.py
+│   └── setup_agent101_dev.sh
 │
-├── 📂 01-agent-prompt-or-context/     # 🧠 提示词与上下文工程
-│   ├── prompt-enginner/               # 提示词工程最佳实践
-│   ├── context-engineer/              # 上下文工程高级技术
-│   └── prompts_best_practice/         # 提示词最佳实践案例库
+├── 01-agent-prompt-or-context/       # 提示词与上下文工程
+│   ├── context-engineer/
+│   ├── prompt-enginner/
+│   ├── prompts_best_practice/
+│   └── docs/
 │
-├── 📂 02-agent-model-deploy/          # 🚀 大模型推理部署
-│   ├── transformer/                   # Transformers基础教程
-│   ├── vllm/                         # vLLM高性能推理
+├── 02-agent-llm-mcp/                 # MCP 协议与工具链
+│   ├── docs/
+│   └── mcp-demo/
+│       ├── client/
+│       ├── server/
+│       └── doc/
+│
+├── 03-agent-multi-role/              # 多角色智能体系统
+│   ├── img/
+│   └── langgraph/
+│       ├── 0-Introduce/
+│       ├── 1-Base/
+│       ├── 2-StateAndMemory/
+│       ├── 3-HumanInTheLoop/
+│       ├── 4-BuildYourAssiant/
+│       └── 5-LongTermMemroy/
+│
+├── 04-agent-build-docker-deploy/     # 系统搭建与容器部署
+│   ├── backend/
+│   ├── frontend/
+│   ├── docker/
+│   ├── docs/
+│   ├── setup_environment.sh
+│   ├── start_backend.sh
+│   └── start_frontend.sh
+│
+├── 05-agent-model-finetuning/        # 模型微调与优化
+│   ├── llamafactory/
+│   └── peft/
+│
+├── 06-agent-evaluation/              # 智能体评估体系
+│   └── langfuse/
+│
+├── 07-agent-model-deploy/            # 大模型推理部署
+│   ├── transformer/
+│   ├── vllm/
+│   ├── Transformers.md
 │   └── 大语言模型推理：核心概念、挑战与优化方案.md
 │
-├── 📂 03-agent-llm-mcp/              # 🔗 MCP协议集成
-│   ├── docs/                         # MCP协议文档
-│   └── mcp-demo/                     # MCP实战Demo
-│       ├── client/                   # 客户端实现
-│       ├── server/                   # 服务端实现
-│       └── requirements.txt          # 依赖包清单
+├── 08-agent-llm_benchmark/           # 推理性能压测
+│   └── llm_benchmark/
+│       ├── src/
+│       ├── reports/
+│       ├── charts/
+│       ├── docs/
+│       ├── main.py
+│       ├── config.yaml
+│       └── requirements.txt
 │
-├── 📂 04-agent-multi-role/           # 👥 多角色智能体系统
-│   ├── langchain/                    # LangChain基础框架
-│   └── langgraph/                    # LangGraph状态管理
-│       ├── 0-Introduce/              # 入门介绍
-│       ├── 1-Base/                   # 基础概念
-│       ├── 2-StateAndMemory/         # 状态与记忆
-│       ├── 3-HumanInTheLoop/         # 人机交互
-│       ├── 4-BuildYourAssiant/       # 构建助手
-│       ├── 5-LongTermMemroy/         # 长期记忆
-│       └── 6-Deployment/             # 部署配置
+├── 09-agent-workflow-n8n/            # 业务流程自动化
+│   ├── doc/
+│   ├── images/
+│   └── template/
 │
-├── 📂 05-agent-model-finetuning/     # 🔧 模型微调与优化
-│   ├── llamafactory/                 # LlamaFactory微调框架
-│   └── peft/                         # PEFT参数高效微调
+├── 10-agent-review/                  # 项目复盘与职业规划
+│   └── README.MD
 │
-├── 📂 06-agent-evaluation/           # 📈 智能体评估体系
-│   └── langfuse/                     # Langfuse评估平台
+├── 11-agent-docs/                    # 行业洞察与参考资料
+│   ├── lecture/
+│   ├── img/
+│   └── *.pdf
 │
-├── 📂 07-agent-llm_benchmark/        # 🏃 性能压测框架
-│   └── llm_benchmark/                # vLLM压测工具
-│       ├── main.py                   # 统一入口脚本
-│       ├── config.yaml              # 配置文件
-│       ├── src/                     # 核心源码
-│       ├── results/                 # 测试结果
-│       └── charts/                  # 性能图表
-│
-├── 📂 08-agent-workflow-n8n/         # 🔄 工作流自动化
-│   ├── doc/                         # n8n文档资料
-│   ├── template/                    # 工作流模板
-│   └── n8n-manager.sh              # n8n管理脚本
-│
-├── 📂 09-agent-review/              # 📝 项目总结与复盘
-├── 📂 10-agent-docs/                # 📚 项目文档资料
-├── 📄 LICENSE                       # 开源协议
-└── 📖 README.md                     # 项目说明文档
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
 ---
@@ -540,7 +509,7 @@ langgraph dev
 #### 🔧 第三步：集成MCP工具
 ```bash
 # 进入MCP演示目录  
-cd 03-agent-llm-mcp/mcp-demo
+cd 02-agent-llm-mcp/mcp-demo
 
 # 启动天气服务器
 python server/weather_server.py &
@@ -552,45 +521,6 @@ python client/mcp_client_deepseek.py
 # 输入：今天北京天气怎么样？
 ```
 
-### 📚 学习路径建议
-
-#### 🥇 初学者路径 
-```
-1：环境搭建 + 提示词工程基础
-├── 📂 00-agent-env          # 开发环境配置
-├── 📂 01-prompt-engineer    # 提示词基础技能  
-└── 🎯 目标：能写出有效的提示词，运行基础AI应用
-
-2：模型部署 + MCP协议
-├── 📂 02-agent-model-deploy # vLLM推理部署
-├── 📂 03-agent-llm-mcp      # MCP工具集成
-└── 🎯 目标：部署本地推理服务，集成外部工具
-
-3：多角色智能体开发
-├── 📂 04-agent-multi-role   # LangChain + LangGraph
-└── 🎯 目标：构建简单的多角色协作系统
-
-
-├── 🏨 旅行规划智能体开发
-└── 🎯 目标：完成一个可演示的智能体项目
-```
-
-#### 🥈 进阶开发者路径
-```
-1：模型微调与优化
-├── 📂 05-agent-model-finetuning  # LlamaFactory微调
-└── 🎯 目标：微调专业领域模型
-
-2：评估与压测
-├── 📂 06-agent-evaluation        # Langfuse评估体系
-├── 📂 07-agent-llm_benchmark     # 性能压测框架
-└── 🎯 目标：建立完整的评估体系
-
-3：生产部署
-├── 📂 08-agent-workflow-n8n      # 工作流自动化
-├── 🐳 Docker容器化部署
-└── 🎯 目标：部署生产级智能体系统
-```
 
 ### 🎯 学习目标检查清单
 
