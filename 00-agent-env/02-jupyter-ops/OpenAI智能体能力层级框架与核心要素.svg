@@ -1,0 +1,121 @@
+<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: 'Times New Roman', serif; font-size: 26px; font-weight: bold; fill: #1a1a1a; }
+      .subtitle { font-family: 'Times New Roman', serif; font-size: 16px; fill: #333; }
+      .chinese { font-family: SimSun, serif; font-size: 14px; fill: #444; }
+      .formula { font-family: 'Times New Roman', serif; font-size: 12px; font-style: italic; fill: #666; }
+      .level-box { fill: #ffffff; stroke: #495057; stroke-width: 2; }
+      .level1 { fill: #e3f2fd; }
+      .level2 { fill: #fff3e0; }
+      .level3 { fill: #e8f5e9; }
+      .level4 { fill: #fce4ec; }
+      .level5 { fill: #f3e5f5; }
+      .key-element { fill: #fff9c4; stroke: #f57f17; stroke-width: 2; }
+      .arrow { fill: none; stroke: #495057; stroke-width: 2; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#495057" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" class="title">OpenAI Agent Capability Levels Framework</text>
+  <text x="700" y="65" text-anchor="middle" class="chinese">OpenAI智能体能力层级框架与核心要素</text>
+
+  <!-- Level Pyramid -->
+  <g id="levels">
+    <!-- Level 1: Chatbot -->
+    <polygon points="400,680 1000,680 900,580 500,580" class="level1 level-box"/>
+    <text x="700" y="620" text-anchor="middle" class="subtitle">Level 1: Chatbot (对话机器人)</text>
+    <text x="700" y="645" text-anchor="middle" class="formula">Foundation = Language Prior Knowledge</text>
+    <text x="700" y="665" text-anchor="middle" class="chinese">基础：语言先验知识</text>
+
+    <!-- Level 2: Reasoner -->
+    <polygon points="450,580 950,580 850,480 550,480" class="level2 level-box"/>
+    <text x="700" y="520" text-anchor="middle" class="subtitle">Level 2: Reasoner (推理者)</text>
+    <text x="700" y="545" text-anchor="middle" class="formula">Chain-of-Thought: s₁ → s₂ → ... → sₙ</text>
+    <text x="700" y="565" text-anchor="middle" class="chinese">能力：多步推理</text>
+
+    <!-- Level 3: Agent -->
+    <polygon points="500,480 900,480 800,380 600,380" class="level3 level-box"/>
+    <text x="700" y="420" text-anchor="middle" class="subtitle">Level 3: Agent (智能体)</text>
+    <text x="700" y="445" text-anchor="middle" class="formula">Reasoning + Action + Environment</text>
+    <text x="700" y="465" text-anchor="middle" class="chinese">突破：环境交互能力</text>
+
+    <!-- Level 4: Innovator -->
+    <polygon points="550,380 850,380 750,280 650,280" class="level4 level-box"/>
+    <text x="700" y="320" text-anchor="middle" class="subtitle">Level 4: Innovator (创新者)</text>
+    <text x="700" y="345" text-anchor="middle" class="formula">Self-Exploration + Intrinsic Reward</text>
+    <text x="700" y="365" text-anchor="middle" class="chinese">关键：内生激励机制</text>
+
+    <!-- Level 5: Organizer -->
+    <polygon points="600,280 800,280 700,180 700,180" class="level5 level-box"/>
+    <text x="700" y="220" text-anchor="middle" class="subtitle">Level 5: Organizer (组织者)</text>
+    <text x="700" y="245" text-anchor="middle" class="formula">Multi-Agent Collaboration</text>
+    <text x="700" y="265" text-anchor="middle" class="chinese">顶层：协作组织能力</text>
+  </g>
+
+  <!-- Three Key Capabilities -->
+  <g id="key-capabilities">
+    <text x="100" y="130" class="subtitle">Three Critical Capabilities (三大关键能力)</text>
+
+    <!-- Memory -->
+    <rect x="50" y="150" width="350" height="180" class="key-element" rx="8"/>
+    <text x="225" y="180" text-anchor="middle" class="subtitle">1. Long-Term Memory</text>
+    <text x="225" y="200" text-anchor="middle" class="chinese">长期记忆</text>
+    
+    <text x="70" y="230" class="chinese">• Context管理能力</text>
+    <text x="70" y="255" class="formula">Memory Hierarchy:</text>
+    <text x="90" y="275" class="formula">CPU Cache → RAM → Disk → Environment</text>
+    <text x="70" y="295" class="chinese">• 冯·诺依曼洞察：</text>
+    <text x="90" y="315" class="formula">"Environment = Outermost Memory Layer"</text>
+
+    <!-- Intrinsic Reward -->
+    <rect x="450" y="150" width="350" height="180" class="key-element" rx="8"/>
+    <text x="625" y="180" text-anchor="middle" class="subtitle">2. Intrinsic Reward</text>
+    <text x="625" y="200" text-anchor="middle" class="chinese">内生奖励</text>
+    
+    <text x="470" y="230" class="chinese">• 自我探索动机</text>
+    <text x="470" y="255" class="formula">R(s,a) = R_external + R_intrinsic</text>
+    <text x="470" y="280" class="chinese">• 类比：婴儿的好奇心驱动</text>
+    <text x="470" y="305" class="chinese">• 关键：无需外部反馈即可学习</text>
+
+    <!-- Multi-Agent -->
+    <rect x="850" y="150" width="350" height="180" class="key-element" rx="8"/>
+    <text x="1025" y="180" text-anchor="middle" class="subtitle">3. Multi-Agent System</text>
+    <text x="1025" y="200" text-anchor="middle" class="chinese">多智能体系统</text>
+    
+    <text x="870" y="230" class="chinese">• 协作组织能力</text>
+    <text x="870" y="255" class="formula">Collective Intelligence > Σ Individual</text>
+    <text x="870" y="280" class="chinese">• 分布式决策</text>
+    <text x="870" y="305" class="chinese">• 信息交换与价值创造</text>
+  </g>
+
+  <!-- Task Evaluation Metrics -->
+  <g id="metrics">
+    <rect x="50" y="750" width="600" height="130" class="level-box" rx="8"/>
+    <text x="350" y="780" text-anchor="middle" class="subtitle">Task Evaluation Metrics (任务评估指标)</text>
+    
+    <text x="70" y="810" class="chinese">• Pass@k：k次尝试至少成功1次</text>
+    <text x="90" y="835" class="formula">P@k = 1 - (1-p)^k ≈ k·p (for small p)</text>
+    <text x="380" y="810" class="chinese">适用：创新类任务</text>
+    
+    <text x="70" y="860" class="chinese">• Pass^k：每次都必须成功</text>
+    <text x="90" y="885" class="formula">P^k = p^k ≈ e^(-k(1-p))</text>
+    <text x="380" y="860" class="chinese">适用：可靠性任务</text>
+  </g>
+
+  <!-- Design Principles -->
+  <rect x="700" y="750" width="650" height="130" class="level-box" rx="8"/>
+  <text x="1025" y="780" text-anchor="middle" class="subtitle">Reward Design Principles (奖励设计原则)</text>
+  
+  <text x="720" y="810" class="chinese">✓ 基于结果 (Result-based) ≠ 基于过程 (Process-based)</text>
+  <text x="720" y="835" class="chinese">✓ 白盒可计算 (White-box) ≠ 主观偏好 (Subjective)</text>
+  <text x="720" y="860" class="chinese">✓ 规则驱动 (Rule-driven) ≠ 人类反馈 (Human feedback)</text>
+
+  <!-- Example -->
+  <text x="1050" y="810" class="formula">Example: Math Problem</text>
+  <text x="1070" y="835" class="formula">Answer = 3 → Correct</text>
+  <text x="1070" y="860" class="formula">Answer ≠ 3 → Wrong</text>
+</svg>

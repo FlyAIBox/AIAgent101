@@ -631,7 +631,7 @@ sudo systemctl status v2raya.service
 
 ### 9.2 配置v2rayA
 
-1. **访问Web界面**: http://localhost:2017
+1. **访问Web界面**: http://192.168.172.128:2017
 2. **创建管理员账号**: 首次访问需要创建账号
 3. **导入节点**: 支持多种导入方式
    - 节点链接
