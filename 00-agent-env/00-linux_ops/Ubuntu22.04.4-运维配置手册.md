@@ -427,6 +427,107 @@ df -Th
 - 磁盘操作有数据丢失风险，请务必备份重要数据
 - 在生产环境操作前，建议在测试环境验证
 
+#### 6.2.4 Ubuntu 根目录 LVM 扩容详细操作步骤
+
+没问题，这是一份完整的操作步骤，用于在 Ubuntu 22.04 系统中，将已有的 **Logical Volume Management (LVM)** 根目录 (`/`) 空间从大约 58 GiB 扩容到大约 146 GiB，利用了未分配的磁盘空间。
+
+**目标:** 将根目录挂载点 `/` 所在的逻辑卷 `/dev/mapper/ubuntu--vg-ubuntu--lv` 从约 58 GiB 扩容到约 146 GiB，使用 `/dev/sda` 上的剩余空间。
+
+##### 1. 检查当前磁盘和文件系统状态
+
+首先，确认根目录的文件系统大小和磁盘分区情况。
+
+| 命令       | 目的                         | 初始结果分析                                                 |
+| ---------- | ---------------------------- | ------------------------------------------------------------ |
+| `df -Th`   | 查看文件系统挂载点使用情况。 | 根目录 `/` 初始大小为 **57G**，挂载在 `/dev/mapper/ubuntu--vg-ubuntu--lv`。 |
+| `fdisk -l` | 列出所有磁盘和分区信息。     | 确认主要磁盘是 `/dev/sda`，总大小 **150 GiB**。现有分区 `/dev/sda3` 只有 **58G**，说明磁盘上有大量未分配空间。 |
+
+------
+
+##### 2. 创建新的磁盘分区
+
+使用 `fdisk` 工具在 `/dev/sda` 磁盘上创建一个新的分区，以利用剩余空间。
+
+Bash
+
+```Bash
+fdisk /dev/sda
+```
+
+在 `fdisk` 提示符下执行以下步骤：
+
+1. 输入 `n` **(new)** 创建新分区。
+2. **Partition number (4-128, default 4):** 直接按 **Enter** 键接受默认的下一个分区号（例如 `4`）。
+3. **First sector (...):** 直接按 **Enter** 键接受默认值，从剩余空间的起始扇区开始。
+4. **Last sector, +/-sectors or +/-size{K,M,G,T,P} (...):** 直接按 **Enter** 键接受默认值，使用所有剩余空间（这里创建了一个 **90 GiB** 的新分区 `/dev/sda4`）。
+5. 输入 `p` **(print)** 检查新的分区表，确认 `/dev/sda4` 已创建。
+6. 输入 `w` **(write)** 将更改写入磁盘并退出 `fdisk`。
+
+##### 3. 通知内核分区表变更
+
+为了让操作系统立即识别新的分区 `/dev/sda4`，需要运行 `partprobe`。
+
+```Bash
+partprobe
+```
+
+##### 4. 将新分区添加到 LVM (Logical Volume Management)
+
+现在，将新创建的分区 `/dev/sda4` 添加到 LVM 体系中。
+
+###### 4.1. 创建物理卷 (PV)
+
+将 `/dev/sda4` 初始化为一个 **Physical Volume (PV)**。
+
+```Bash
+pvcreate /dev/sda4
+```
+
+###### 4.2. 扩展卷组 (VG)
+
+将新的物理卷 `/dev/sda4` 添加到包含根逻辑卷的卷组 **ubuntu-vg** 中。
+
+```Bash
+vgextend ubuntu-vg /dev/sda4
+```
+
+##### 5. 扩展逻辑卷和文件系统
+
+现在卷组已经拥有了额外的空间，可以扩展逻辑卷和其上的文件系统了。
+
+###### 5.1. 扩展逻辑卷 (LV)
+
+使用卷组中 **100% 的空闲空间** (`+100%FREE`) 来扩展根目录逻辑卷 `/dev/mapper/ubuntu--vg-ubuntu--lv`。
+
+```Bash
+lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+```
+
+###### 5.2. 调整文件系统大小
+
+最后，调整逻辑卷上的 **ext4 文件系统**大小，以使用逻辑卷的全部新空间。因为文件系统处于挂载状态 (`on-line resizing required`)，`resize2fs` 会自动在线完成扩容。
+
+```Bash
+resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+```
+
+##### 6. 验证扩容结果
+
+运行 `df -Th` 确认根目录 `/` 的大小是否已成功增加。
+
+```Bash
+df -Th /
+```
+
+###### **扩容后结果:**
+
+```Bash
+Filesystem                                Type  Size Used Avail Use% Mounted on
+/dev/mapper/ubuntu--vg-ubuntu--lv ext4  146G  18G 122G  13% /
+```
+
+✅ 根目录的文件系统大小已成功从 **57G** 扩容到 **146G**。
+
 ---
 
 ## 7. DNS配置
