@@ -153,36 +153,18 @@ mcp-demo/
 
 ### 环境要求
 
-- Python 3.10.12 或更高版本
+- Python 3.10.18
 - Ubuntu 22.04 操作系统
 
 ### 安装步骤
 
-1. **克隆项目**：
-
-```bash
-git clone https://github.com/your-username/mcp-in-action.git
-cd mcp-in-action/mcp-demo
-```
-
-2. **创建并激活虚拟环境**：
-
-```bash
-python -m venv venv_mcp_demo
-source venv_mcp_demo/bin/activate
-
-#或者使用conda创建虚拟环境
-conda create -n venv_mcp_demo python=3.10.12
-conda activate venv_mcp_demo
-```
-
-3. **安装依赖**：
+1. **安装依赖**：
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **设置和风天气 API Key 和 API Host**：
+42. **设置和风天气 API Key 和 API Host**：
 复制`.env.example`来创建 `.env` 文件并添加以下配置：
 ```bash
 ### 和风天气API配置(参考https://dev.qweather.com/)
