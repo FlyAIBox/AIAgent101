@@ -134,6 +134,14 @@ mcp-demo/
    - 支持通过城市ID或经纬度坐标查询天气信息
    - 城市ID可通过[和风天气城市查询API](https://dev.qweather.com/docs/api/geoapi/)获取
 
+5. **和风天气API测试**：
+
+```bash
+curl --compressed \
+-H "X-QW-Api-Key: XXX" \
+'https://XXX/v7/weather/now?location=101010100'
+```
+
 ### 客户端实现说明
 
 客户端提供了一个简单的命令行界面，支持以下操作：
@@ -164,7 +172,7 @@ mcp-demo/
 pip install -r requirements.txt
 ```
 
-42. **设置和风天气 API Key 和 API Host**：
+2. **设置和风天气 API Key 和 API Host**：
 复制`.env.example`来创建 `.env` 文件并添加以下配置：
 ```bash
 ### 和风天气API配置(参考https://dev.qweather.com/)
