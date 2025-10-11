@@ -17,7 +17,7 @@ MCP 天气服务器
 2. get_daily_forecast: 获取指定城市ID或经纬度的天气预报
 
 Author: FlyAIBox
-Date: 2025.05.03
+Date: 2025.10.11
 """
 
 from typing import Any, Dict, List, Optional, Union

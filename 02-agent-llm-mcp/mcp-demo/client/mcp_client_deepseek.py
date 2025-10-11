@@ -16,7 +16,7 @@
 # DEEPSEEK_MODEL：DeepSeek 模型名称 (例如 deepseek-chat)
 
 Author: FlyAIBox
-Date: 2025.05.03
+Date: 2025.10.11
 """
 
 import json
