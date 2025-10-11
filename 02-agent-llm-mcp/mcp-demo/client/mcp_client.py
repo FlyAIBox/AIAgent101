@@ -50,7 +50,12 @@ class SimpleClientApp:
         )
         
         # 启动服务器并获取通信流
+        # 通过 stdio_client 协程，以异步方式建立与服务器进程的标准输入/输出通道
+        # enter_async_context 可以确保后续资源能自动释放（类似 try...finally）
+        # stdio_client(server_params) 会启动子进程并返回 (reader, writer) 的元组
         read_write = await self.exit_stack.enter_async_context(stdio_client(server_params))
+        # 解包得到 reader（读取服务器输出）、writer（写入服务器输入），用于后续通信
+        # read_write 是一个包含两个元素的元组，分别对应于与服务器通信的 “读取” (reader) 和 “写入” (writer) 流对象。
         read, write = read_write
         
         # 创建 MCP 客户端会话
@@ -82,6 +87,8 @@ class SimpleClientApp:
             工具执行结果或错误消息
         """
         # 检查工具是否存在
+        # 遍历工具定义列表，查找名称与 tool_name 匹配的工具对象
+        # next() 用于返回第一个匹配的工具（如未找到则返回 None）
         tool_def = next((t for t in self.tool_definitions if t.name == tool_name), None)
         if not tool_def:
             return f"错误: 未找到工具 '{tool_name}'"

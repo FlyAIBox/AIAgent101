@@ -7,14 +7,14 @@
 ## 代码结构
 ```mermaid
 graph TD
-    A[mcp_client.py] --> B[SimpleClientApp]
-    B --> B1[start\n连接服务器并加载工具]
-    B --> B2[execute_tool\n调用 MCP 工具]
-    B --> B3[print_help/print_tools]
-    A --> C[main 异步入口]
-    C --> C1[校验服务器路径]
-    C --> C2[实例化 SimpleClientApp]
-    C --> C3[命令循环\nhelp/list/call/exit]
+    A["mcp_client.py"] --> B["SimpleClientApp"]
+    B --> B1["start<br/>连接服务器并加载工具"]
+    B --> B2["execute_tool<br/>调用 MCP 工具"]
+    B --> B3["print_help / print_tools"]
+    A --> C["main 异步入口"]
+    C --> C1["校验服务器路径"]
+    C --> C2["实例化 SimpleClientApp"]
+    C --> C3["命令循环<br/>help / list / call / exit"]
 ```
 - `SimpleClientApp` 管理服务器会话与命令分发（`02-agent-llm-mcp/mcp-demo/client/mcp_client.py:26`）
 - 命令循环解析用户输入（`02-agent-llm-mcp/mcp-demo/client/mcp_client.py:133`）
@@ -23,18 +23,18 @@ graph TD
 ## 业务流程
 ```mermaid
 flowchart TD
-    Start[运行 main] --> CheckPath[校验服务器路径]
-    CheckPath --> StartServer[SimpleClientApp.start\n启动天气服务器]
-    StartServer --> ListTools[list_tools 缓存工具]
+    Start["运行 main"] --> CheckPath["校验服务器路径"]
+    CheckPath --> StartServer["SimpleClientApp.start<br/>启动天气服务器"]
+    StartServer --> ListTools["list_tools 缓存工具"]
     ListTools --> Loop{用户输入?}
-    Loop -->|help| ShowHelp[print_help]
-    Loop -->|list| ShowTools[print_tools]
-    Loop -->|call| Parse[解析参数\nJSON/空格]
-    Parse --> Exec[execute_tool 调用]
-    Exec --> Print[输出结果]
-    Loop -->|exit| Stop[关闭客户端]
+    Loop -->|help| ShowHelp["print_help"]
+    Loop -->|list| ShowTools["print_tools"]
+    Loop -->|call| Parse["解析参数<br/>JSON 或空格"]
+    Parse --> Exec["execute_tool 调用"]
+    Exec --> Print["输出结果"]
+    Loop -->|exit| Stop["关闭客户端"]
     Print --> Loop
-    Stop --> End[释放资源并退出]
+    Stop --> End["释放资源并退出"]
 ```
 1. 校验服务器脚本路径并启动天气服务器子进程。
 2. 建立 MCP 会话并缓存工具列表。
@@ -46,8 +46,3 @@ flowchart TD
 - `execute_tool`：根据工具名取 schema，执行工具并返回 `content`。
 - `print_help` / `print_tools`：说明命令格式与参数。
 - 命令解析兼容 JSON 与空格分隔，降低使用门槛。
-
-## 与 PPT 大纲的关联
-- “MCP 客户端联调：命令行工具调用实操”（第9页）。
-- 为理解模型自动编排前的手动流程提供支撑。
-- 可延展为作业，例如增加结果格式化或自动化脚本。
