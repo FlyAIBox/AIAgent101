@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional, Union
 import asyncio
 import httpx
 import os
+from urllib.parse import urljoin
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 from pathlib import Path
@@ -33,11 +34,36 @@ dotenv_path = Path(__file__).resolve().parents[1] / '.env'
 load_dotenv(dotenv_path)
 
 # 初始化 FastMCP 服务器
-mcp = FastMCP("weather")
+mcp = FastMCP("weather",  # 服务器名称
+              debug=True,  # 启用调试模式，会输出详细日志
+              host="0.0.0.0") # 监听所有网络接口，允许远程连接
 
 # 从环境变量中读取常量
 QWEATHER_API_BASE = os.getenv("QWEATHER_API_BASE")
 QWEATHER_API_KEY = os.getenv("QWEATHER_API_KEY")
+
+def _normalize_base_url(raw_base: Optional[str]) -> str:
+    """
+    确保基础 URL 包含协议并以单个斜杠结尾，兼容 .env 中未写协议的情况
+    """
+    if not raw_base:
+        raise RuntimeError("未配置 QWEATHER_API_BASE 环境变量")
+
+    base = raw_base.strip()
+    if not base.startswith(("http://", "https://")):
+        base = f"https://{base.lstrip('/')}"
+
+    # urljoin 要求目录风格以斜杠结尾，避免 'v7/weather/7d' 被覆盖
+    if not base.endswith("/"):
+        base = f"{base}/"
+
+    return base
+
+try:
+    _QWEATHER_BASE_URL = _normalize_base_url(QWEATHER_API_BASE)
+except RuntimeError as err:
+    print(f"[配置错误] {err}")
+    _QWEATHER_BASE_URL = None
 
 async def make_qweather_request(endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """
@@ -50,18 +76,37 @@ async def make_qweather_request(endpoint: str, params: Dict[str, Any]) -> Option
     返回:
         成功时返回 JSON 响应，失败时返回 None
     """
-    # 添加密钥到参数
-    params["key"] = QWEATHER_API_KEY
-    
-    url = f"{QWEATHER_API_BASE}/{endpoint}"
+    if not _QWEATHER_BASE_URL:
+        print("QWEATHER_API_BASE 未正确配置，已跳过请求。")
+        return None
+
+    if not QWEATHER_API_KEY:
+        print("QWEATHER_API_KEY 未设置，已跳过请求。")
+        return None
+
+    safe_endpoint = endpoint.lstrip("/")
+    url = urljoin(_QWEATHER_BASE_URL, safe_endpoint)
+
+    # 使用 Header 方式认证（和风天气的新版本API）
+    headers = {
+        "X-QW-Api-Key": QWEATHER_API_KEY
+    }
     
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.get(url, params=params, timeout=30.0)
+            print(f"请求 URL: {url}")
+            print(f"请求参数: {params}")
+            response = await client.get(url, params=params, headers=headers, timeout=30.0)
+            print(f"响应状态码: {response.status_code}")
             response.raise_for_status()
-            return response.json()
+            result = response.json()
+            print(f"响应内容: {result}")
+            return result
+        except httpx.HTTPStatusError as e:
+            print(f"HTTP 状态错误: {e.response.status_code} - {e.response.text}")
+            return None
         except Exception as e:
-            print(f"API 请求错误: {e}")
+            print(f"API 请求错误: {type(e).__name__}: {e}")
             return None
 
 def format_warning(warning: Dict[str, Any]) -> str:
@@ -108,7 +153,7 @@ async def get_weather_warning(location: Union[str, int]) -> str:
         "lang": "zh"
     }
     
-    data = await make_qweather_request("warning/now", params)
+    data = await make_qweather_request("v7/warning/now", params)
     
     if not data:
         return "无法获取预警信息或API请求失败。"
@@ -174,7 +219,7 @@ async def get_daily_forecast(location: Union[str, int], days: int = 3) -> str:
         "lang": "zh"
     }
     
-    endpoint = f"weather/{days}d"
+    endpoint = f"v7/weather/{days}d"
     data = await make_qweather_request(endpoint, params)
     
     if not data:
