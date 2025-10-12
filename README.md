@@ -377,16 +377,14 @@ AIAgent101/
 | 组件 | 当前配置 | 说明 |
 |------|----------|------|
 | **🖥️ 操作系统** | Ubuntu 22.04.4 LTS · 内核 5.15.0-157 | 运行在 VMware 虚拟机 |
-| **🧠 CPU** | 2 vCPU · Intel Core i5-1135G7 @ 2.40GHz | Hypervisor: VMware |
+| **🧠 CPU** | 4 vCPU · Intel Core i5-1135G7 @ 2.40GHz | Hypervisor: VMware |
 | **💾 内存** | 6 GiB | 未配置 Swap |
-| **💿 存储** |  100 GB | 最小60 GB |
+| **💿 存储** |  150 GB | 最小100 GB |
 | **🎮 GPU** | 未配置 | 如需 GPU 微调需另行配置 |
 | **🐍 Python** | 3.10.18 | 系统默认 Python 版本 |
 
 #### ☁️ 云端环境支持
 - **Google Colab**：免费GPU资源，适合学习和小规模实验
-- **阿里云PAI**：企业级GPU实例，适合生产环境
-- **华为云ModelArts**：国内访问速度快，支持DCU等国产芯片
 
 ### 🚀 一键安装脚本
 
