@@ -218,7 +218,7 @@ async def get_daily_forecast(location: Union[str, int], days: int = 3) -> str:
         "location": location,
         "lang": "zh"
     }
-    
+    # 和风天气API文档 https://dev.qweather.com/docs/api/weather/weather-daily-forecast/
     endpoint = f"v7/weather/{days}d"
     data = await make_qweather_request(endpoint, params)
     
