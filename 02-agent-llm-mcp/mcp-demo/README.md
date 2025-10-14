@@ -65,8 +65,6 @@ mcp-demo/
 ├── client/                          # 客户端实现
 │   └── mcp_client.py                # MCP 客户端
 │   └── mcp_client_deepseek.py       # DeepSeek MCP 客户端（支持对话）
-│   └── mcp_client_langchain.py      # 基于LangChain实现 MCP 客户端
-│   └── mcp_client_langchain_chat.py # 基于LangChain实现 MCP 客户端（支持多轮对话）
 │
 ├── requirements.txt           # 项目依赖
 └── README.md                  # 项目文档
