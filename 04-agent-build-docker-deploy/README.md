@@ -91,6 +91,8 @@ EXCHANGE_RATE_API_KEY=
 
 #### 方法1: 使用启动脚本
 ```bash
+# 启动脚本添加执行权限
+chmod 777 start_*.sh
 # 启动后端服务
 ./start_backend.sh
 
