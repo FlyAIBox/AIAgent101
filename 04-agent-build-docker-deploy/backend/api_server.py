@@ -132,12 +132,12 @@ async def root():
 async def health_check():
     """健康检查端点"""
     try:
-        # 检查Gemini API密钥
-        if not config.GEMINI_API_KEY:
+        # 检查 OpenAI 兼容 API 密钥
+        if not config.OPENAI_API_KEY:
             return {
                 "status": "warning", 
-                "message": "Gemini API密钥未配置",
-                "gemini_model": config.GEMINI_MODEL,
+                "message": "OPENAI_API_KEY 未配置",
+                "llm_model": config.OPENAI_MODEL,
                 "api_key_configured": False,
                 "timestamp": datetime.now().isoformat()
             }
@@ -149,8 +149,8 @@ async def health_check():
         
         return {
             "status": "healthy",
-            "gemini_model": config.GEMINI_MODEL,
-            "api_key_configured": bool(config.GEMINI_API_KEY),
+            "llm_model": config.OPENAI_MODEL,
+            "api_key_configured": bool(config.OPENAI_API_KEY),
             "system_info": {
                 "cpu_usage": f"{cpu_percent}%",
                 "memory_usage": f"{memory_info.percent}%",

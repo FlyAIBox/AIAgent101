@@ -1,6 +1,6 @@
 # 🌍 AI旅行规划智能体 (AI Trip Planner Agent)
 
-一个基于LangGraph多智能体协作的智能旅行规划系统，由Google Gemini Flash-2.0和DuckDuckGo搜索驱动。
+一个基于LangGraph多智能体协作的智能旅行规划系统，由 OpenAI 兼容大模型（ChatOpenAI）与 DuckDuckGo 搜索驱动。
 
 ## 🏗️ 系统架构
 
@@ -17,7 +17,7 @@
 - **前端**: Streamlit (Python Web框架)
 - **后端**: FastAPI (高性能异步API框架)
 - **AI引擎**: LangGraph (多智能体协作框架)
-- **大语言模型**: Google Gemini Flash-2.0
+- **大语言模型**: ChatOpenAI（OpenAI 兼容接口，可接入 DeepSeek、通义千问等）
 - **搜索服务**: DuckDuckGo实时搜索
 - **数据存储**: JSON文件存储 + 内存缓存
 - **部署**: Docker容器化 + 可选的Kubernetes
@@ -70,8 +70,21 @@ vim .env
 
 必需的环境变量：
 ```bash
-GOOGLE_API_KEY=your_google_api_key
-DUCKDUCKGO_API_KEY=your_duckduckgo_api_key
+OPENAI_API_KEY=your_openai_style_api_key
+OPENAI_BASE_URL=https://api.deepseek.com/v1  # 可按需调整
+OPENAI_MODEL=deepseek-chat                  # 可按需调整
+```
+
+常用可选服务：
+```bash
+QWEATHER_API_KEY=your_qweather_api_key
+QWEATHER_API_BASE=https://api.qweather.com
+
+AMAP_API_KEY=your_amap_api_key
+AMAP_BASE_URL=https://restapi.amap.com
+
+EXCHANGE_RATE_API_BASE=https://api.exchangerate.host
+EXCHANGE_RATE_API_KEY=
 ```
 
 ### 4. 启动服务
@@ -200,7 +213,7 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ## 🙏 致谢
 
-- Google Gemini团队提供的大语言模型支持
+- OpenAI / ChatOpenAI 团队及各大 OpenAI 兼容模型服务商
 - DuckDuckGo提供的实时搜索服务
 - LangGraph团队的多智能体框架
 - Streamlit和FastAPI的优秀框架支持

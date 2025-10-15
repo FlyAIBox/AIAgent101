@@ -31,7 +31,7 @@ class CurrencyConverter:
     5. 回退汇率和错误处理
 
     主要功能：
-    - Exchange Rate API集成
+    - ExchangeRate Host 等汇率服务集成
     - 智能缓存机制
     - 多货币支持
     - 费用明细转换
@@ -49,9 +49,9 @@ class CurrencyConverter:
         为各种货币转换操作做准备。
         """
         # API配置
-        self.api_key = api_config.EXCHANGERATE_API_KEY  # 汇率API密钥
-        self.base_url = api_config.EXCHANGE_RATE_URL    # API基础URL
-        self.session = requests.Session()               # HTTP会话对象
+        self.api_key = api_config.EXCHANGE_RATE_API_KEY  # 汇率API密钥（可选）
+        self.base_url = api_config.EXCHANGE_RATE_API_BASE  # API基础URL
+        self.session = requests.Session()                 # HTTP会话对象
 
         # 汇率缓存（避免频繁API调用）
         self.rate_cache = {}                           # 汇率缓存字典
@@ -260,20 +260,23 @@ class CurrencyConverter:
         包括错误处理和多种API格式的支持。
         """
         try:
+            url = f"{self.base_url.rstrip('/')}/latest"
+            params = {'base': base_currency}
             if self.api_key:
-                # 如果有API密钥，使用付费API
-                url = f"https://v6.exchangerate-api.com/v6/{self.api_key}/latest/{base_currency}"
-            else:
-                # 使用免费API
-                url = f"{self.base_url}/{base_currency}"
+                # 支持需要密钥的兼容接口（如 apilayer）
+                params['apikey'] = self.api_key
 
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
 
+            if data.get('success') is False and data.get('error'):
+                print(f"汇率接口返回错误: {data['error']}")
+                return None
+
             if 'rates' in data:
                 return data['rates']
-            elif 'conversion_rates' in data:  # 不同的API格式
+            if 'conversion_rates' in data:  # 兼容其他返回格式
                 return data['conversion_rates']
 
             return None

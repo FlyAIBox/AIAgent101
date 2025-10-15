@@ -110,7 +110,7 @@ def display_header():
     <div style="text-align: center; padding: 2rem 0;">
         <h1>🌍 AI旅行规划智能体</h1>
         <p style="font-size: 1.2rem; color: #666;">
-            🤖 由Google Gemini Flash-2.0和DuckDuckGo搜索驱动的智能旅行规划系统
+            🤖 由OpenAI兼容大模型（ChatOpenAI）和DuckDuckGo搜索驱动的智能旅行规划系统
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -970,4 +970,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

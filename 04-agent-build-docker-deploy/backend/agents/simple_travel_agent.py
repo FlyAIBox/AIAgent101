@@ -12,7 +12,7 @@ import sys
 import os
 from datetime import datetime
 from typing import Dict, Any, List
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 
 # 添加backend目录到Python路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,12 +24,8 @@ class SimpleTravelAgent:
     
     def __init__(self):
         """初始化智能体"""
-        self.llm = ChatGoogleGenerativeAI(
-            model=config.GEMINI_MODEL,
-            google_api_key=config.GEMINI_API_KEY,
-            temperature=config.TEMPERATURE,
-            max_tokens=config.MAX_TOKENS
-        )
+        llm_config = config.get_llm_config()
+        self.llm = ChatOpenAI(**llm_config)
     
     def run_travel_planning(self, travel_request: Dict[str, Any]) -> Dict[str, Any]:
         """

@@ -3,7 +3,7 @@
 AI旅行规划智能体配置
 
 这个配置文件定义了整个多智能体系统的核心参数，包括：
-- Google Gemini大语言模型的配置
+- OpenAI 兼容大语言模型的配置
 - DuckDuckGo搜索引擎的设置
 - 智能体协作的参数
 - 旅行规划功能的开关
@@ -31,9 +31,10 @@ class LangGraphConfig:
     - 功能开关
     """
 
-    # Google Gemini大语言模型配置
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")  # 从环境变量获取API密钥
-    GEMINI_MODEL = "gemini-2.0-flash"  # 使用Gemini Flash 2.0模型
+    # OpenAI 兼容接口配置
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")  # OpenAI 风格接口密钥
+    OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")  # 默认 OpenAI 基础地址
+    OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # 默认模型，可根据网关修改
 
     # DuckDuckGo搜索引擎配置
     DUCKDUCKGO_MAX_RESULTS = 10        # 每次搜索的最大结果数
@@ -56,21 +57,24 @@ class LangGraphConfig:
     TOP_P = 0.9         # 核采样参数，控制生成质量
     
     @classmethod
-    def get_gemini_config(cls) -> Dict[str, Any]:
+    def get_llm_config(cls) -> Dict[str, Any]:
         """
-        获取Gemini模型配置
+        获取 OpenAI 兼容模型配置
 
-        返回用于初始化Gemini模型的配置字典，
-        包含模型名称和生成参数。
-
-        返回值：包含Gemini配置的字典
+        返回用于初始化 ChatOpenAI 模型的配置字典，
+        包含模型名称、接口地址和生成参数。
         """
-        return {
-            "model": cls.GEMINI_MODEL,
+        config: Dict[str, Any] = {
+            "model": cls.OPENAI_MODEL,
             "temperature": cls.TEMPERATURE,
-            "max_output_tokens": cls.MAX_TOKENS,
+            "max_tokens": cls.MAX_TOKENS,
             "top_p": cls.TOP_P,
         }
+        if cls.OPENAI_BASE_URL:
+            config["base_url"] = cls.OPENAI_BASE_URL
+        if cls.OPENAI_API_KEY:
+            config["api_key"] = cls.OPENAI_API_KEY
+        return config
 
     @classmethod
     def get_search_config(cls) -> Dict[str, Any]:
@@ -98,9 +102,9 @@ class LangGraphConfig:
 
         返回值：配置有效返回True，否则返回False
         """
-        if not cls.GEMINI_API_KEY:
-            print("⚠️ 警告: 环境变量中未找到GEMINI_API_KEY")
-            print("请在.env文件中设置GEMINI_API_KEY")
+        if not cls.OPENAI_API_KEY:
+            print("⚠️ 警告: 环境变量中未找到 OPENAI_API_KEY")
+            print("请在.env文件中设置 OPENAI_API_KEY 或配置兼容网关的密钥")
             return False
         return True
 
@@ -110,6 +114,6 @@ langgraph_config = LangGraphConfig()
 # 在导入时验证配置
 if not langgraph_config.validate_config():
     print("❌ 配置验证失败")
-    print("请检查您的.env文件并确保设置了GEMINI_API_KEY")
+    print("请检查您的.env文件并确保设置了 OPENAI_API_KEY")
 else:
     print("✅ LangGraph配置加载成功")

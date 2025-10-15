@@ -6,7 +6,7 @@
 - 餐厅推荐和筛选
 - 娱乐活动搜索
 - 价格估算和预算匹配
-- Google Places API集成和模拟数据回退
+- 高德地图 (AMap) API 集成和模拟数据回退
 
 适用于大模型技术初级用户：
 这个模块展示了如何与外部API集成，处理不同类型的数据，
@@ -33,7 +33,7 @@ class AttractionFinder:
     5. API集成和数据处理
 
     主要功能：
-    - Google Places API集成
+    - 高德地图 API 集成
     - 智能预算匹配
     - 多类型场所搜索
     - 模拟数据回退机制
@@ -51,9 +51,17 @@ class AttractionFinder:
         为各种类型的场所搜索做准备。
         """
         # API配置
-        self.api_key = api_config.GOOGLE_PLACES_API_KEY  # Google Places API密钥
-        self.base_url = api_config.PLACES_BASE_URL       # API基础URL
+        self.api_key = api_config.AMAP_API_KEY           # 高德地图 API 密钥
+        self.base_url = api_config.AMAP_BASE_URL         # API 基础URL
         self.session = requests.Session()                # HTTP会话对象
+
+        # 高德地图类型编码映射
+        self.place_type_mapping = {
+            'tourist_attraction': '110100',  # 风景名胜
+            'restaurant': '050000',          # 餐饮服务
+            'point_of_interest': '080000',   # 文化场馆/休闲娱乐
+            'lodging': '100000',             # 住宿服务（酒店）
+        }
 
         # 不同预算范围的价格映射
         self.budget_price_mapping = {
@@ -74,7 +82,7 @@ class AttractionFinder:
         根据旅行详情查找旅游景点
 
         这个方法负责搜索和推荐适合的旅游景点，包括：
-        1. 使用Google Places API搜索实际景点
+        1. 使用高德地图 API 搜索实际景点
         2. 根据用户预算和偏好筛选
         3. 提供模拟数据作为回退方案
         4. 返回排序后的景点列表
@@ -92,11 +100,12 @@ class AttractionFinder:
         """
         try:
             attractions = []
-            query = f"{trip_details['destination']} 旅游景点"  # 中文搜索查询
+            destination = trip_details['destination']
+            query = f"{destination} 旅游景点"  # 中文搜索查询
 
             # 首先尝试API调用
             if self.api_key:
-                places_data = self._search_places(query, 'tourist_attraction')
+                places_data = self._search_places(query, 'tourist_attraction', destination)
                 attractions = self._process_places_data(places_data, 'attraction', trip_details)
 
             # 如果API失败或无密钥，回退到模拟数据
@@ -115,7 +124,7 @@ class AttractionFinder:
         根据旅行详情查找餐厅
 
         这个方法负责搜索和推荐适合的餐厅，包括：
-        1. 使用Google Places API搜索实际餐厅
+        1. 使用高德地图 API 搜索实际餐厅
         2. 根据用户预算和偏好筛选
         3. 提供模拟数据作为回退方案
         4. 返回排序后的餐厅列表
@@ -127,11 +136,12 @@ class AttractionFinder:
         """
         try:
             restaurants = []
-            query = f"{trip_details['destination']} 餐厅"  # 中文搜索查询
+            destination = trip_details['destination']
+            query = f"{destination} 餐厅"  # 中文搜索查询
 
             # 首先尝试API调用
             if self.api_key:
-                places_data = self._search_places(query, 'restaurant')
+                places_data = self._search_places(query, 'restaurant', destination)
                 restaurants = self._process_places_data(places_data, 'restaurant', trip_details)
 
             # 如果API失败或无密钥，回退到模拟数据
@@ -150,7 +160,7 @@ class AttractionFinder:
 
         这个方法负责搜索和推荐适合的娱乐活动，包括：
         1. 根据用户兴趣构建搜索查询
-        2. 使用Google Places API搜索实际活动
+        2. 使用高德地图 API 搜索实际活动
         3. 根据用户预算和偏好筛选
         4. 提供模拟数据作为回退方案
 
@@ -164,14 +174,15 @@ class AttractionFinder:
 
             # 根据偏好构建搜索查询
             interests = trip_details.get('preferences', {}).get('interests', [])
+            destination = trip_details['destination']
             if interests:
                 query = f"{' '.join(interests)} 活动 {trip_details['destination']}"
             else:
-                query = f"{trip_details['destination']} 娱乐活动"
+                query = f"{destination} 娱乐活动"
 
             # 首先尝试API调用
             if self.api_key:
-                places_data = self._search_places(query, 'point_of_interest')
+                places_data = self._search_places(query, 'point_of_interest', destination)
                 activities = self._process_places_data(places_data, 'activity', trip_details)
 
             # 如果API失败或无密钥，回退到模拟数据
@@ -184,35 +195,50 @@ class AttractionFinder:
             print(f"查找活动时出错: {e}")
             return self._get_mock_activities(trip_details)
     
-    def _search_places(self, query: str, place_type: str) -> List[Dict]:
+    def _search_places(self, query: str, place_type: str, destination: str) -> List[Dict]:
         """
-        使用Google Places API搜索场所
+        使用高德地图 (AMap) API 搜索场所
 
-        这个私有方法负责与Google Places API交互，包括：
+        这个私有方法负责与高德地图开放平台交互，包括：
         1. 构建API请求参数
-        2. 发送HTTP请求到Google服务器
+        2. 发送HTTP请求到高德服务器
         3. 处理API响应和错误
         4. 返回搜索结果数据
 
         参数：
         - query: 搜索查询字符串
-        - place_type: 场所类型（如restaurant、tourist_attraction等）
+        - place_type: 场所类型（如 restaurant、tourist_attraction 等）
+        - destination: 目的地城市名称
 
         返回：包含场所信息的字典列表
         """
-        try:
-            url = f"{self.base_url}/textsearch/json"
-            params = {
-                'query': query,
-                'key': self.api_key,
-                'type': place_type
-            }
+        if not self.api_key:
+            return []
 
-            response = self.session.get(url, params=params)
+        try:
+            type_code = self.place_type_mapping.get(place_type, "")
+            params = {
+                'key': self.api_key,
+                'keywords': query,
+                'types': type_code,
+                'city': destination,
+                'citylimit': 'true',
+                'offset': 20,
+                'page': 1,
+                'extensions': 'all',
+                'output': 'JSON'
+            }
+            # 高德地图-搜索POI文档 https://lbs.amap.com/api/webservice/guide/api-advanced/search
+            url = f"{self.base_url.rstrip('/')}/v3/place/text"
+            response = self.session.get(url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
 
-            return data.get('results', [])
+            if data.get('status') != '1':
+                print(f"高德地图搜索失败: {data.get('info')}")
+                return []
+
+            return data.get('pois', [])
 
         except Exception as e:
             print(f"API搜索失败: {e}")
@@ -220,7 +246,7 @@ class AttractionFinder:
     
     def _process_places_data(self, places_data: List[Dict], place_type: str, trip_details: Dict) -> List[Attraction]:
         """
-        将Google Places API响应处理为Attraction对象
+        将高德地图 API 响应处理为 Attraction 对象
 
         这个私有方法负责处理API返回的原始数据，包括：
         1. 提取场所的基本信息（名称、评分、价格等级等）
@@ -229,27 +255,24 @@ class AttractionFinder:
         4. 创建标准化的Attraction对象
 
         参数：
-        - places_data: Google Places API返回的场所数据列表
+        - places_data: 高德地图返回的场所数据列表
         - place_type: 场所类型（景点、餐厅、活动等）
         - trip_details: 旅行详情，包含预算信息
 
         返回：处理后的Attraction对象列表
         """
-        attractions = []
-        budget_range = trip_details.get('budget_range', 'mid-range')
+        attractions: List[Attraction] = []
+        budget_range = trip_details.get('budget_range', '中等预算')
 
         for place in places_data:
             try:
-                # 提取基本信息
                 name = place.get('name', '未知场所')
-                rating = place.get('rating', 4.0)
-                price_level = place.get('price_level', 2)
-                address = place.get('formatted_address', '地址信息不可用')
+                rating = self._parse_rating(place)
+                raw_cost = self._parse_cost(place)
+                price_level = self._infer_price_level(raw_cost, place_type)
+                address = self._compose_address(place)
 
-                # 根据类型和预算估算费用
-                estimated_cost = self._estimate_cost(place_type, budget_range, price_level)
-
-                # 根据类型确定游览时长
+                estimated_cost = self._estimate_cost(place_type, budget_range, price_level, raw_cost)
                 duration = self._get_duration_by_type(place_type)
 
                 attraction = Attraction(
@@ -262,34 +285,87 @@ class AttractionFinder:
                     estimated_cost=estimated_cost,
                     duration=duration
                 )
-
                 attractions.append(attraction)
-
             except Exception as e:
                 print(f"处理场所数据时出错: {e}")
                 continue
 
         return attractions
+
+    def _parse_rating(self, place: Dict[str, Any]) -> float:
+        """从高德返回的数据中解析评分"""
+        biz_ext = place.get('biz_ext') or {}
+        rating = biz_ext.get('rating') or place.get('rating')
+        try:
+            return round(float(rating), 1) if rating else 4.2
+        except (TypeError, ValueError):
+            return 4.2
+
+    def _parse_cost(self, place: Dict[str, Any]) -> Optional[float]:
+        """解析平均消费或门票价格"""
+        biz_ext = place.get('biz_ext') or {}
+        cost = biz_ext.get('cost') or biz_ext.get('ticket_price')
+        if not cost:
+            return None
+        try:
+            return float(cost)
+        except (TypeError, ValueError):
+            return None
+
+    def _infer_price_level(self, raw_cost: Optional[float], place_type: str) -> int:
+        """
+        根据高德返回的费用估算价格等级（0-4）
+        """
+        if raw_cost is None:
+            default_levels = {'attraction': 2, 'restaurant': 2, 'activity': 3}
+            return default_levels.get(place_type, 2)
+
+        if raw_cost <= 80:
+            return 1
+        if raw_cost <= 200:
+            return 2
+        if raw_cost <= 400:
+            return 3
+        return 4
+
+    def _compose_address(self, place: Dict[str, Any]) -> str:
+        """组合地址信息，优先使用城市/区县名称"""
+        parts = [
+            place.get('pname') or '',
+            place.get('cityname') or '',
+            place.get('adname') or '',
+            place.get('address') or ''
+        ]
+        address = "".join(part for part in parts if part)
+        return address or place.get('location', '地址信息不可用')
     
-    def _estimate_cost(self, place_type: str, budget_range: str, price_level: int) -> float:
+    def _estimate_cost(self, place_type: str, budget_range: str, price_level: int,
+                       raw_cost: Optional[float]) -> float:
         """
         根据场所类型、预算范围和价格等级估算费用
 
         这个方法使用多个因素来估算场所的费用：
         1. 基础费用：根据场所类型和用户预算范围
-        2. 价格调整：根据Google的价格等级（0-4级）
-        3. 最终计算：基础费用 × 价格倍数
+        2. 若高德返回平均消费，则以实际消费为基础
+        3. 价格调整：根据估算的价格等级（0-4级）
+        4. 最终计算：基础费用/实际费用 × 预算倍数
 
         参数：
         - place_type: 场所类型（景点、餐厅、活动）
         - budget_range: 预算范围（经济型、中等预算、豪华型）
-        - price_level: Google的价格等级（0-4，0最便宜，4最贵）
+        - price_level: 价格等级（0-4，0最便宜，4最贵）
+        - raw_cost: 高德返回的平均消费（可选）
 
         返回：估算的费用（人民币）
         """
+        multiplier = self.budget_price_mapping.get(budget_range, {}).get('multiplier', 1.0)
+
+        if raw_cost is not None:
+            return round(raw_cost * multiplier, 2)
+
         base_cost = self.cost_estimates.get(place_type, {}).get(budget_range, 30)
 
-        # 根据价格等级调整（Google的0-4级价格体系）
+        # 根据价格等级调整（0-4级价格体系）
         price_multipliers = {0: 0.5, 1: 0.7, 2: 1.0, 3: 1.3, 4: 1.8}
         multiplier = price_multipliers.get(price_level, 1.0)
 
@@ -317,27 +393,41 @@ class AttractionFinder:
         return durations.get(place_type, 2)
     
     def _generate_description(self, place: Dict, place_type: str) -> str:
-        """Generate a description for the place"""
-        types = place.get('types', [])
-        rating = place.get('rating', 0)
-        
-        description_parts = []
-        
+        """根据高德返回的类型和评分生成简短描述"""
+        rating = self._parse_rating(place)
+        type_str = place.get('type', '')
+        description_parts: List[str] = []
+
         if rating >= 4.5:
-            description_parts.append("Highly rated")
+            description_parts.append("口碑极佳")
         elif rating >= 4.0:
-            description_parts.append("Well-reviewed")
-        
-        if 'museum' in types:
-            description_parts.append("cultural attraction")
-        elif 'park' in types:
-            description_parts.append("outdoor space")
-        elif 'restaurant' in types:
-            description_parts.append("dining establishment")
-        elif 'shopping_mall' in types:
-            description_parts.append("shopping destination")
-        
-        return " ".join(description_parts) if description_parts else f"Popular {place_type}"
+            description_parts.append("评价良好")
+
+        type_keywords = type_str.split(';') if type_str else []
+        keyword_map = {
+            '公园': "户外公园",
+            '博物馆': "文化博物馆",
+            '美术馆': "艺术展览",
+            '旅游景点': "热门景点",
+            '餐饮服务': "美食餐厅",
+            '购物': "购物娱乐",
+            '娱乐休闲': "休闲娱乐"
+        }
+
+        for keyword, desc in keyword_map.items():
+            if any(keyword in item for item in type_keywords):
+                description_parts.append(desc)
+                break
+
+        if not description_parts:
+            fallback_map = {
+                'attraction': "热门景点",
+                'restaurant': "人气餐厅",
+                'activity': "特色活动"
+            }
+            description_parts.append(fallback_map.get(place_type, "本地推荐"))
+
+        return "，".join(description_parts)
     
     def _get_mock_attractions(self, trip_details: Dict) -> List[Attraction]:
         """

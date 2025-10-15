@@ -8,14 +8,13 @@
 - 模拟天气数据（当API不可用时）
 
 适用于大模型技术初级用户：
-这个模块展示了如何与外部API进行交互，
-包括错误处理、数据转换和回退机制。
+本模块示范了如何对接国内可访问的和风天气 (QWeather) 服务，
+同时保留健壮的错误处理与回退机制。
 """
 
 import requests
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 from datetime import datetime, timedelta
-import json
 
 from ..config.api_config import api_config
 from ..data.models import Weather
@@ -24,245 +23,215 @@ class WeatherService:
     """
     天气数据获取服务类
 
-    这个类负责从OpenWeather API获取天气信息，包括：
+    这个类负责从和风天气 (QWeather) 获取天气信息，包括：
     1. 当前天气状况查询
     2. 多日天气预报获取
     3. 天气数据的处理和格式化
     4. API错误处理和模拟数据回退
 
     适用于大模型技术初级用户：
-    这个类展示了如何设计一个外部API服务的包装器，
-    包含错误处理、数据验证和用户友好的接口。
+    展示了如何封装国内可访问的天气服务，并对外提供统一接口。
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         初始化天气服务
 
-        设置API密钥、基础URL和HTTP会话，
+        设置 API 密钥、基础 URL、城市查询 URL 和 HTTP 会话，
         为后续的天气数据请求做准备。
         """
-        self.api_key = api_config.OPENWEATHER_API_KEY  # OpenWeather API密钥
-        self.base_url = api_config.WEATHER_BASE_URL    # API基础URL
-        self.session = requests.Session()              # HTTP会话对象，提高请求效率
+        self.api_key = api_config.QWEATHER_API_KEY
+        self.base_url = (api_config.QWEATHER_API_BASE).rstrip("/")
+        self.session = requests.Session()
+
+        # QWeather 建议使用请求头携带密钥，兼容参数方式
+        self._auth_headers = {"X-QW-Api-Key": self.api_key} if self.api_key else {}
 
     def get_current_weather(self, city: str) -> Optional[Weather]:
         """
         获取指定城市的当前天气
 
-        从OpenWeather API获取实时天气数据，包括温度、
-        天气描述、湿度、风速等信息。
-
         参数：
-        - city: 城市名称（中文或英文）
+        - city: 城市名称或经纬度（如 "北京" 或 "116.41,39.92"）
 
-        返回：Weather对象或None（如果获取失败）
-
-        功能说明：
-        1. 构建API请求参数
-        2. 发送HTTP请求获取数据
-        3. 解析JSON响应
-        4. 创建Weather对象
-        5. 错误处理和回退到模拟数据
+        返回：Weather 对象，若失败返回模拟数据
         """
+        if not self.api_key:
+            print("未配置 QWEATHER_API_KEY，使用模拟天气数据。")
+            return self._get_mock_weather()
+
+        location = self._resolve_location(city)
+        if not location:
+            print(f"无法解析城市位置: {city}，使用模拟天气数据。")
+            return self._get_mock_weather()
+
         try:
-            # 构建API请求URL和参数
-            url = f"{self.base_url}/weather"
-            params = {
-                'q': city,              # 城市名称
-                'appid': self.api_key,  # API密钥
-                'units': 'metric'       # 使用摄氏度
-            }
+            url = f"{self.base_url}/v7/weather/now"
+            params = {"location": location, "lang": "zh"}
+            response = self.session.get(url, params=params, headers=self._auth_headers, timeout=10)
+            response.raise_for_status()
 
-            # 发送HTTP请求
-            response = self.session.get(url, params=params)
-            response.raise_for_status()  # 检查HTTP错误
-            data = response.json()       # 解析JSON响应
+            data = response.json()
+            if data.get("code") != "200":
+                print(f"和风天气返回错误代码: {data.get('code')}, 消息: {data.get('fxLink')}")
+                return self._get_mock_weather()
 
-            # 创建Weather对象
+            now = data.get("now", {})
+            temperature = float(now.get("temp", 22.0))
+            humidity = int(float(now.get("humidity", 60)))
+            wind_speed = float(now.get("windSpeed", 5.0))
+            feels_like = float(now.get("feelsLike", temperature))
+            description = now.get("text", "多云")
+
             return Weather(
-                temperature=data['main']['temp'],                    # 温度
-                description=data['weather'][0]['description'].title(), # 天气描述
-                humidity=data['main']['humidity'],                   # 湿度
-                wind_speed=data['wind'].get('speed', 0),            # 风速
-                feels_like=data['main']['feels_like'],              # 体感温度
-                date=datetime.now().strftime('%Y-%m-%d')            # 日期
+                temperature=temperature,
+                description=description,
+                humidity=humidity,
+                wind_speed=wind_speed,
+                feels_like=feels_like,
+                date=datetime.now().strftime("%Y-%m-%d")
             )
+        except Exception as exc:
+            print(f"获取当前天气时出错: {exc}")
+            return self._get_mock_weather()
 
-        except Exception as e:
-            print(f"获取当前天气时出错: {e}")
-            return self._get_mock_weather()  # 回退到模拟数据
-    
     def get_weather_forecast(self, city: str, days: int = 5) -> List[Weather]:
         """
         获取多日天气预报
 
-        从OpenWeather API获取指定天数的天气预报数据，
-        包括每日的温度、天气状况、湿度等信息。
-
         参数：
-        - city: 城市名称（中文或英文）
-        - days: 预报天数（默认5天，最多5天）
+        - city: 城市名称或经纬度
+        - days: 预报天数（默认 5 天，QWeather 支持 3/7/10/15/30 天）
 
-        返回：Weather对象列表，每个对象代表一天的天气
-
-        功能说明：
-        1. 构建预报API请求
-        2. 处理3小时间隔的预报数据
-        3. 提取每日代表性天气
-        4. 避免重复日期
-        5. 错误处理和模拟数据回退
+        返回：Weather 对象列表
         """
-        try:
-            url = f"{self.base_url}/forecast"
-            params = {
-                'q': city,                      # 城市名称
-                'appid': self.api_key,          # API密钥
-                'units': 'metric',              # 使用摄氏度
-                'cnt': min(days * 8, 40)        # 每天8个预报（3小时间隔），最多40个
-            }
+        if not self.api_key:
+            print("未配置 QWEATHER_API_KEY，返回模拟预报数据。")
+            return self._get_mock_forecast(days)
 
-            response = self.session.get(url, params=params)
+        location = self._resolve_location(city)
+        if not location:
+            print(f"无法解析城市位置: {city}，返回模拟预报数据。")
+            return self._get_mock_forecast(days)
+
+        # 和风天气支持的固定天数
+        supported_days = [3, 7, 10, 15, 30]
+        request_days = next((d for d in supported_days if d >= max(1, days)), supported_days[0])
+
+        try:
+            url = f"{self.base_url}/v7/weather/{request_days}d"
+            params = {"location": location, "lang": "zh"}
+            response = self.session.get(url, params=params, headers=self._auth_headers, timeout=10)
+            response.raise_for_status()
+
+            data = response.json()
+            if data.get("code") != "200":
+                print(f"和风天气预报返回错误代码: {data.get('code')}")
+                return self._get_mock_forecast(days)
+
+            daily_items = data.get("daily", []) or []
+            forecasts: List[Weather] = []
+
+            for item in daily_items[:days]:
+                temp_max = float(item.get("tempMax", 26.0))
+                temp_min = float(item.get("tempMin", temp_max - 5))
+                avg_temp = round((temp_max + temp_min) / 2, 1)
+                humidity = int(float(item.get("humidity", 60)))
+                wind_speed = float(item.get("windSpeedDay", item.get("windSpeedNight", 5.0)))
+                feels_like = round((temp_max * 2 + temp_min) / 3, 1)
+                description = item.get("textDay") or item.get("textNight") or "多云"
+
+                forecasts.append(
+                    Weather(
+                        temperature=avg_temp,
+                        description=description,
+                        humidity=humidity,
+                        wind_speed=wind_speed,
+                        feels_like=feels_like,
+                        date=item.get("fxDate", datetime.now().strftime("%Y-%m-%d"))
+                    )
+                )
+
+            if not forecasts:
+                return self._get_mock_forecast(days)
+
+            return forecasts
+
+        except Exception as exc:
+            print(f"获取天气预报时出错: {exc}")
+            return self._get_mock_forecast(days)
+
+    def _resolve_location(self, city: str) -> Optional[str]:
+        """
+        将城市名称解析为和风天气的 location ID 或经纬度字符串。
+        """
+        if not city:
+            return None
+
+        stripped = city.strip()
+        if "," in stripped:
+            # 已经是经纬度
+            return stripped
+
+        if not self.api_key:
+            return None
+
+        try:
+            # API文档地址：https://dev.qweather.com/docs/api/geoapi/city-lookup/
+            url = f"{self.base_url}/geo/v2/city/lookup"
+            params = {"location": stripped, "lang": "zh"}
+            response = self.session.get(url, params=params, headers=self._auth_headers, timeout=10)
             response.raise_for_status()
             data = response.json()
 
-            daily_forecasts = []
-            processed_dates = set()  # 避免重复日期
+            if data.get("code") != "200":
+                print(f"和风天气城市查询失败: {data.get('code')} {data.get('fxLink')}")
+                return None
 
-            # 处理预报数据列表
-            for item in data['list']:
-                date_str = datetime.fromtimestamp(item['dt']).strftime('%Y-%m-%d')
+            locations = data.get("location") or []
+            if not locations:
+                return None
 
-                # 如果这个日期还没有处理过
-                if date_str not in processed_dates:
-                    weather = Weather(
-                        temperature=item['main']['temp'],                    # 温度
-                        description=item['weather'][0]['description'].title(), # 天气描述
-                        humidity=item['main']['humidity'],                   # 湿度
-                        wind_speed=item['wind'].get('speed', 0),            # 风速
-                        feels_like=item['main']['feels_like'],              # 体感温度
-                        date=date_str                                       # 日期
-                    )
-                    daily_forecasts.append(weather)
-                    processed_dates.add(date_str)
+            return locations[0].get("id")
+        except Exception as exc:
+            print(f"解析和风天气城市 ID 时出错: {exc}")
+            return None
 
-                # 如果已经获取了足够的天数，停止处理
-                if len(daily_forecasts) >= days:
-                    break
-
-            return daily_forecasts
-
-        except Exception as e:
-            print(f"获取天气预报时出错: {e}")
-            return self._get_mock_forecast(days)
-    
     def _get_mock_weather(self) -> Weather:
         """
-        当API失败时返回模拟天气数据
-
-        这个方法提供一个合理的默认天气数据，
-        确保应用程序在API不可用时仍能正常运行。
-
-        返回：包含模拟数据的Weather对象
+        当 API 失败时返回模拟天气数据
         """
         return Weather(
-            temperature=22.0,                                    # 温度：22°C
-            description="多云",                                   # 天气描述
-            humidity=65,                                         # 湿度：65%
-            wind_speed=5.2,                                      # 风速：5.2 m/s
-            feels_like=24.0,                                     # 体感温度：24°C
-            date=datetime.now().strftime('%Y-%m-%d')             # 当前日期
+            temperature=22.0,
+            description="多云",
+            humidity=65,
+            wind_speed=5.2,
+            feels_like=24.0,
+            date=datetime.now().strftime("%Y-%m-%d")
         )
 
     def _get_mock_forecast(self, days: int) -> List[Weather]:
         """
-        当API失败时返回模拟预报数据
-
-        这个方法生成指定天数的模拟天气预报，
-        包含变化的温度和不同的天气状况。
-
-        参数：
-        - days: 需要生成的预报天数
-
-        返回：包含模拟预报数据的Weather对象列表
+        当 API 失败时返回模拟预报数据
         """
-        forecasts = []
+        forecasts: List[Weather] = []
         base_date = datetime.now()
-
-        # 天气状况循环列表
         weather_conditions = ["晴朗", "多云", "阴天", "小雨"]
 
-        for i in range(days):
-            date_str = (base_date + timedelta(days=i)).strftime('%Y-%m-%d')
-            temp = 20 + (i % 10)  # 变化的温度（20-29°C循环）
+        for i in range(max(1, days)):
+            date_str = (base_date + timedelta(days=i)).strftime("%Y-%m-%d")
+            temp = 20 + (i % 8)
+            description = weather_conditions[i % len(weather_conditions)]
 
-            weather = Weather(
-                temperature=float(temp),                         # 温度
-                description=weather_conditions[i % 4],           # 循环的天气状况
-                humidity=60 + (i % 20),                         # 变化的湿度（60-79%）
-                wind_speed=3.0 + (i % 5),                       # 变化的风速（3-7 m/s）
-                feels_like=float(temp + 2),                     # 体感温度（比实际温度高2°C）
-                date=date_str                                   # 日期
+            forecasts.append(
+                Weather(
+                    temperature=float(temp),
+                    description=description,
+                    humidity=60 + (i % 5) * 5,
+                    wind_speed=4.5 + (i % 3),
+                    feels_like=float(temp) + 1.5,
+                    date=date_str
+                )
             )
-            forecasts.append(weather)
 
         return forecasts
-    
-    def get_weather_summary(self, forecasts: List[Weather]) -> Dict[str, Any]:
-        """
-        生成旅行天气摘要
-
-        这个方法分析天气预报数据，生成有用的统计信息
-        和旅行建议，帮助用户做好旅行准备。
-
-        参数：
-        - forecasts: 天气预报列表
-
-        返回：包含天气统计和建议的字典
-        """
-        if not forecasts:
-            return {}
-
-        temps = [w.temperature for w in forecasts]
-
-        return {
-            'avg_temperature': round(sum(temps) / len(temps), 1),    # 平均温度
-            'min_temperature': min(temps),                           # 最低温度
-            'max_temperature': max(temps),                           # 最高温度
-            'conditions': [w.description for w in forecasts],        # 天气状况列表
-            'rainy_days': len([w for w in forecasts if '雨' in w.description]), # 下雨天数
-            'recommendations': self._get_weather_recommendations(forecasts)      # 旅行建议
-        }
-
-    def _get_weather_recommendations(self, forecasts: List[Weather]) -> List[str]:
-        """
-        根据天气生成旅行建议
-
-        这个方法分析天气预报，生成实用的旅行建议，
-        帮助用户准备合适的衣物和装备。
-
-        参数：
-        - forecasts: 天气预报列表
-
-        返回：旅行建议字符串列表
-        """
-        recommendations = []
-        temps = [w.temperature for w in forecasts]
-        avg_temp = sum(temps) / len(temps)
-
-        # 温度建议
-        if avg_temp < 10:
-            recommendations.append("建议携带保暖衣物 - 天气会比较寒冷！")
-        elif avg_temp > 30:
-            recommendations.append("建议携带轻薄透气的衣物 - 天气会比较炎热！")
-
-        # 降雨建议
-        rainy_days = len([w for w in forecasts if '雨' in w.description])
-        if rainy_days > 0:
-            recommendations.append(f"建议携带雨伞 - 预计有{rainy_days}天会下雨")
-
-        # 风力建议
-        if any(w.wind_speed > 10 for w in forecasts):
-            recommendations.append("预计会有大风天气 - 请注意固定随身物品")
-
-        return recommendations

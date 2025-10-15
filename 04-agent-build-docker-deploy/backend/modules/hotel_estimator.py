@@ -5,7 +5,7 @@
 - 酒店搜索和筛选
 - 基于预算的价格估算
 - 城市价格系数调整
-- Google Places API集成
+- 高德地图 (AMap) API 集成
 - 模拟酒店数据生成
 - 住宿费用计算和优化
 
@@ -34,7 +34,7 @@ class HotelEstimator:
     6. 模拟数据生成和回退
 
     主要功能：
-    - Google Places API集成
+    - 高德地图 API 集成
     - 智能价格预测
     - 预算匹配算法
     - 地区价格调整
@@ -52,9 +52,10 @@ class HotelEstimator:
         为酒店搜索和费用估算做准备。
         """
         # API配置
-        self.api_key = api_config.GOOGLE_PLACES_API_KEY  # Google Places API密钥
-        self.base_url = api_config.PLACES_BASE_URL       # API基础URL
+        self.api_key = api_config.AMAP_API_KEY           # 高德地图 API 密钥
+        self.base_url = api_config.AMAP_BASE_URL         # API基础URL
         self.session = requests.Session()                # HTTP会话对象
+        self.hotel_type_code = '100100'                  # 高德地图 酒店类目编码
 
         # 不同预算类别的基础价格范围（每晚，人民币）
         self.budget_price_ranges = {
@@ -81,7 +82,7 @@ class HotelEstimator:
         根据旅行要求查找酒店
 
         这个方法负责搜索和推荐适合的酒店，包括：
-        1. 使用Google Places API搜索真实酒店
+        1. 使用高德地图 API 搜索真实酒店
         2. 根据预算范围筛选合适选项
         3. 应用城市价格调整
         4. 提供模拟数据作为回退方案
@@ -122,9 +123,9 @@ class HotelEstimator:
     
     def _search_hotels_api(self, destination: str) -> List[Dict]:
         """
-        使用Google Places API搜索酒店
+        使用高德地图 API 搜索酒店
 
-        这个私有方法负责与Google Places API交互，
+        这个私有方法负责与高德地图开放平台交互，
         搜索指定目的地的酒店信息。
 
         参数：
@@ -132,19 +133,32 @@ class HotelEstimator:
 
         返回：包含酒店信息的字典列表
         """
+        if not self.api_key:
+            return []
+
         try:
-            url = f"{self.base_url}/textsearch/json"
+            url = f"{self.base_url.rstrip('/')}/v3/place/text"
             params = {
-                'query': f'{destination} 酒店',  # 中文搜索查询
                 'key': self.api_key,
-                'type': 'lodging'  # 住宿类型
+                'keywords': f'{destination} 酒店',
+                'types': self.hotel_type_code,
+                'city': destination,
+                'citylimit': 'true',
+                'offset': 20,
+                'page': 1,
+                'extensions': 'all',
+                'output': 'JSON'
             }
 
-            response = self.session.get(url, params=params)
+            response = self.session.get(url, params=params, timeout=10)
             response.raise_for_status()
             data = response.json()
 
-            return data.get('results', [])
+            if data.get('status') != '1':
+                print(f"酒店API搜索失败: {data.get('info')}")
+                return []
+
+            return data.get('pois', [])
 
         except Exception as e:
             print(f"酒店API搜索失败: {e}")
@@ -152,13 +166,13 @@ class HotelEstimator:
     
     def _process_hotels_data(self, hotels_data: List[Dict], trip_details: Dict) -> List[Hotel]:
         """
-        将Google Places API响应处理为Hotel对象
+        将高德地图 API 响应处理为 Hotel 对象
 
         这个私有方法负责处理API返回的原始酒店数据，
         包括价格估算、设施生成和对象创建。
 
         参数：
-        - hotels_data: Google Places API返回的酒店数据列表
+        - hotels_data: 高德地图返回的酒店数据列表
         - trip_details: 旅行详情，包含预算信息
 
         返回：处理后的Hotel对象列表
@@ -170,14 +184,12 @@ class HotelEstimator:
         for hotel_data in hotels_data:
             try:
                 name = hotel_data.get('name', '未知酒店')
-                rating = hotel_data.get('rating', 4.0)
-                address = hotel_data.get('formatted_address', f'{destination} 市中心')
-                price_level = hotel_data.get('price_level', 2)
+                rating = self._parse_rating(hotel_data)
+                raw_cost = self._parse_cost(hotel_data)
+                price_level = self._infer_price_level(raw_cost)
+                address = self._compose_address(hotel_data, destination)
 
-                # 估算每晚价格
-                price_per_night = self._estimate_hotel_price(destination, budget_range, price_level, rating)
-
-                # 根据价格等级和评分生成设施
+                price_per_night = self._estimate_hotel_price(destination, budget_range, price_level, rating, raw_cost)
                 amenities = self._generate_amenities(price_level, rating)
 
                 hotel = Hotel(
@@ -195,54 +207,100 @@ class HotelEstimator:
                 continue
 
         return hotels
+
+    def _parse_rating(self, hotel_data: Dict[str, Any]) -> float:
+        """解析酒店评分"""
+        biz_ext = hotel_data.get('biz_ext') or {}
+        rating = biz_ext.get('rating') or hotel_data.get('rating')
+        try:
+            return round(float(rating), 1) if rating else 4.2
+        except (TypeError, ValueError):
+            return 4.2
+
+    def _parse_cost(self, hotel_data: Dict[str, Any]) -> Optional[float]:
+        """解析酒店平均价格/门市价"""
+        biz_ext = hotel_data.get('biz_ext') or {}
+        cost = biz_ext.get('lowest_price') or biz_ext.get('cost')
+        if not cost:
+            return None
+        try:
+            return float(cost)
+        except (TypeError, ValueError):
+            return None
+
+    def _infer_price_level(self, raw_cost: Optional[float]) -> int:
+        """根据费用估算价格等级（0-4）"""
+        if raw_cost is None:
+            return 2
+        if raw_cost <= 300:
+            return 1
+        if raw_cost <= 600:
+            return 2
+        if raw_cost <= 1200:
+            return 3
+        return 4
+
+    def _compose_address(self, hotel_data: Dict[str, Any], destination: str) -> str:
+        """组合酒店地址信息"""
+        parts = [
+            hotel_data.get('pname') or '',
+            hotel_data.get('cityname') or '',
+            hotel_data.get('adname') or '',
+            hotel_data.get('address') or ''
+        ]
+        address = "".join(part for part in parts if part)
+        return address or f'{destination} 市中心'
     
-    def _estimate_hotel_price(self, destination: str, budget_range: str, price_level: int, rating: float) -> float:
+    def _estimate_hotel_price(self, destination: str, budget_range: str,
+                              price_level: int, rating: float,
+                              raw_cost: Optional[float]) -> float:
         """
         估算酒店每晚价格
 
         这个方法使用多个因素来估算酒店的每晚价格：
         1. 基础价格：根据预算范围确定
         2. 城市调整：根据目的地生活成本
-        3. 价格等级：根据Google的价格等级（0-4）
+        3. 价格等级：根据估算的价格等级（0-4）
         4. 评分调整：高评分酒店通常更贵
-        5. 随机变化：增加价格的真实性
+        5. 实际费用：优先使用高德返回的平均价格信息
+        6. 随机变化：增加价格的真实性
 
         参数：
         - destination: 目的地名称
         - budget_range: 预算范围
-        - price_level: Google的价格等级（0-4）
+        - price_level: 价格等级（0-4）
         - rating: 酒店评分
+        - raw_cost: 高德返回的平均价格（可选）
 
         返回：估算的每晚价格（人民币）
         """
-        # 获取基础价格范围
         base_range = self.budget_price_ranges.get(budget_range, self.budget_price_ranges['中等预算'])
         base_price = base_range['avg']
+        price_min = base_range['min']
+        price_max = base_range['max'] * 1.6
 
-        # 应用城市价格倍数
-        city_key = destination.lower()
-        multiplier = self.city_multipliers.get(city_key, self.city_multipliers['default'])
+        city_multiplier = self.city_multipliers.get(destination, self.city_multipliers.get('default', 1.0))
 
-        # 根据价格等级调整（Google Places的0-4级价格体系）
-        price_level_multipliers = {0: 0.6, 1: 0.8, 2: 1.0, 3: 1.3, 4: 1.8}
-        price_multiplier = price_level_multipliers.get(price_level, 1.0)
-
-        # 根据评分调整（高评分酒店通常更贵）
         if rating >= 4.5:
-            rating_multiplier = 1.2    # 优秀酒店
+            rating_multiplier = 1.2
         elif rating >= 4.0:
-            rating_multiplier = 1.1    # 良好酒店
+            rating_multiplier = 1.1
         elif rating < 3.5:
-            rating_multiplier = 0.9    # 一般酒店
+            rating_multiplier = 0.9
         else:
-            rating_multiplier = 1.0    # 标准酒店
+            rating_multiplier = 1.0
 
-        final_price = base_price * multiplier * price_multiplier * rating_multiplier
+        if raw_cost:
+            price = raw_cost * city_multiplier * rating_multiplier
+        else:
+            price_level_multipliers = {0: 0.6, 1: 0.8, 2: 1.0, 3: 1.3, 4: 1.8}
+            price_multiplier = price_level_multipliers.get(price_level, 1.0)
+            price = base_price * city_multiplier * price_multiplier * rating_multiplier
 
-        # 添加随机变化以增加真实性
-        final_price *= random.uniform(0.9, 1.1)
+        price *= random.uniform(0.9, 1.1)
+        price = max(price_min, min(price, price_max))
 
-        return round(final_price, 2)
+        return round(price, 2)
     
     def _generate_amenities(self, price_level: int, rating: float) -> List[str]:
         """

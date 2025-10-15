@@ -2,7 +2,7 @@
 LangGraph旅行规划智能体系统
 
 这个模块实现了基于LangGraph框架的多智能体旅行规划系统。
-它使用Google Gemini Flash-2.0作为大语言模型，通过多个专业智能体
+它使用 OpenAI 兼容的大语言模型，通过多个专业智能体
 的协作来生成全面的旅行计划。
 
 主要组件：
@@ -19,7 +19,7 @@ LangGraph旅行规划智能体系统
 
 from typing import Dict, Any, List, Optional, TypedDict, Annotated
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 import json
@@ -70,7 +70,7 @@ class LangGraphTravelAgents:
     基于LangGraph的多智能体旅行规划系统
 
     这个类是整个多智能体系统的核心，它：
-    1. 初始化Google Gemini大语言模型
+    1. 初始化 OpenAI 兼容大语言模型
     2. 创建和管理智能体工作流图
     3. 协调各个专业智能体的工作
     4. 处理智能体间的状态传递和消息通信
@@ -84,16 +84,11 @@ class LangGraphTravelAgents:
         """
         初始化LangGraph旅行智能体系统
 
-        设置Google Gemini大语言模型和创建智能体工作流图
+        配置 OpenAI 兼容大语言模型并创建智能体工作流图
         """
-        # 初始化Google Gemini大语言模型
-        self.llm = ChatGoogleGenerativeAI(
-            model=config.GEMINI_MODEL,           # 使用Gemini Flash-2.0模型
-            google_api_key=config.GEMINI_API_KEY, # API密钥
-            temperature=config.TEMPERATURE,      # 控制生成的随机性
-            max_output_tokens=config.MAX_TOKENS, # 最大输出token数
-            top_p=config.TOP_P,                 # 核采样参数
-        )
+        # 初始化 OpenAI 兼容大语言模型
+        llm_config = config.get_llm_config()
+        self.llm = ChatOpenAI(**llm_config)
 
         # 初始化智能体工作流图
         self.graph = self._create_agent_graph()

@@ -9,7 +9,15 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.deepseek.com/v1}
+      - OPENAI_MODEL=${OPENAI_MODEL:-deepseek-chat}
+      - QWEATHER_API_KEY=${QWEATHER_API_KEY}
+      - QWEATHER_API_BASE=${QWEATHER_API_BASE:-https://api.qweather.com}
+      - AMAP_API_KEY=${AMAP_API_KEY}
+      - AMAP_BASE_URL=${AMAP_BASE_URL:-https://restapi.amap.com}
+      - EXCHANGE_RATE_API_BASE=${EXCHANGE_RATE_API_BASE:-https://api.exchangerate.host}
+      - EXCHANGE_RATE_API_KEY=${EXCHANGE_RATE_API_KEY}
     volumes:
       - ./results:/app/results
     networks:

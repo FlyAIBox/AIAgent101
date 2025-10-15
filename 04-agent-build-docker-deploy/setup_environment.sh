@@ -91,17 +91,30 @@ echo "🔍 检查环境变量配置..."
 if [ ! -f ".env" ]; then
     echo "📝 创建.env文件模板..."
     cat > .env << EOF
-# Google API密钥 (必需)
-GOOGLE_API_KEY=your_google_api_key_here
+# OpenAI 兼容 API 配置 (必需)
+OPENAI_API_KEY=your_openai_style_api_key_here
+OPENAI_BASE_URL=https://api.deepseek.com/v1
+OPENAI_MODEL=deepseek-chat
 
-# 可选配置
-GEMINI_MODEL=gemini-2.0-flash
+# 和风天气 API (可选)
+QWEATHER_API_KEY=your_qweather_api_key_here
+QWEATHER_API_BASE=your_api_host
+
+# 高德地图 API (可选)
+AMAP_API_KEY=your_amap_api_key_here
+AMAP_BASE_URL=https://restapi.amap.com
+
+# 汇率服务 (可选)
+EXCHANGE_RATE_API_BASE=https://api.exchangerate.host
+EXCHANGE_RATE_API_KEY=
+
+# 模型生成参数
 TEMPERATURE=0.7
 MAX_TOKENS=4000
 TOP_P=0.9
 EOF
     echo "✅ .env文件已创建"
-    echo "⚠️  请编辑.env文件，添加您的Google API密钥"
+    echo "⚠️  请编辑.env文件，配置 OPENAI_API_KEY 及其他可选服务密钥"
 else
     echo "✅ .env文件已存在"
 fi
@@ -117,12 +130,8 @@ echo "🎉 环境设置完成！"
 echo "=================================================="
 echo ""
 echo "📋 下一步操作："
-echo "1. 编辑.env文件，添加您的Google API密钥"
-echo "   GOOGLE_API_KEY=your_actual_api_key_here"
-echo ""
-echo "2. 获取Google API密钥："
-echo "   https://aistudio.google.com/app/api-keys"
-echo ""
+echo "1. 编辑.env文件，配置 OPENAI_API_KEY 以及可选的和风天气、高德地图、汇率服务密钥"
+echo "2. 若使用国内 OpenAI 兼容网关，请同步更新 OPENAI_BASE_URL 和 OPENAI_MODEL"
 echo "3. 启动服务："
 echo "   # 终端1 - 启动后端"
 echo "   ./start_backend.sh"
