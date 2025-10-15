@@ -44,10 +44,9 @@
 - 8GB+ RAM (推荐16GB)
 - 稳定的网络连接
 
-### 1. 克隆项目
+### 1. 进入项目目录
 ```bash
-git clone https://github.com/FlyAIBox/AI-Trip-Planner-Agent.git
-cd AI-Trip-Planner-Agent
+cd 04-agent-build-docker-deploy
 ```
 
 ### 2. 安装依赖
@@ -63,10 +62,10 @@ pip install -r frontend/requirements.txt
 ```bash
 # 创建环境变量文件
 cd backend
-cp .env.example .env
+cp env.example .env
 
 # 编辑环境变量
-nano .env
+vim .env
 ```
 
 必需的环境变量：

@@ -27,7 +27,7 @@ omegaconf==2.3.0          # 分层配置/超参合并（训练与多环境配置
 ########## 2) 智能体核心框架与工具 ##########
 # LangChain / LangGraph 与常见检索工具
 langchain-core==0.3.75            # LangChain 核心抽象（消息、工具、链式接口）
-langchain-community==0.3.29       # 社区工具与向量库适配器集合
+langchain-community==0.3.27       # 社区工具与向量库适配器集合
 langchain-openai==0.3.32          # OpenAI 接入适配
 langchain==0.3.27                 # LangChain 入口组合包
 

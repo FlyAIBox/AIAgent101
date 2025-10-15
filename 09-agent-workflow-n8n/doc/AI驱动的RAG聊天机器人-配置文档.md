@@ -85,7 +85,7 @@ n8n-nodes-base
 ### 2. Google Gemini API配置
 
 #### 步骤1：获取API密钥
-1. 访问 [Google AI Studio](https://makersuite.google.com/app/apikey)
+1. 访问 [Google AI Studio](https://aistudio.google.com/app/api-keys)
 2. 创建新的API密钥
 3. 记录API密钥（保密存储）
 

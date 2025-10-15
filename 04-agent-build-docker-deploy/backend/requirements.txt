@@ -36,7 +36,7 @@ langchain==0.3.27
 # LangChain 核心组件 - 框架的基础抽象层
 # 功能：定义了 LangChain 的核心概念，如可运行组件、处理链、记忆模块等
 # 使用场景：所有 LangChain 应用的基础，提供统一的编程模型
-langchain-core==0.3.72
+langchain-core==0.3.75
 
 # LangChain 社区扩展 - 第三方集成和工具集合
 # 功能：提供与各种外部服务和工具的集成，如搜索引擎、数据库等
