@@ -30,21 +30,21 @@ fi
 echo "✅ 检测到Conda环境"
 
 # 检查是否已存在虚拟环境
-if conda env list | grep -q "AI-Trip-Planner-Agent"; then
-    echo "⚠️  虚拟环境 'AI-Trip-Planner-Agent' 已存在"
+if conda env list | grep -q "agent101"; then
+    echo "⚠️  虚拟环境 'agent101' 已存在"
     read -p "是否要重新创建环境？(y/N): " recreate
     if [[ $recreate =~ ^[Yy]$ ]]; then
         echo "🗑️  删除现有环境..."
-        conda env remove -n AI-Trip-Planner-Agent -y
+        conda env remove -n agent101 -y
     else
         echo "📦 使用现有环境"
     fi
 fi
 
 # 创建虚拟环境
-if ! conda env list | grep -q "AI-Trip-Planner-Agent"; then
-    echo "📦 创建conda虚拟环境 'AI-Trip-Planner-Agent'..."
-    conda create -n AI-Trip-Planner-Agent python=3.10 -y
+if ! conda env list | grep -q "agent101"; then
+    echo "📦 创建conda虚拟环境 'agent101'..."
+    conda create -n agent101 python=3.10 -y
     
     if [ $? -eq 0 ]; then
         echo "✅ 虚拟环境创建成功"
@@ -57,7 +57,7 @@ fi
 # 激活环境
 echo "🔧 激活虚拟环境..."
 source $(conda info --base)/etc/profile.d/conda.sh
-conda activate AI-Trip-Planner-Agent
+conda activate agent101
 
 # 安装后端依赖
 echo "📥 安装后端依赖..."
@@ -144,10 +144,10 @@ echo "   🌐 前端界面: http://localhost:8501"
 echo "   📚 API文档: http://localhost:8000/docs"
 echo ""
 echo "5. 运行演示："
-echo "   conda activate AI-Trip-Planner-Agent"
+echo "   conda activate agent101"
 echo "   python demo.py"
 echo ""
 echo "💡 提示："
-echo "   每次使用前请先激活环境: conda activate AI-Trip-Planner-Agent"
+echo "   每次使用前请先激活环境: conda activate agent101"
 echo ""
 echo "=================================================="
