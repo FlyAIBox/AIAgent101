@@ -25,7 +25,7 @@ from duckduckgo_search import DDGS
 import json
 import re
 from datetime import datetime
-from .mcp_weather_client import fetch_forecast_via_mcp
+from .weather_client_mcp import fetch_forecast_via_mcp
 
 # 配置日志记录器
 def setup_travel_logger():
