@@ -510,7 +510,9 @@ class LangGraphTravelAgents:
             
             try:
                 # 智能工具选择：根据查询内容和当前智能体选择最合适的搜索工具
+                selected_tool = ""
                 if "weather" in search_query.lower() or "天气" in search_query or current_agent == "weather_analyst":
+                    selected_tool = "search_weather_info"
                     # 天气相关查询：使用天气信息搜索工具
                     from tools.travel_tools import search_weather_info
                     tool_result = search_weather_info.invoke({
@@ -518,6 +520,7 @@ class LangGraphTravelAgents:
                         "dates": state.get("travel_dates", "")
                     })
                 elif "attraction" in search_query.lower() or "activity" in search_query.lower() or "景点" in search_query or "活动" in search_query:
+                    selected_tool = "search_attractions"
                     # 景点活动查询：使用景点搜索工具
                     from tools.travel_tools import search_attractions
                     tool_result = search_attractions.invoke({
@@ -525,13 +528,15 @@ class LangGraphTravelAgents:
                         "interests": " ".join(state.get("interests", []))
                     })
                 elif "budget" in search_query.lower() or "cost" in search_query.lower() or "预算" in search_query or "费用" in search_query:
-                    # 预算费用查询：使用预算信息搜索工具
+                    selected_tool = "search_budget_info"
+                     # 预算费用查询：使用预算信息搜索工具
                     from tools.travel_tools import search_budget_info
                     tool_result = search_budget_info.invoke({
                         "destination": state.get("destination", ""),
                         "duration": str(state.get("duration", ""))
                     })
                 elif "hotel" in search_query.lower() or "accommodation" in search_query.lower() or "酒店" in search_query or "住宿" in search_query:
+                    selected_tool = "search_hotels"
                     # 住宿查询：使用酒店搜索工具
                     from tools.travel_tools import search_hotels
                     tool_result = search_hotels.invoke({
@@ -539,23 +544,28 @@ class LangGraphTravelAgents:
                         "budget": state.get("budget_range", "mid-range")
                     })
                 elif "restaurant" in search_query.lower() or "food" in search_query.lower() or "餐厅" in search_query or "美食" in search_query:
-                    # 餐饮查询：使用餐厅搜索工具
+                    selected_tool = "search_restaurants"
+                     # 餐饮查询：使用餐厅搜索工具
                     from tools.travel_tools import search_restaurants
                     tool_result = search_restaurants.invoke({
                         "destination": state.get("destination", "")
                     })
                 elif "local" in search_query.lower() or "tip" in search_query.lower() or "本地" in search_query or "贴士" in search_query:
+                    selected_tool = "search_local_tips"
                     # 本地贴士查询：使用本地贴士搜索工具
                     from tools.travel_tools import search_local_tips
                     tool_result = search_local_tips.invoke({
                         "destination": state.get("destination", "")
                     })
                 else:
+                    selected_tool = "search_destination_info"
                     # 默认选择：使用目的地信息搜索工具
                     from tools.travel_tools import search_destination_info
                     tool_result = search_destination_info.invoke({
                         "query": state.get("destination", "")
                     })
+
+                print(f"[LangGraphTools] 调用了工具: {selected_tool} | 查询关键词: {search_query}")
 
                 # 将工具执行结果添加到消息历史中
                 tool_message = AIMessage(content=f"搜索结果: {tool_result}")

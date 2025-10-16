@@ -171,7 +171,7 @@ class TravelAdvisorAgent(BaseAgent):
         return recommendation
     
     def _provide_destination_advice(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Provide comprehensive destination advice"""
+        """为指定目的地提供较为完整的出行建议"""
         destination = request.get('destination', '').lower()
         
         if destination in self.destination_expertise:
@@ -184,7 +184,7 @@ class TravelAdvisorAgent(BaseAgent):
             }
     
     def _recommend_attractions(self, request: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Recommend attractions based on interests"""
+        """结合用户兴趣给出景点推荐"""
         interests = request.get('interests', [])
         destination = request.get('destination', '').lower()
         
@@ -193,7 +193,7 @@ class TravelAdvisorAgent(BaseAgent):
         if destination in self.destination_expertise:
             dest_info = self.destination_expertise[destination]
             
-            # Add must-visit attractions
+            # 添加必游景点
             for attraction in dest_info['must_visit']:
                 recommendations.append({
                     'name': attraction,
@@ -202,7 +202,7 @@ class TravelAdvisorAgent(BaseAgent):
                     'estimated_duration': 2
                 })
             
-            # Add interest-based recommendations
+            # 添加与兴趣相关的景点
             if 'culture' in interests or 'history' in interests:
                 for gem in dest_info['hidden_gems'][:2]:
                     recommendations.append({
@@ -212,10 +212,10 @@ class TravelAdvisorAgent(BaseAgent):
                         'estimated_duration': 1.5
                     })
         
-        return recommendations[:8]  # Limit to 8 recommendations
+        return recommendations[:8]  # 限制最多返回 8 条记录
     
     def _get_food_recommendations(self, destination: str) -> List[str]:
-        """Get food recommendations for destination"""
+        """针对目的地提供美食体验建议"""
         food_recs = {
             'london': ['Traditional pub lunch', 'Fish and chips', 'Afternoon tea', 'Sunday roast'],
             'paris': ['Café culture', 'Boulangerie pastries', 'Wine tasting', 'Bistro dining'],
@@ -224,7 +224,7 @@ class TravelAdvisorAgent(BaseAgent):
         return food_recs.get(destination, ['Local specialties', 'Street food', 'Traditional restaurants'])
 
 class BudgetOptimizerAgent(BaseAgent):
-    """Agent specialized in budget optimization and cost-saving strategies"""
+    """预算优化智能体，侧重成本分析与省钱策略"""
     
     def __init__(self):
         super().__init__(
@@ -233,7 +233,7 @@ class BudgetOptimizerAgent(BaseAgent):
             capabilities=["cost_analysis", "budget_optimization", "deal_finding"]
         )
         
-        # Cost-saving strategies database
+        # 省钱策略知识库
         self.optimization_strategies = {
             'accommodation': [
                 'Book accommodations outside city center',
@@ -266,7 +266,7 @@ class BudgetOptimizerAgent(BaseAgent):
         }
     
     def process_message(self, message: Message) -> Optional[Message]:
-        """Process budget-related queries"""
+        """处理预算相关的查询消息"""
         if message.msg_type == MessageType.QUERY:
             content = message.content
             
@@ -286,7 +286,7 @@ class BudgetOptimizerAgent(BaseAgent):
         return None
     
     def generate_recommendation(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate budget optimization recommendations"""
+        """根据上下文生成预算优化建议"""
         budget_range = context.get('budget_range', 'mid-range')
         total_cost = context.get('total_cost', 0)
         duration = context.get('duration', 3)
@@ -300,10 +300,10 @@ class BudgetOptimizerAgent(BaseAgent):
             'strategies': []
         }
         
-        # Calculate potential savings
+        # 计算潜在节省空间
         daily_budget = total_cost / duration if duration > 0 else 0
         
-        # Analyze budget and suggest optimizations
+        # 根据预算区间给出优化建议
         if budget_range == 'luxury' and daily_budget > 200:
             recommendation['strategies'].extend([
                 'Consider mid-range alternatives for some expenses',
@@ -328,7 +328,7 @@ class BudgetOptimizerAgent(BaseAgent):
             ])
             recommendation['savings_potential'] = total_cost * 0.20  # 20% potential savings
         
-        # Add group-specific savings
+        # 针对多人同行附加节省建议
         if group_size > 2:
             recommendation['strategies'].extend([
                 'Look for group discounts on activities',
@@ -337,7 +337,7 @@ class BudgetOptimizerAgent(BaseAgent):
             ])
             recommendation['savings_potential'] += total_cost * 0.05
         
-        # Add category-specific strategies
+        # 对已给出的费用类别，补充对应的节约策略
         for category in ['accommodation', 'transportation', 'food', 'activities']:
             if category in context.get('expense_breakdown', {}):
                 recommendation['strategies'].extend(
@@ -347,7 +347,7 @@ class BudgetOptimizerAgent(BaseAgent):
         return recommendation
     
     def _optimize_budget(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Provide detailed budget optimization plan"""
+        """输出详细的预算优化方案"""
         current_budget = request.get('budget', 0)
         target_savings = request.get('target_savings', 0.1)  # 10% default
         
@@ -358,7 +358,7 @@ class BudgetOptimizerAgent(BaseAgent):
             'optimization_actions': []
         }
         
-        # Priority-ordered optimization actions
+        # 按优先级排列的优化动作
         actions = [
             {'action': 'Review accommodation options', 'potential_savings': 0.08, 'effort': 'low'},
             {'action': 'Optimize transportation choices', 'potential_savings': 0.05, 'effort': 'low'},
@@ -378,7 +378,7 @@ class BudgetOptimizerAgent(BaseAgent):
         return optimization_plan
     
     def _analyze_costs(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze cost breakdown and identify optimization opportunities"""
+        """分析费用构成并识别可优化空间"""
         expense_breakdown = request.get('expense_breakdown', {})
         
         analysis = {
@@ -398,7 +398,7 @@ class BudgetOptimizerAgent(BaseAgent):
                 'status': 'normal'
             }
             
-            # Flag high-cost categories
+        # 标记高支出比例的类别
             if category == 'accommodation' and percentage > 45:
                 analysis['category_analysis'][category]['status'] = 'high'
                 analysis['recommendations'].append(f'Accommodation costs are high ({percentage:.1f}%). Consider alternatives.')
@@ -412,7 +412,7 @@ class BudgetOptimizerAgent(BaseAgent):
         return analysis
 
 class WeatherAnalystAgent(BaseAgent):
-    """Agent specialized in weather analysis and weather-based recommendations"""
+    """天气分析智能体，负责解读天气并给出行程建议"""
     
     def __init__(self):
         super().__init__(
@@ -421,7 +421,7 @@ class WeatherAnalystAgent(BaseAgent):
             capabilities=["weather_analysis", "activity_optimization", "packing_advice"]
         )
         
-        # Weather-activity mapping
+        # 天气与活动对应关系
         self.weather_activities = {
             'sunny': {
                 'recommended': ['outdoor tours', 'parks', 'walking', 'outdoor dining', 'sightseeing'],
@@ -446,7 +446,7 @@ class WeatherAnalystAgent(BaseAgent):
         }
     
     def process_message(self, message: Message) -> Optional[Message]:
-        """Process weather-related queries"""
+        """处理天气类查询消息"""
         if message.msg_type == MessageType.QUERY:
             content = message.content
             
@@ -466,7 +466,7 @@ class WeatherAnalystAgent(BaseAgent):
         return None
     
     def generate_recommendation(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate weather-based recommendations"""
+        """依据天气预报生成行程调整与装备建议"""
         weather_forecast = context.get('weather_forecast', [])
         planned_activities = context.get('planned_activities', [])
         
@@ -480,15 +480,15 @@ class WeatherAnalystAgent(BaseAgent):
         }
         
         if weather_forecast:
-            # Analyze weather patterns
+            # 分析整体天气趋势
             weather_summary = self._analyze_weather_patterns(weather_forecast)
             recommendation['weather_insights'] = weather_summary
             
-            # Generate activity adjustments
+            # 给出活动调整建议
             adjustments = self._suggest_activity_adjustments(weather_forecast, planned_activities)
             recommendation['activity_adjustments'] = adjustments
             
-            # Generate packing advice
+            # 输出打包建议
             packing_advice = self._comprehensive_packing_advice(weather_forecast)
             recommendation['packing_recommendations'] = packing_advice
             
@@ -497,7 +497,7 @@ class WeatherAnalystAgent(BaseAgent):
         return recommendation
     
     def _analyze_weather_patterns(self, forecast: List[Dict]) -> Dict[str, Any]:
-        """Analyze weather patterns from forecast"""
+        """根据天气预报分析主要气象模式"""
         if not forecast:
             return {}
         
@@ -514,7 +514,7 @@ class WeatherAnalystAgent(BaseAgent):
             'temperature_variation': max(temperatures) - min(temperatures)
         }
         
-        # Add insights
+        # 补充洞察信息
         insights = []
         if analysis['rainy_days'] > len(forecast) * 0.4:
             insights.append("Expect frequent rain - plan indoor alternatives")
@@ -530,7 +530,7 @@ class WeatherAnalystAgent(BaseAgent):
         return analysis
     
     def _suggest_activity_adjustments(self, forecast: List[Dict], activities: List[Dict]) -> List[Dict]:
-        """Suggest activity adjustments based on weather"""
+        """结合天气情况给出活动调整建议"""
         adjustments = []
         
         for i, day_weather in enumerate(forecast):
@@ -544,7 +544,7 @@ class WeatherAnalystAgent(BaseAgent):
             for activity in day_activities:
                 activity_type = activity.get('type', '').lower()
                 
-                # Check if activity should be avoided
+                # 检查活动是否应避免
                 if any(avoid_item in activity_type for avoid_item in avoid):
                     adjustments.append({
                         'day': i + 1,
@@ -554,7 +554,7 @@ class WeatherAnalystAgent(BaseAgent):
                         'alternatives': recommended[:3]
                     })
                 
-                # Suggest timing adjustments for hot weather
+                # 针对炎热天气提示调整活动时间
                 elif day_condition == 'hot' and 'outdoor' in activity_type:
                     adjustments.append({
                         'day': i + 1,
@@ -567,7 +567,7 @@ class WeatherAnalystAgent(BaseAgent):
         return adjustments
     
     def _categorize_weather_condition(self, weather: Dict) -> str:
-        """Categorize weather condition"""
+        """对单日天气进行分类"""
         description = weather.get('description', '').lower()
         temperature = weather.get('temperature', 20)
         
@@ -583,7 +583,7 @@ class WeatherAnalystAgent(BaseAgent):
             return 'mild'
     
     def _comprehensive_packing_advice(self, forecast: List[Dict]) -> List[str]:
-        """Generate comprehensive packing advice"""
+        """综合天气特征生成打包清单"""
         all_conditions = []
         temperatures = []
         
@@ -594,12 +594,12 @@ class WeatherAnalystAgent(BaseAgent):
         
         packing_advice = set()
         
-        # Add condition-specific items
+        # 根据天气类型添加必备物品
         for condition in set(all_conditions):
             if condition in self.weather_activities:
                 packing_advice.update(self.weather_activities[condition]['packing'])
         
-        # Add temperature-based items
+        # 根据温度范围补充装备
         min_temp = min(temperatures)
         max_temp = max(temperatures)
         
@@ -611,14 +611,14 @@ class WeatherAnalystAgent(BaseAgent):
         if max_temp > 25:
             packing_advice.update(['shorts', 'tank tops', 'sandals', 'sun hat'])
         
-        # Add versatile items
+        # 温差较大时提示可层叠的衣物
         if max_temp - min_temp > 15:
             packing_advice.update(['layers', 'versatile jacket', 'multiple shoe options'])
         
         return list(packing_advice)
     
     def _optimize_for_weather(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Optimize itinerary for weather conditions"""
+        """根据天气状况优化日程安排"""
         forecast = request.get('weather_forecast', [])
         itinerary = request.get('itinerary', [])
         
@@ -663,7 +663,7 @@ class WeatherAnalystAgent(BaseAgent):
         return optimization
     
     def _generate_packing_advice(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate detailed packing advice"""
+        """依据天气与行程生成详细的打包建议"""
         forecast = request.get('weather_forecast', [])
         destination = request.get('destination', '')
         duration = request.get('duration', 3)
@@ -814,7 +814,7 @@ class LocalExpertAgent(BaseAgent):
         return None
     
     def generate_recommendation(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate local expert recommendations"""
+        """输出当地专家视角的推荐与提醒"""
         destination = context.get('destination', '').lower()
         visit_date = context.get('visit_date', datetime.now())
         interests = context.get('interests', [])
@@ -858,7 +858,7 @@ class LocalExpertAgent(BaseAgent):
         return recommendation
     
     def _provide_local_insights(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Provide detailed local insights"""
+        """提供细化的本地洞察信息"""
         destination = request.get('destination', '').lower()
         insight_type = request.get('insight_type', 'general')
         
@@ -881,7 +881,7 @@ class LocalExpertAgent(BaseAgent):
         return insights
     
     def _get_real_time_updates(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Simulate real-time updates (would connect to actual APIs)"""
+        """模拟实时动态（实际场景可接入对应 API）"""
         destination = request.get('destination', '').lower()
         
         # Simulated real-time data
@@ -900,7 +900,7 @@ class LocalExpertAgent(BaseAgent):
         return updates
     
     def _get_season(self, date: datetime) -> str:
-        """Determine season based on date"""
+        """根据日期判断季节"""
         month = date.month
         if month in [12, 1, 2]:
             return 'winter'
@@ -912,7 +912,7 @@ class LocalExpertAgent(BaseAgent):
             return 'autumn'
     
     def _get_local_food_spots(self, destination: str) -> List[str]:
-        """Get local food recommendations"""
+        """返回当地美食体验建议"""
         food_spots = {
             'london': ['Borough Market', 'Brick Lane curry houses', 'Traditional pubs for fish & chips'],
             'paris': ['Local bistros in Marais', 'Boulangeries for fresh pastries', 'Wine bars in Saint-Germain'],
@@ -921,7 +921,7 @@ class LocalExpertAgent(BaseAgent):
         return food_spots.get(destination, ['Explore local markets', 'Ask locals for recommendations'])
     
     def _get_nightlife_tips(self, destination: str) -> List[str]:
-        """Get nightlife recommendations"""
+        """返回夜生活相关建议"""
         nightlife = {
             'london': ['West End for theatre', 'Shoreditch for trendy bars', 'Camden for live music'],
             'paris': ['Montmartre for cabaret', 'Latin Quarter for student bars', 'Champs-Élysées for clubs'],
@@ -930,7 +930,7 @@ class LocalExpertAgent(BaseAgent):
         return nightlife.get(destination, ['Check local event listings', 'Ask hotel concierge'])
     
     def _get_shopping_tips(self, destination: str) -> List[str]:
-        """Get shopping recommendations"""
+        """返回购物相关建议"""
         shopping = {
             'london': ['Oxford Street for department stores', 'Camden Market for alternative', 'Portobello Road for antiques'],
             'paris': ['Champs-Élysées for luxury', 'Le Marais for boutiques', 'Flea markets for vintage'],
@@ -940,7 +940,7 @@ class LocalExpertAgent(BaseAgent):
 
 
 class ItineraryPlannerAgent(BaseAgent):
-    """Specialized agent for creating optimized daily itineraries"""
+    """行程规划智能体，负责生成优化的每日安排"""
     
     def __init__(self):
         super().__init__(
@@ -949,7 +949,7 @@ class ItineraryPlannerAgent(BaseAgent):
             capabilities=["route_optimization", "timing_coordination", "logistics_planning", "schedule_balancing"]
         )
         
-        # Initialize planning algorithms and templates
+        # 初始化行程模板与规划策略
         self.itinerary_templates = {
             'cultural': {
                 'morning': ['Museums', 'Historical sites'],
@@ -973,7 +973,7 @@ class ItineraryPlannerAgent(BaseAgent):
             }
         }
         
-        # Transportation and timing knowledge
+        # 交通耗时的经验数据
         self.transport_times = {
             'london': {'walking': 15, 'tube': 8, 'bus': 12, 'taxi': 10},
             'paris': {'walking': 12, 'metro': 6, 'bus': 15, 'taxi': 8},
@@ -981,7 +981,7 @@ class ItineraryPlannerAgent(BaseAgent):
         }
     
     def process_message(self, message: Message) -> Optional[Message]:
-        """Process itinerary planning requests"""
+        """处理行程规划相关请求"""
         if message.msg_type == MessageType.QUERY:
             content = message.content
             
@@ -1038,7 +1038,7 @@ class ItineraryPlannerAgent(BaseAgent):
             )
             recommendation['daily_plans'].append(daily_plan)
 
-        # 添加优化建议
+        # 添加整体优化提示
         recommendation['optimization_notes'] = [
             '根据天气条件调整日程安排',
             '优化地点间的交通时间',
@@ -1172,7 +1172,7 @@ class ItineraryPlannerAgent(BaseAgent):
         return daily_plan
     
     def _optimize_schedule(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Optimize existing schedule for better flow"""
+        """对既有行程进行再优化以提升流畅度"""
         current_schedule = request.get('schedule', {})
         optimization_criteria = request.get('criteria', ['time', 'cost', 'energy'])
         
@@ -1187,7 +1187,7 @@ class ItineraryPlannerAgent(BaseAgent):
             }
         }
         
-        # Add optimization notes
+        # 记录优化说明
         for criteria in optimization_criteria:
             if criteria == 'time':
                 optimized['optimizations_applied'].append('Reorganized activities by geographical proximity')
@@ -1199,7 +1199,7 @@ class ItineraryPlannerAgent(BaseAgent):
         return optimized
     
     def _get_weather_adjustment(self, weather: Optional[Dict]) -> str:
-        """Get weather-based adjustments for the day"""
+        """给出与天气相关的当天注意事项"""
         if not weather:
             return 'No weather data available'
         
@@ -1217,7 +1217,7 @@ class ItineraryPlannerAgent(BaseAgent):
 
 
 class CoordinatorAgent(BaseAgent):
-    """Master coordinator agent that orchestrates all other agents"""
+    """协调员智能体，负责统筹其他专业智能体的合作"""
     
     def __init__(self):
         super().__init__(
@@ -1226,7 +1226,7 @@ class CoordinatorAgent(BaseAgent):
             capabilities=["agent_orchestration", "decision_synthesis", "conflict_resolution", "workflow_management"]
         )
         
-        # Define agent coordination workflows
+        # 预设的协同流程
         self.coordination_workflows = {
             'full_trip_planning': [
                 {'agent': 'travel_advisor', 'task': 'destination_analysis'},
@@ -1247,7 +1247,7 @@ class CoordinatorAgent(BaseAgent):
             ]
         }
         
-        # Agent priority system
+        # 不同关注点下的智能体优先级
         self.agent_priorities = {
             'safety_concern': ['local_expert', 'travel_advisor'],
             'budget_concern': ['budget_optimizer', 'local_expert'],
@@ -1256,7 +1256,7 @@ class CoordinatorAgent(BaseAgent):
         }
     
     def process_message(self, message: Message) -> Optional[Message]:
-        """Process coordination requests"""
+        """处理协同请求，将需求分派给对应智能体"""
         if message.msg_type == MessageType.REQUEST:
             content = message.content
             
@@ -1276,7 +1276,7 @@ class CoordinatorAgent(BaseAgent):
         return None
     
     def generate_recommendation(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Coordinate all agents to generate comprehensive recommendation"""
+        """统筹各智能体生成最终的综合建议"""
         planning_type = context.get('planning_type', 'full_trip_planning')
         user_priorities = context.get('priorities', [])
         
@@ -1290,7 +1290,7 @@ class CoordinatorAgent(BaseAgent):
             'decision_rationale': []
         }
         
-        # Execute coordination workflow
+        # 执行既定协同流程
         workflow = self.coordination_workflows.get(planning_type, 
                                                   self.coordination_workflows['full_trip_planning'])
         
@@ -1315,7 +1315,7 @@ class CoordinatorAgent(BaseAgent):
             'optimization_applied': True
         }
         
-        # Add decision rationale
+        # 添加决策依据，便于审核
         recommendation['decision_rationale'] = [
             'Combined expertise from all specialized agents',
             'Prioritized user preferences and constraints',
@@ -1326,7 +1326,7 @@ class CoordinatorAgent(BaseAgent):
         return recommendation
     
     def _coordinate_trip_planning(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Coordinate comprehensive trip planning"""
+        """为一趟旅行生成详细的协同计划"""
         trip_context = request.get('trip_context', {})
         user_preferences = request.get('preferences', {})
         
@@ -1343,7 +1343,7 @@ class CoordinatorAgent(BaseAgent):
             }
         }
         
-        # Assign tasks to agents based on trip context
+        # 根据旅客需求为智能体分配任务
         if trip_context.get('budget_conscious'):
             coordination_plan['agent_assignments']['budget_optimizer'] = 'Primary cost analysis and optimization'
             coordination_plan['execution_order'].append('budget_optimizer')
@@ -1352,7 +1352,7 @@ class CoordinatorAgent(BaseAgent):
             coordination_plan['agent_assignments']['weather_analyst'] = 'Weather impact analysis'
             coordination_plan['execution_order'].append('weather_analyst')
         
-        # Always include core agents
+        # 核心智能体始终参与
         coordination_plan['agent_assignments']['travel_advisor'] = 'Destination expertise and recommendations'
         coordination_plan['agent_assignments']['local_expert'] = 'Local insights and real-time updates'
         coordination_plan['agent_assignments']['itinerary_planner'] = 'Schedule optimization and logistics'
@@ -1362,7 +1362,7 @@ class CoordinatorAgent(BaseAgent):
         return coordination_plan
     
     def _resolve_agent_conflict(self, conflict_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Resolve conflicts between agent recommendations"""
+        """处理不同智能体建议之间的冲突"""
         conflicting_agents = conflict_data.get('agents', [])
         conflict_type = conflict_data.get('type', 'recommendation_mismatch')
         
@@ -1375,7 +1375,7 @@ class CoordinatorAgent(BaseAgent):
             'confidence': 0.8
         }
         
-        # Apply resolution strategy based on conflict type
+        # 根据冲突类型采用对应的解决策略
         if conflict_type == 'budget_vs_quality':
             resolution['final_decision'] = 'Optimize for mid-range options with selective premium choices'
             resolution['compromise_elements'] = [
@@ -1394,7 +1394,7 @@ class CoordinatorAgent(BaseAgent):
         return resolution
     
     def _simulate_agent_consultation(self, agent_role: str, task: str, context: Dict[str, Any]) -> Dict[str, Any]:
-        """Simulate consultation with specialized agent"""
+        """模拟与某一专业智能体的沟通过程"""
         # This would call actual agents in full implementation
         simulated_responses = {
             'travel_advisor': {

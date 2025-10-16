@@ -472,6 +472,12 @@ async def create_travel_plan(request: TravelRequest, background_tasks: Backgroun
         save_tasks_state()
         
         # 添加后台任务
+        # 这里通过 FastAPI 提供的 BackgroundTasks 功能，把“旅行规划任务”的实际执行放到后台异步运行。
+        # 这样做的好处是接口能够立即响应，并不会因耗时的AI推理阻塞前端用户。
+        # add_task 的第一个参数是要执行的函数（run_planning_task），
+        # 后面的参数（task_id, travel_request）是传递给该函数的实际参数。
+        # run_planning_task 用于具体执行业务逻辑（AI旅行规划），
+        # 而 background_tasks.add_task 会在响应完成后自动在后台启动它。
         background_tasks.add_task(run_planning_task, task_id, travel_request)
         
         return PlanningResponse(
