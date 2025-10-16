@@ -18,6 +18,8 @@ LangGraph旅行规划智能体系统
 """
 
 from typing import Dict, Any, List, Optional, TypedDict, Annotated
+import logging
+from pathlib import Path
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
@@ -31,6 +33,23 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.langgraph_config import langgraph_config as config
+
+# --------------------------- 日志配置 ---------------------------
+def setup_agents_logger():
+    logger = logging.getLogger('langgraph_agents')
+    logger.setLevel(logging.INFO)
+    if not logger.handlers:
+        log_dir = Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        fh = logging.FileHandler('logs/backend.log', encoding='utf-8')
+        fh.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                                      datefmt='%Y-%m-%d %H:%M:%S')
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+    return logger
+
+agents_logger = setup_agents_logger()
 
 # 定义多智能体系统的状态结构
 class TravelPlanState(TypedDict):
@@ -507,6 +526,7 @@ class LangGraphTravelAgents:
 
             # 根据当前智能体和查询确定使用哪个工具
             current_agent = state.get("current_agent", "")
+            agents_logger.info(f"[ToolExecutor] 解析到搜索需求 | 当前智能体: {current_agent} | 查询: {search_query}")
             
             try:
                 # 智能工具选择：根据查询内容和当前智能体选择最合适的搜索工具
@@ -515,57 +535,70 @@ class LangGraphTravelAgents:
                     selected_tool = "search_weather_info"
                     # 天气相关查询：使用天气信息搜索工具
                     from tools.travel_tools import search_weather_info
-                    tool_result = search_weather_info.invoke({
-                        "destination": state.get("destination", ""),
-                        "dates": state.get("travel_dates", "")
-                    })
+                    tool_params = {"destination": state.get("destination", ""),
+                                   "dates": state.get("travel_dates", "")}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    # 该工具为异步工具，需使用 ainvoke 在独立事件循环中执行
+                    import asyncio
+                    loop = asyncio.new_event_loop()
+                    try:
+                        asyncio.set_event_loop(loop)
+                        tool_result = loop.run_until_complete(search_weather_info.ainvoke(tool_params))
+                    finally:
+                        loop.close()
+                        try:
+                            asyncio.set_event_loop(None)
+                        except Exception:
+                            pass
                 elif "attraction" in search_query.lower() or "activity" in search_query.lower() or "景点" in search_query or "活动" in search_query:
                     selected_tool = "search_attractions"
                     # 景点活动查询：使用景点搜索工具
                     from tools.travel_tools import search_attractions
-                    tool_result = search_attractions.invoke({
-                        "destination": state.get("destination", ""),
-                        "interests": " ".join(state.get("interests", []))
-                    })
+                    tool_params = {"destination": state.get("destination", ""),
+                                   "interests": " ".join(state.get("interests", []))}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    tool_result = search_attractions.invoke(tool_params)
                 elif "budget" in search_query.lower() or "cost" in search_query.lower() or "预算" in search_query or "费用" in search_query:
                     selected_tool = "search_budget_info"
                      # 预算费用查询：使用预算信息搜索工具
                     from tools.travel_tools import search_budget_info
-                    tool_result = search_budget_info.invoke({
-                        "destination": state.get("destination", ""),
-                        "duration": str(state.get("duration", ""))
-                    })
+                    tool_params = {"destination": state.get("destination", ""),
+                                   "duration": str(state.get("duration", ""))}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    tool_result = search_budget_info.invoke(tool_params)
                 elif "hotel" in search_query.lower() or "accommodation" in search_query.lower() or "酒店" in search_query or "住宿" in search_query:
                     selected_tool = "search_hotels"
                     # 住宿查询：使用酒店搜索工具
                     from tools.travel_tools import search_hotels
-                    tool_result = search_hotels.invoke({
-                        "destination": state.get("destination", ""),
-                        "budget": state.get("budget_range", "mid-range")
-                    })
+                    tool_params = {"destination": state.get("destination", ""),
+                                   "budget": state.get("budget_range", "mid-range")}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    tool_result = search_hotels.invoke(tool_params)
                 elif "restaurant" in search_query.lower() or "food" in search_query.lower() or "餐厅" in search_query or "美食" in search_query:
                     selected_tool = "search_restaurants"
                      # 餐饮查询：使用餐厅搜索工具
                     from tools.travel_tools import search_restaurants
-                    tool_result = search_restaurants.invoke({
-                        "destination": state.get("destination", "")
-                    })
+                    tool_params = {"destination": state.get("destination", "")}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    tool_result = search_restaurants.invoke(tool_params)
                 elif "local" in search_query.lower() or "tip" in search_query.lower() or "本地" in search_query or "贴士" in search_query:
                     selected_tool = "search_local_tips"
                     # 本地贴士查询：使用本地贴士搜索工具
                     from tools.travel_tools import search_local_tips
-                    tool_result = search_local_tips.invoke({
-                        "destination": state.get("destination", "")
-                    })
+                    tool_params = {"destination": state.get("destination", "")}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    tool_result = search_local_tips.invoke(tool_params)
                 else:
                     selected_tool = "search_destination_info"
                     # 默认选择：使用目的地信息搜索工具
                     from tools.travel_tools import search_destination_info
-                    tool_result = search_destination_info.invoke({
-                        "query": state.get("destination", "")
-                    })
+                    tool_params = {"query": state.get("destination", "")}
+                    agents_logger.info(f"[ToolExecutor] 调用工具: {selected_tool} | 参数: {tool_params}")
+                    tool_result = search_destination_info.invoke(tool_params)
 
-                print(f"[LangGraphTools] 调用了工具: {selected_tool} | 查询关键词: {search_query}")
+                # 记录工具返回结果大小（避免日志过大）
+                result_str = str(tool_result)
+                agents_logger.info(f"[ToolExecutor] 工具返回: {selected_tool} | 长度: {len(result_str)} 字符")
 
                 # 将工具执行结果添加到消息历史中
                 tool_message = AIMessage(content=f"搜索结果: {tool_result}")
@@ -574,6 +607,7 @@ class LangGraphTravelAgents:
                 return new_state
 
             except Exception as e:
+                agents_logger.error(f"[ToolExecutor] 工具执行错误: {str(e)}")
                 # 工具执行失败时添加错误消息
                 error_message = AIMessage(content=f"工具执行错误: {str(e)}")
                 new_state = state.copy()
@@ -601,28 +635,37 @@ class LangGraphTravelAgents:
 
         last_message = state.get("messages", [])[-1] if state.get("messages") else None
         if not last_message:
+            agents_logger.info("[CoordinatorRouter] 无最近消息，结束流程")
             return "end"
 
         content = last_message.content.lower()
 
         # 路由决策逻辑：根据协调员的输出内容决定下一步行动
+        agents_logger.info(f"[CoordinatorRouter] 协调员输出: {content}")
 
         # 检查协调员是否需要搜索工具
         if "search" in content or "need_search" in content or "搜索" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 进入工具执行节点")
             return "tools"
 
         # 检查协调员是否请求特定的智能体
         if "travel_advisor" in content or "旅行顾问" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 跳转 travel_advisor")
             return "travel_advisor"
         elif "weather_analyst" in content or "天气分析师" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 跳转 weather_analyst")
             return "weather_analyst"
         elif "budget_optimizer" in content or "预算优化师" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 跳转 budget_optimizer")
             return "budget_optimizer"
         elif "local_expert" in content or "当地专家" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 跳转 local_expert")
             return "local_expert"
         elif "itinerary_planner" in content or "行程规划师" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 跳转 itinerary_planner")
             return "itinerary_planner"
         elif "final_plan" in content or "最终计划" in content:
+            agents_logger.info("[CoordinatorRouter] 决策: 结束流程")
             return "end"
 
         # 默认策略：检查哪些智能体还没有参与工作
@@ -632,9 +675,11 @@ class LangGraphTravelAgents:
         # 按优先级顺序调用尚未参与的智能体
         for agent in required_agents:
             if agent not in agent_outputs:
+                agents_logger.info(f"[CoordinatorRouter] 决策: 跳转 {agent} (尚未参与)")
                 return agent
 
         # 如果所有智能体都已参与，结束流程
+        agents_logger.info("[CoordinatorRouter] 决策: 所有智能体已参与，结束流程")
         return "end"
     
     def _agent_router(self, state: TravelPlanState) -> str:
@@ -656,15 +701,18 @@ class LangGraphTravelAgents:
 
         last_message = state.get("messages", [])[-1] if state.get("messages") else None
         if not last_message:
+            agents_logger.info("[AgentRouter] 无最近消息，返回协调员")
             return "coordinator"
 
         content = last_message.content
 
         # 检查智能体是否需要搜索更多信息
         if "NEED_SEARCH:" in content:
+            agents_logger.info("[AgentRouter] 检测到搜索需求，跳转工具节点")
             return "tools"
 
         # 否则返回协调员进行下一步决策
+        agents_logger.info("[AgentRouter] 返回协调员继续决策")
         return "coordinator"
     
     def run_travel_planning(self, travel_request: Dict[str, Any]) -> Dict[str, Any]:
