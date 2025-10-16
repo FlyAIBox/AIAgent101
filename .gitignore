@@ -114,6 +114,7 @@ datasets/
 *.db
 *.sqlite
 *.sqlite3
+04-agent-build-docker-deploy/backend/tasks_state.json
 
 # 向量数据库文件
 *.db
