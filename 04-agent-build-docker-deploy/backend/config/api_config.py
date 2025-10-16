@@ -23,9 +23,8 @@ QWEATHER_API_BASE: str = os.getenv("QWEATHER_API_BASE", "https://api.qweather.co
 AMAP_API_KEY: Optional[str] = os.getenv("AMAP_API_KEY")
 AMAP_BASE_URL: str = os.getenv("AMAP_BASE_URL", "https://restapi.amap.com")
 
-# 汇率服务配置（默认使用 https://api.exchangerate.host）
-EXCHANGE_RATE_API_BASE: str = os.getenv("EXCHANGE_RATE_API_BASE", "https://api.exchangerate.host")
-EXCHANGE_RATE_API_KEY: Optional[str] = os.getenv("EXCHANGE_RATE_API_KEY")
+# 汇率服务配置（默认使用 https://api.exchangerate.host 的最新汇率端点）
+EXCHANGE_RATE_API_BASE: str = os.getenv("EXCHANGE_RATE_API_BASE", "https://api.exchangerate.host/latest")
 
 # 备用免费接口（无需密钥）
 FREE_EXCHANGE_URL: str = "https://api.exchangerate.host/latest"
@@ -56,7 +55,6 @@ class APIConfig:
     AMAP_BASE_URL = AMAP_BASE_URL
 
     EXCHANGE_RATE_API_BASE = EXCHANGE_RATE_API_BASE
-    EXCHANGE_RATE_API_KEY = EXCHANGE_RATE_API_KEY
     FREE_EXCHANGE_URL = FREE_EXCHANGE_URL
 
 # 全局实例供导入使用

@@ -105,8 +105,7 @@ AMAP_API_KEY=your_amap_api_key_here
 AMAP_BASE_URL=https://restapi.amap.com
 
 # 汇率服务 (可选)
-EXCHANGE_RATE_API_BASE=https://api.exchangerate.host
-EXCHANGE_RATE_API_KEY=
+EXCHANGE_RATE_API_BASE=https://api.exchangerate.host/latest
 
 # 模型生成参数
 TEMPERATURE=0.7

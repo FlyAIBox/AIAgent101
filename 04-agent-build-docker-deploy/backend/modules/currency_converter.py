@@ -49,8 +49,7 @@ class CurrencyConverter:
         为各种货币转换操作做准备。
         """
         # API配置
-        self.api_key = api_config.EXCHANGE_RATE_API_KEY  # 汇率API密钥（可选）
-        self.base_url = api_config.EXCHANGE_RATE_API_BASE  # API基础URL
+        self.base_url = api_config.EXCHANGE_RATE_API_BASE  # 汇率API基础URL或完整端点
         self.session = requests.Session()                 # HTTP会话对象
 
         # 汇率缓存（避免频繁API调用）
@@ -260,11 +259,23 @@ class CurrencyConverter:
         包括错误处理和多种API格式的支持。
         """
         try:
-            url = f"{self.base_url.rstrip('/')}/latest"
-            params = {'base': base_currency}
-            if self.api_key:
-                # 支持需要密钥的兼容接口（如 apilayer）
-                params['apikey'] = self.api_key
+            base_url = self.base_url.rstrip("/")
+
+            params = None
+            url = base_url
+
+            if "{base}" in base_url:
+                url = base_url.replace("{base}", base_currency)
+            else:
+                segments = base_url.split("/")
+                if len(segments) >= 2 and segments[-2] == "latest":
+                    segments[-1] = base_currency
+                    url = "/".join(segments)
+                elif segments[-1] == "latest":
+                    params = {'base': base_currency}
+                else:
+                    url = f"{base_url}/latest"
+                    params = {'base': base_currency}
 
             response = self.session.get(url, params=params, timeout=10)
             response.raise_for_status()

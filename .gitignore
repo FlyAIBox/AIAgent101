@@ -248,6 +248,7 @@ outputs/
 results/
 generated/
 exports/
+04-agent-build-docker-deploy/backend/tasks_state.json
 
 # 图表和可视化
 plots/

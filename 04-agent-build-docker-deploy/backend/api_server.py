@@ -32,14 +32,15 @@ from agents.langgraph_agents import LangGraphTravelAgents
 from agents.simple_travel_agent import SimpleTravelAgent, MockTravelAgent
 from config.langgraph_config import langgraph_config as config
 
-# 创建FastAPI应用
+# --------------------------- 应用初始化与全局配置 ---------------------------
+# 创建FastAPI应用，定义对外暴露的基础信息（标题、描述、版本等）
 app = FastAPI(
     title="AI旅行规划智能体API",
     description="基于LangGraph框架的多智能体旅行规划系统API",
     version="1.0.0"
 )
 
-# 添加CORS中间件，允许前端访问
+# 添加CORS中间件，允许任意来源的前端访问；生产环境建议根据域名白名单收紧策略
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 在生产环境中应该限制为特定域名
@@ -48,12 +49,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 全局变量存储任务状态
+# 全局字典，用于缓存当前所有规划任务的实时状态
 planning_tasks: Dict[str, Dict[str, Any]] = {}
 
-# 任务持久化文件
+# 任务状态持久化文件路径，重启服务后可恢复未完成/历史任务状态
 TASKS_FILE = "tasks_state.json"
 
+# --------------------------- 任务状态持久化工具函数 ---------------------------
 def save_tasks_state():
     """保存任务状态到文件"""
     try:
@@ -79,22 +81,48 @@ def load_tasks_state():
 # 启动时加载任务状态
 load_tasks_state()
 
+# --------------------------- 数据模型定义 ---------------------------
 class TravelRequest(BaseModel):
-    """旅行规划请求模型"""
-    destination: str
-    start_date: str
-    end_date: str
-    budget_range: str
-    group_size: int
-    interests: list[str] = []
-    dietary_restrictions: str = ""
-    activity_level: str = "适中"
-    travel_style: str = "探索者"
-    transportation_preference: str = "公共交通"
-    accommodation_preference: str = "酒店"
-    special_occasion: str = ""
-    special_requirements: str = ""
-    currency: str = "CNY"
+    """
+    旅行规划请求模型
+
+    用于接受客户端/前端提交的旅行规划需求。该模型定义了用户提交给智能体系统的所有关键信息参数，
+    包含从基础出行时间、目的地，到细致偏好（如兴趣、饮食禁忌、预算、交通与住宿等），
+    以全面支撑多智能体的任务分工与细致化规划。
+
+    字段说明：
+        - destination (str): 旅行目的地，例如“杭州”。
+        - start_date (str): 旅行开始日期，格式如“2025-08-14”。
+        - end_date (str): 旅行结束日期，格式如“2025-08-17”。
+        - budget_range (str): 期望的预算区间或类型，例如“经济型 (300-800元/天)”。
+        - group_size (int): 出行人数。
+        - interests (list[str]): 兴趣偏好列表，如 ["美食","徒步"]。
+        - dietary_restrictions (str): 饮食禁忌或特殊偏好（如“全素”），默认为空字符串。
+        - activity_level (str): 活动强度（如“适中”、“轻松”、“高强度”），默认“适中”。
+        - travel_style (str): 旅行风格（如“探索者”、“休闲者”），默认“探索者”。
+        - transportation_preference (str): 交通方式偏好（如“自驾”、“公共交通”），默认“公共交通”。
+        - accommodation_preference (str): 住宿方式偏好（如“酒店”、“民宿”），默认“酒店”。
+        - special_occasion (str): 是否有特殊场合（如“生日”、“纪念日”），没有则为空字符串。
+        - special_requirements (str): 其他特殊需求（如“无障碍房间”），没有则为空字符串。
+        - currency (str): 预算币种，默认“CNY”。
+
+    注意事项：
+        此模型作为前端与后端/智能体主控交互的数据标准，在任务派发、多智能体决策、状态持久化等多个核心模块中反复使用。
+    """
+    destination: str  # 目的地（如“杭州”）
+    start_date: str  # 出发日期，格式如“2025-08-14”
+    end_date: str  # 返回日期，格式如“2025-08-17”
+    budget_range: str  # 预算范围（如“经济型 (300-800元/天)”）
+    group_size: int  # 出行人数
+    interests: list[str] = []  # 兴趣偏好，如["美食","徒步"]
+    dietary_restrictions: str = ""  # 饮食禁忌或偏好，默认为空
+    activity_level: str = "适中"  # 活动强度（如“适中”、“轻松”或“高强度”）
+    travel_style: str = "探索者"  # 旅行风格（如“探索者”、“休闲者”）
+    transportation_preference: str = "公共交通"  # 交通偏好，如“自驾”、“公共交通”
+    accommodation_preference: str = "酒店"  # 住宿偏好，如“酒店”、“民宿”
+    special_occasion: str = ""  # 特殊场合（如“生日”、“纪念日”），没有则为空
+    special_requirements: str = ""  # 其他特殊需求，如“无障碍房间”，没有则为空
+    currency: str = "CNY"  # 预算币种，默认为人民币（CNY）
 
 class PlanningResponse(BaseModel):
     """规划响应模型"""
@@ -111,6 +139,7 @@ class PlanningStatus(BaseModel):
     message: str
     result: Optional[Dict[str, Any]] = None
 
+# --------------------------- 路由定义 ---------------------------
 @app.get("/")
 async def root():
     """根路径，返回API信息"""
@@ -166,8 +195,19 @@ async def health_check():
             "timestamp": datetime.now().isoformat()
         }
 
+# --------------------------- 异步执行核心任务 ---------------------------
 async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
-    """异步执行旅行规划任务"""
+    """
+    异步执行旅行规划任务
+
+    后台协程负责整个 LangGraph 多智能体推理流程，核心步骤如下：
+        1. 更新任务状态进度条，并构造 LangGraph 所需的标准化请求 `langgraph_request`；
+        2. 在异步上下文中调用 `LangGraphTravelAgents`，通过线程池避免阻塞事件循环；
+        3. 设定超时与异常回退策略：若 LangGraph 超时或执行失败，则自动降级至 SimpleTravelAgent；
+        4. 规划成功后保存结果、写入文件；若失败或异常，则返回简化方案并记录错误信息。
+
+    该函数不会阻塞 API 响应，由 `BackgroundTasks` 在后台运行，确保接口响应迅速。
+    """
     try:
         print(f"开始执行任务 {task_id}")
         
@@ -204,6 +244,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
         try:
             # 使用asyncio.wait_for添加超时控制
             async def run_langgraph():
+                """封装 LangGraph 智能体执行流程，便于统一超时处理"""
                 # 初始化AI旅行规划智能体
                 print(f"任务 {task_id}: 初始化AI旅行规划智能体")
                 planning_tasks[task_id]["progress"] = 50
@@ -221,6 +262,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
                     import concurrent.futures
 
                     def run_planning():
+                        """在线程池中实际执行多智能体规划，保持事件循环顺畅"""
                         return travel_agents.run_travel_planning(langgraph_request)
 
                     # 使用线程池执行，设置超时
@@ -353,8 +395,14 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
         planning_tasks[task_id]["message"] = f"系统错误: {str(e)}"
         print(f"任务 {task_id}: 规划任务执行错误: {str(e)}")
 
+# --------------------------- 规划结果输出工具函数 ---------------------------
 async def save_planning_result(task_id: str, result: Dict[str, Any], request: Dict[str, Any]):
-    """保存规划结果到文件"""
+    """
+    保存规划结果到文件
+
+    将规划请求、结果及时间戳封装为 JSON 存入 `results/` 目录，文件命名包含目的地与时间，
+    便于后续归档。该函数在完成主任务后调用，确保生成的报告可以被用户下载或复盘。
+    """
     try:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         destination = request.get('destination', 'unknown').replace(' ', '_')
@@ -374,15 +422,26 @@ async def save_planning_result(task_id: str, result: Dict[str, Any], request: Di
         
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(save_data, f, ensure_ascii=False, indent=2)
-            
+
         planning_tasks[task_id]["result_file"] = filename
         
     except Exception as e:
         print(f"保存结果文件时出错: {str(e)}")
 
+# --------------------------- API 路由：创建、查询、下载 ---------------------------
 @app.post("/plan", response_model=PlanningResponse)
 async def create_travel_plan(request: TravelRequest, background_tasks: BackgroundTasks):
-    """创建旅行规划任务"""
+    """
+    创建旅行规划任务
+
+    该接口负责接收前端提交的详细旅行需求，初始化任务状态并触发后台异步执行：
+        1. 生成唯一的 task_id，作为后续查询的关键主键；
+        2. 依据起止日期计算旅行天数，写入请求体供多智能体使用；
+        3. 将任务存入全局状态字典 `planning_tasks`，并立即持久化到本地文件；
+        4. 投递后台任务 `run_planning_task`，由事件循环异步执行，保证接口快速响应。
+
+    请求成功后返回 `PlanningResponse`，调用方可通过 task_id 轮询 `/status/{task_id}` 获取进度。
+    """
     try:
         # 生成任务ID
         task_id = str(uuid.uuid4())
@@ -426,7 +485,12 @@ async def create_travel_plan(request: TravelRequest, background_tasks: Backgroun
 
 @app.get("/status/{task_id}", response_model=PlanningStatus)
 async def get_planning_status(task_id: str):
-    """获取规划任务状态"""
+    """
+    获取规划任务状态
+
+    根据 task_id 读取内存中的任务状态，返回进度条（0-100）、当前执行智能体/阶段提示、
+    文本消息以及完成后缓存的最终结果。若任务不存在则返回 404。
+    """
     try:
         print(f"状态查询: {task_id}")
 
@@ -453,7 +517,12 @@ async def get_planning_status(task_id: str):
 
 @app.get("/download/{task_id}")
 async def download_result(task_id: str):
-    """下载规划结果文件"""
+    """
+    下载规划结果文件
+
+    如果任务执行成功并生成结果文件，则按照 task_id 寻址 `results/` 目录下的 JSON 文件，
+    返回 `FileResponse` 供调用方下载。若文件不存在或任务无结果，将抛出 404。
+    """
     if task_id not in planning_tasks:
         raise HTTPException(status_code=404, detail="任务不存在")
     
@@ -471,9 +540,15 @@ async def download_result(task_id: str):
         media_type='application/json'
     )
 
+# --------------------------- 辅助路由：任务列表、简化/模拟模式 ---------------------------
 @app.get("/tasks")
 async def list_tasks():
-    """列出所有任务"""
+    """
+    列出所有任务
+
+    将当前内存中的 `planning_tasks` 转化为摘要列表，便于调试或在管理端展示所有历史任务。
+    每个任务包含 task_id、状态、创建时间及目的地信息。
+    """
     return {
         "tasks": [
             {
@@ -488,7 +563,12 @@ async def list_tasks():
 
 @app.post("/simple-plan")
 async def simple_travel_plan(request: TravelRequest, background_tasks: BackgroundTasks):
-    """简化版旅行规划（使用简化智能体）"""
+    """
+    简化版旅行规划（使用简化智能体）
+
+    使用 `SimpleTravelAgent` 同步生成旅行方案，适用于快速响应或 LangGraph 资源不足场景。
+    仍然以异步后台任务方式执行，流程与完整版类似，但智能体数量更少、执行逻辑更简单。
+    """
     try:
         # 生成任务ID
         task_id = str(uuid.uuid4())
@@ -517,6 +597,7 @@ async def simple_travel_plan(request: TravelRequest, background_tasks: Backgroun
 
         # 添加后台任务
         async def run_simple_planning():
+            """运行简化智能体规划逻辑，保持与完整版相同的状态更新流程"""
             try:
                 planning_tasks[task_id]["status"] = "processing"
                 planning_tasks[task_id]["progress"] = 30
@@ -554,7 +635,12 @@ async def simple_travel_plan(request: TravelRequest, background_tasks: Backgroun
 
 @app.post("/mock-plan")
 async def mock_travel_plan(request: TravelRequest):
-    """模拟旅行规划（用于测试，立即返回结果）"""
+    """
+    模拟旅行规划（用于测试，立即返回结果）
+
+    调用 `MockTravelAgent`，快速返回预设的示例行程，主要用于调试前端调用链或演示流程，
+    不依赖外部 API，也不会写入持久化任务状态。
+    """
     try:
         # 生成测试任务ID
         task_id = str(uuid.uuid4())
@@ -587,6 +673,7 @@ async def mock_travel_plan(request: TravelRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"模拟规划失败: {str(e)}")
 
+# --------------------------- 独立运行入口 ---------------------------
 if __name__ == "__main__":
     print("🚀 启动AI旅行规划智能体API服务器...")
     print(f"📍 API文档: http://localhost:8080/docs")

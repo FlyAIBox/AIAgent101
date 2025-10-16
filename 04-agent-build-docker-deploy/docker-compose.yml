@@ -16,8 +16,7 @@ services:
       - QWEATHER_API_BASE=${QWEATHER_API_BASE:-https://api.qweather.com}
       - AMAP_API_KEY=${AMAP_API_KEY}
       - AMAP_BASE_URL=${AMAP_BASE_URL:-https://restapi.amap.com}
-      - EXCHANGE_RATE_API_BASE=${EXCHANGE_RATE_API_BASE:-https://api.exchangerate.host}
-      - EXCHANGE_RATE_API_KEY=${EXCHANGE_RATE_API_KEY}
+      - EXCHANGE_RATE_API_BASE=${EXCHANGE_RATE_API_BASE}
     volumes:
       - ./results:/app/results
     networks:

@@ -27,8 +27,7 @@ QWEATHER_GEO_BASE=https://geoapi.qweather.com
 AMAP_API_KEY=your_amap_key
 AMAP_BASE_URL=https://restapi.amap.com
 
-EXCHANGE_RATE_API_BASE=https://api.exchangerate.host
-EXCHANGE_RATE_API_KEY=
+EXCHANGE_RATE_API_BASE=https://v6.exchangerate-api.com/v6/YOUR-API-KEY/latest/CNY
 ```
 
 > ⚠️ 生产环境请使用安全的秘钥管理方式（CI/CD Secret、KMS 等），避免直接在仓库中提交 `.env`。
