@@ -72,6 +72,7 @@ def _resolve_mcp_server_path() -> str:
     ]
     for candidate in candidates:
         if os.path.exists(candidate):
+            logger.info(f"MCP 服务器脚本已定位: {candidate}")
             return candidate
     raise FileNotFoundError(
         "找不到MCP天气服务器文件，已检查: " + ", ".join(candidates)
@@ -169,6 +170,9 @@ def _convert_city_name_to_id_with_llm(city_name: str) -> Optional[str]:
 
         user_prompt = f"请提供 {city_name} 的和风天气城市ID："
         
+        logger.info(f"LLM提示词-系统: {system_prompt[:200]}…")
+        logger.info(f"LLM提示词-用户: {user_prompt}")
+
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=[
@@ -180,6 +184,7 @@ def _convert_city_name_to_id_with_llm(city_name: str) -> Optional[str]:
         )
         
         result = response.choices[0].message.content.strip()
+        logger.info(f"LLM返回: {result}")
         
         # 验证返回结果格式
         if result == "UNKNOWN":
@@ -279,6 +284,7 @@ class MCPServer:
         
         for attempt in range(max_retries):
             try:
+                logger.info(f"尝试连接 MCP 服务器 (第 {attempt + 1}/{max_retries} 次): {self.server_path}")
                 if not os.path.exists(self.server_path):
                     raise FileNotFoundError(f"找不到服务器文件: {self.server_path}")
                 
@@ -312,11 +318,14 @@ class MCPServer:
         if not self.session:
             raise RuntimeError("服务器未初始化")
             
+        logger.info("请求服务器工具列表…")
         response = await self.session.list_tools()
-        return [
+        tools = [
             Tool(tool.name, tool.description, tool.inputSchema)
             for tool in response.tools
         ]
+        logger.info(f"工具列表获取成功，数量: {len(tools)}，名称: {[t.name for t in tools]}")
+        return tools
         
     async def execute_tool(
         self,
@@ -342,8 +351,18 @@ class MCPServer:
             
         for attempt in range(retries):
             try:
-                logger.info(f"执行工具 {tool_name}，参数: {arguments}")
+                logger.info(f"执行工具调用开始: name={tool_name}, args={arguments}, attempt={attempt + 1}/{retries}")
                 result = await self.session.call_tool(tool_name, arguments)
+                # 尝试记录结果摘要
+                try:
+                    content = getattr(result, 'content', None)
+                    if content:
+                        preview = str(content)[:500]
+                        logger.info(f"工具调用成功: name={tool_name}, 返回内容预览(<=500 chars)={preview}")
+                    else:
+                        logger.info(f"工具调用成功: name={tool_name}, 返回为空或无 content 字段")
+                except Exception as log_err:
+                    logger.warning(f"记录工具返回摘要时出错: {log_err}")
                 return result
                 
             except Exception as e:
@@ -357,6 +376,7 @@ class MCPServer:
         """清理服务器资源"""
         async with self._cleanup_lock:
             try:
+                logger.info("开始清理 MCP 服务器连接与资源…")
                 await self.exit_stack.aclose()
                 self.session = None
                 logger.info("服务器资源清理完成")
@@ -580,6 +600,7 @@ class MCPWeatherClient:
     async def connect(self) -> None:
         """建立到本地 MCP 天气服务器的连接。"""
         server_path = _resolve_mcp_server_path()
+        logger.info(f"准备连接 MCP 天气服务器: {server_path}")
         self.server = MCPServer(server_path)
         await self.server.initialize()
 
@@ -610,15 +631,20 @@ class MCPWeatherClient:
         # 解析位置参数，将中文城市名转换为城市ID
         resolved_location = _resolve_city_location(location)
         arguments: Dict[str, Any] = {"location": resolved_location, "days": int(days)}
+        logger.info(f"调用 get_daily_forecast，入参: location={resolved_location}, days={days}")
         result = await self.server.execute_tool("get_daily_forecast", arguments)
 
         # MCP 返回结果通常包含 content 列表与 Part 文本
         try:
             # result.content[0].text 形态（与上文 MCPClient.process_query 保持一致）
-            return result.content[0].text  # type: ignore[attr-defined]
+            text = result.content[0].text  # type: ignore[attr-defined]
+            logger.info(f"get_daily_forecast 返回文本长度: {len(text)}")
+            return text
         except Exception:
             # 兜底返回字符串
-            return str(result)
+            fallback = str(result)
+            logger.info(f"get_daily_forecast 返回非标准结构，已转为字符串，长度: {len(fallback)}")
+            return fallback
 
 
 
@@ -648,8 +674,9 @@ async def fetch_forecast_via_mcp(location: str, days: int = 3) -> str:
     logger.info(f"通过 MCP 工具获取天气预报: 位置={location}, 天数={days}")
     try:
         async with MCPWeatherClient() as client:
+            logger.info("MCPWeatherClient 上下文已建立，开始请求预报…")
             result = await client.get_daily_forecast(location=location, days=days)
-            logger.info("MCP 工具调用成功")
+            logger.info("MCP 工具调用成功，已获得返回结果")
             return result
     except Exception as e:
         logger.error(f"MCP 工具调用失败: {str(e)}")

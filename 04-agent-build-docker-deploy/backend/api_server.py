@@ -18,6 +18,8 @@ import asyncio
 import json
 import uuid
 from datetime import datetime
+import logging
+from pathlib import Path
 from typing import Dict, Any, Optional
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,6 +33,23 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from agents.langgraph_agents import LangGraphTravelAgents
 from agents.simple_travel_agent import SimpleTravelAgent, MockTravelAgent
 from config.langgraph_config import langgraph_config as config
+
+# --------------------------- 日志配置 ---------------------------
+def setup_api_logger():
+    logger = logging.getLogger('api_server')
+    logger.setLevel(logging.INFO)
+    if not logger.handlers:
+        log_dir = Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        fh = logging.FileHandler('logs/backend.log', encoding='utf-8')
+        fh.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                                      datefmt='%Y-%m-%d %H:%M:%S')
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+    return logger
+
+api_logger = setup_api_logger()
 
 # --------------------------- 应用初始化与全局配置 ---------------------------
 # 创建FastAPI应用，定义对外暴露的基础信息（标题、描述、版本等）
@@ -62,7 +81,7 @@ def save_tasks_state():
         with open(TASKS_FILE, 'w', encoding='utf-8') as f:
             json.dump(planning_tasks, f, ensure_ascii=False, indent=2, default=str)
     except Exception as e:
-        print(f"保存任务状态失败: {e}")
+        api_logger.error(f"保存任务状态失败: {e}")
 
 def load_tasks_state():
     """从文件加载任务状态"""
@@ -71,11 +90,11 @@ def load_tasks_state():
         if os.path.exists(TASKS_FILE):
             with open(TASKS_FILE, 'r', encoding='utf-8') as f:
                 planning_tasks = json.load(f)
-            print(f"✅ 已加载 {len(planning_tasks)} 个任务状态")
+            api_logger.info(f"已加载 {len(planning_tasks)} 个任务状态")
         else:
-            print("📝 任务状态文件不存在，使用空状态")
+            api_logger.info("任务状态文件不存在，使用空状态")
     except Exception as e:
-        print(f"加载任务状态失败: {e}")
+        api_logger.error(f"加载任务状态失败: {e}")
         planning_tasks = {}
 
 # 启动时加载任务状态
@@ -189,6 +208,7 @@ async def health_check():
             "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
+        api_logger.error(f"健康检查错误: {e}")
         return {
             "status": "error", 
             "message": str(e),
@@ -209,7 +229,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
     该函数不会阻塞 API 响应，由 `BackgroundTasks` 在后台运行，确保接口响应迅速。
     """
     try:
-        print(f"开始执行任务 {task_id}")
+        api_logger.info(f"开始执行任务 {task_id} | 请求: {json.dumps(travel_request, ensure_ascii=False)}")
         
         # 更新任务状态
         planning_tasks[task_id]["status"] = "processing"
@@ -239,25 +259,25 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
         
         await asyncio.sleep(1)
         
-        print(f"任务 {task_id}: 开始LangGraph处理")
+        api_logger.info(f"任务 {task_id}: 开始LangGraph处理")
         
         try:
             # 使用asyncio.wait_for添加超时控制
             async def run_langgraph():
                 """封装 LangGraph 智能体执行流程，便于统一超时处理"""
                 # 初始化AI旅行规划智能体
-                print(f"任务 {task_id}: 初始化AI旅行规划智能体")
+                api_logger.info(f"任务 {task_id}: 初始化AI旅行规划智能体")
                 planning_tasks[task_id]["progress"] = 50
                 planning_tasks[task_id]["message"] = "初始化AI旅行规划智能体..."
 
                 try:
                     travel_agents = LangGraphTravelAgents()
-                    print(f"任务 {task_id}: AI旅行规划智能体初始化完成")
+                    api_logger.info(f"任务 {task_id}: AI旅行规划智能体初始化完成")
 
                     planning_tasks[task_id]["progress"] = 60
                     planning_tasks[task_id]["message"] = "开始多智能体协作..."
 
-                    print(f"任务 {task_id}: 执行旅行规划")
+                    api_logger.info(f"任务 {task_id}: 执行旅行规划")
                     # 在线程池中执行规划，避免阻塞
                     import concurrent.futures
 
@@ -271,10 +291,10 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
                         try:
                             # 等待最多4分钟
                             result = future.result(timeout=240)
-                            print(f"任务 {task_id}: LangGraph执行完成，结果: {result.get('success', False)}")
+                            api_logger.info(f"任务 {task_id}: LangGraph执行完成，结果: {result.get('success', False)}")
                             return result
                         except concurrent.futures.TimeoutError:
-                            print(f"任务 {task_id}: LangGraph执行超时，尝试使用简化版本")
+                            api_logger.warning(f"任务 {task_id}: LangGraph执行超时，尝试使用简化版本")
                             planning_tasks[task_id]["progress"] = 80
                             planning_tasks[task_id]["message"] = "LangGraph超时，使用简化版本..."
 
@@ -283,7 +303,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
                             return simple_agent.run_travel_planning(langgraph_request)
 
                         except Exception as e:
-                            print(f"任务 {task_id}: LangGraph执行异常: {str(e)}，尝试使用简化版本")
+                            api_logger.error(f"任务 {task_id}: LangGraph执行异常: {str(e)}，尝试使用简化版本")
                             planning_tasks[task_id]["progress"] = 80
                             planning_tasks[task_id]["message"] = "LangGraph异常，使用简化版本..."
 
@@ -292,7 +312,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
                             return simple_agent.run_travel_planning(langgraph_request)
 
                 except Exception as e:
-                    print(f"任务 {task_id}: 初始化LangGraph失败: {str(e)}")
+                    api_logger.error(f"任务 {task_id}: 初始化LangGraph失败: {str(e)}")
                     return {
                         "success": False,
                         "error": f"初始化失败: {str(e)}",
@@ -304,7 +324,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
             # 设置300秒超时（5分钟）
             result = await asyncio.wait_for(run_langgraph(), timeout=300.0)
             
-            print(f"任务 {task_id}: LangGraph处理完成")
+            api_logger.info(f"任务 {task_id}: LangGraph处理完成")
             
             if result["success"]:
                 planning_tasks[task_id]["status"] = "completed"
@@ -323,7 +343,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
                 planning_tasks[task_id]["message"] = f"规划失败: {result.get('error', '未知错误')}"
                 
         except asyncio.TimeoutError:
-            print(f"任务 {task_id}: LangGraph处理超时")
+            api_logger.warning(f"任务 {task_id}: LangGraph处理超时")
             # 超时处理，提供简化响应
             simplified_result = {
                 "success": True,
@@ -356,7 +376,7 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
                 
         except Exception as agent_error:
             # 如果AI旅行规划智能体出错，提供一个简化的响应
-            print(f"任务 {task_id}: AI旅行规划智能体错误: {str(agent_error)}")
+            api_logger.error(f"任务 {task_id}: AI旅行规划智能体错误: {str(agent_error)}")
             
             # 创建一个简化的旅行计划作为回退
             simplified_result = {
@@ -388,12 +408,12 @@ async def run_planning_task(task_id: str, travel_request: Dict[str, Any]):
             # 保存简化结果
             await save_planning_result(task_id, simplified_result, langgraph_request)
             
-        print(f"任务 {task_id}: 执行完成")
+        api_logger.info(f"任务 {task_id}: 执行完成")
             
     except Exception as e:
         planning_tasks[task_id]["status"] = "failed"
         planning_tasks[task_id]["message"] = f"系统错误: {str(e)}"
-        print(f"任务 {task_id}: 规划任务执行错误: {str(e)}")
+        api_logger.error(f"任务 {task_id}: 规划任务执行错误: {str(e)}")
 
 # --------------------------- 规划结果输出工具函数 ---------------------------
 async def save_planning_result(task_id: str, result: Dict[str, Any], request: Dict[str, Any]):
@@ -426,7 +446,7 @@ async def save_planning_result(task_id: str, result: Dict[str, Any], request: Di
         planning_tasks[task_id]["result_file"] = filename
         
     except Exception as e:
-        print(f"保存结果文件时出错: {str(e)}")
+        api_logger.error(f"保存结果文件时出错: {str(e)}")
 
 # --------------------------- API 路由：创建、查询、下载 ---------------------------
 @app.post("/plan", response_model=PlanningResponse)
@@ -498,14 +518,14 @@ async def get_planning_status(task_id: str):
     文本消息以及完成后缓存的最终结果。若任务不存在则返回 404。
     """
     try:
-        print(f"状态查询: {task_id}")
+        api_logger.info(f"状态查询: {task_id}")
 
         if task_id not in planning_tasks:
-            print(f"任务不存在: {task_id}")
+            api_logger.warning(f"任务不存在: {task_id}")
             raise HTTPException(status_code=404, detail="任务不存在")
 
         task = planning_tasks[task_id]
-        print(f"任务状态: {task['status']}, 进度: {task['progress']}%")
+        api_logger.info(f"任务状态: {task['status']}, 进度: {task['progress']}%")
 
         return PlanningStatus(
             task_id=task_id,
@@ -518,7 +538,7 @@ async def get_planning_status(task_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"状态查询错误: {str(e)}")
+        api_logger.error(f"状态查询错误: {str(e)}")
         raise HTTPException(status_code=500, detail=f"状态查询失败: {str(e)}")
 
 @app.get("/download/{task_id}")
@@ -650,8 +670,7 @@ async def mock_travel_plan(request: TravelRequest):
     try:
         # 生成测试任务ID
         task_id = str(uuid.uuid4())
-
-        print(f"模拟任务 {task_id}: 开始")
+        api_logger.info(f"模拟任务 {task_id}: 开始")
 
         # 计算旅行天数
         from datetime import datetime
@@ -667,7 +686,7 @@ async def mock_travel_plan(request: TravelRequest):
         mock_agent = MockTravelAgent()
         result = mock_agent.run_travel_planning(travel_request)
 
-        print(f"模拟任务 {task_id}: 完成")
+        api_logger.info(f"模拟任务 {task_id}: 完成")
 
         return {
             "task_id": task_id,
@@ -681,9 +700,9 @@ async def mock_travel_plan(request: TravelRequest):
 
 # --------------------------- 独立运行入口 ---------------------------
 if __name__ == "__main__":
-    print("🚀 启动AI旅行规划智能体API服务器...")
-    print(f"📍 API文档: http://localhost:8080/docs")
-    print(f"🔧 健康检查: http://localhost:8080/health")
+    api_logger.info("启动AI旅行规划智能体API服务器…")
+    api_logger.info("API文档: http://localhost:8080/docs")
+    api_logger.info("健康检查: http://localhost:8080/health")
 
     uvicorn.run(
         "api_server:app",
