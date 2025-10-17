@@ -4,6 +4,29 @@
 
 ---
 
+## 0. 快速开始（强烈推荐）
+
+1) 在后端目录准备环境变量文件：
+
+```bash
+cd 04-agent-build-docker-deploy/backend
+cp env.example .env
+# 编辑 .env，填入 OPENAI_API_KEY 等必需配置
+```
+
+2) 返回项目目录并启动：
+
+```bash
+cd ..
+docker compose -f docker-compose.yml up -d --build
+```
+
+3) 访问：前端 `http://localhost:8501`，后端健康检查 `http://localhost:8080/health`
+
+> 注意：容器内访问另一容器的服务，不能使用 `localhost`，应使用 Compose 服务名（如 `http://backend:8080`）。
+
+---
+
 ## 1. 环境准备
 
 | 项目 | 说明 |
@@ -109,6 +132,7 @@ CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.add
   - 构建目录 `./backend`，注入环境变量（LLM、和风天气、高德、汇率）。  
   - 将宿主机 `./results` 挂载到容器 `/app/results`，方便查看输出。  
   - 健康检查引用 `/health`，确保服务正常。  
+  - 通过 `env_file: ./backend/.env` 注入密钥（推荐）。  
 - **frontend**：  
   - 构建目录 `./frontend`，暴露 8501 端口。  
   - `API_BASE_URL` 指向 Compose 内部的 `backend` 服务（例如：`http://backend:8080`）。  
@@ -117,6 +141,39 @@ CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.add
   - 使用命名卷 `results` 或本地挂载存储规划结果。
 
 完整文件已包含在仓库中，可根据部署环境调整端口与环境变量。
+
+示例关键片段（已在仓库提供）：
+
+```yaml
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env  # 从后端目录读取密钥与配置
+    networks:
+      - travel-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://backend:8080  # 通过服务名访问后端
+    depends_on:
+      - backend
+    networks:
+      - travel-network
+
+networks:
+  travel-network:
+    driver: bridge
+```
 
 ---
 
@@ -217,6 +274,8 @@ docker compose -f docker-compose.yml logs -f
 | 端口冲突 | 调整 `docker-compose.yml` 中的 `ports` 映射 |
 | API 调用失败 | 确认外部服务密钥有效，检查容器内是否能访问目标域名 |
 | 前端无法调用后端 | 在容器内不要使用 `localhost`；使用 `http://backend:8080`（Compose 服务名）或 `http://<后端容器名>:8080`（自建网络） |
+| 后端提示缺少 OPENAI_API_KEY | 在 `./backend/` 目录下复制并填写 `.env`：`cp env.example .env`，或在 Compose 中配置 `env_file: ./backend/.env` |
+| Compose 没有读取 `.env` | 确认路径为 `./backend/.env`（相对 compose 文件所在目录），并重启：`docker compose down && docker compose up -d --build` |
 
 ---
 
