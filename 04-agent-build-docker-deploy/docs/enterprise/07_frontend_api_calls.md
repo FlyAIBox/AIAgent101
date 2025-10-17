@@ -12,7 +12,7 @@
 | `download_travel_plan` | `/download/{task_id}` | GET | 下载规划结果 JSON 文件（用于前端“下载报告”按钮）。 |
 | `list_tasks` *(可选调用)* | `/tasks` | GET | 列出所有任务概览，默认界面未直接调用，可用于运营视图。 |
 
-a> 注：`/simple-plan` 与 `/mock-plan` 可以通过新增按钮接入，目前界面默认使用主规划流程。
+a> 注：`/simple-plan` 与 `/mock-plan` 由后端提供（见 `backend/api_server.py`），可按需在前端新增按钮接入；当前界面默认使用主规划流程。
 
 ## 3. 调用流程
 ```mermaid

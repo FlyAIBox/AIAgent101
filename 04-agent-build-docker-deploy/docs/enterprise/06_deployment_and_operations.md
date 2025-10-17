@@ -80,7 +80,7 @@ docker compose up -d --build
 
 ### 4.2 健康检查
 - 后端：`http://localhost:8080/health`
-- 前端：`http://localhost:8080/docs`
+- 后端 API 文档：`http://localhost:8080/docs`
 - 前端页面：`http://localhost:8501`
 
 ## 5. CI/CD 流程建议

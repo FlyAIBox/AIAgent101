@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 # 检查后端服务
 echo "🔍 检查后端服务状态..."
-if ! curl -s http://172.16.1.3:8080/health > /dev/null; then
+if ! curl -s http://localhost:8080/health > /dev/null; then
     echo "⚠️  警告: 后端API服务似乎未运行"
     echo "请先启动后端服务: ./start_backend.sh"
     echo "或者在另一个终端中运行: cd backend && python api_server.py"

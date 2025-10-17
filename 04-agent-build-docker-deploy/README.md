@@ -196,13 +196,13 @@ curl http://localhost:8080/status/{task_id}
 
 ## 🚀 部署选项
 
-### Docker部署
+### Docker部署（推荐使用 Compose）
 ```bash
-# 构建镜像
-docker build -t ai-trip-planner .
+# 使用 Docker Compose 启动（自动构建前后端镜像）
+docker compose up --build
 
-# 运行容器
-docker run -p 8080:8080 -p 8501:8501 ai-trip-planner
+# 后台启动
+docker compose up -d --build
 ```
 
 

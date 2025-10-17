@@ -18,17 +18,8 @@ graph LR
         D[SimpleTravelAgent\nbackend/agents/simple_travel_agent.py]
         E[MockTravelAgent\nbackend/agents/simple_travel_agent.py]
     end
-    subgraph Business_Modules
-        F[WeatherService\nmodules/weather_service.py]
-        G[AttractionFinder\nmodules/attraction_finder.py]
-        H[HotelEstimator\nmodules/hotel_estimator.py]
-        I[CurrencyConverter\nmodules/currency_converter.py]
-        J[ItineraryPlanner\nmodules/itinerary_planner.py]
-        K[TripSummary\nmodules/trip_summary.py]
-        L[ExpenseCalculator\nmodules/expense_calculator.py]
-    end
-    subgraph Tools
-        M[DuckDuckGo Tools\nbackend/tools/travel_tools.py]
+    subgraph Tools & Services
+        F[DuckDuckGo/搜索等工具\nbackend/tools/travel_tools.py]
     end
     subgraph Config
         N[LangGraphConfig\nconfig/langgraph_config.py]
@@ -50,13 +41,9 @@ graph LR
     B --> C
     B --> D
     B --> E
-    C --> F & G & H & I & J & K & L & M
-    D --> J & K & L
-    F --> R
-    G --> S
-    H --> S
-    I --> T
-    M --> Q
+    C --> F
+    D --> F
+    F --> Q
     B --> U
     B --> V
     B --> N
@@ -96,25 +83,19 @@ graph LR
 - **MockTravelAgent**：
   - 返回固定格式结果，用于测试。
 
-### 3.4 业务模块层
-| 模块 | 责任 | 外部依赖 |
-| ---- | ---- | -------- |
-| `weather_service.py` | 获取实时天气/预报，提供回退数据 | QWeather |
-| `attraction_finder.py` | 高德 POI 搜索，估算费用/评分 | AMap |
-| `hotel_estimator.py` | 酒店匹配与价格估算 | AMap |
-| `currency_converter.py` | 汇率转换、缓存与回退 | Exchangerate API |
-| `itinerary_planner.py` | 日程分配、交通估算、天气适配 | 内部逻辑 |
-| `trip_summary.py` | 生成旅行总结、支持导出 | 内部逻辑 |
-| `expense_calculator.py` | 预算拆分与汇总 | 内部逻辑 |
+### 3.4 工具与外部服务
+- 由 `backend/tools/travel_tools.py` 暴露的工具提供天气、景点、酒店、餐饮、预算等查询能力；
+- 这些工具封装对外部服务（DuckDuckGo 搜索、QWeather、AMap、Exchangerate 等）的访问，并在失败时提供回退逻辑；
+- 规划中的日程/总结/预算拆分由多智能体在对话与工具结果的基础上综合生成，不存在独立的 `backend/modules/*.py` 业务模块文件。
 
 ### 3.5 工具层
-- `travel_tools.py` 使用 `@tool` 装饰器提供 DuckDuckGo 搜索能力，供 LangGraph 工具节点调用。
+- `backend/tools/travel_tools.py` 提供多种搜索与查询工具（目的地、天气、景点、酒店、餐饮、预算等），供 LangGraph 工具节点调用。
 
 ### 3.6 配置与数据模型
-- `config/langgraph_config.py`：加载环境变量，提供 LLM 参数。
-- `config/api_config.py`：封装外部服务配置（QWeather、AMap、Exchangerate）。
-- `config/app_config.py`：系统默认值与限制。
-- `data/models.py`：定义实体 `Weather`、`Attraction`、`Hotel`、`DayPlan`、`TripSummary` 等。
+- `backend/config/langgraph_config.py`：加载环境变量，提供 LLM 参数。
+- `backend/config/api_config.py`：封装外部服务配置（QWeather、AMap、Exchangerate）。
+- `backend/config/app_config.py`：系统默认值与限制。
+- `backend/data/models.py`：定义实体 `Weather`、`Attraction`、`Hotel`、`DayPlan`、`TripSummary` 等。
 
 ## 4. 序列图
 

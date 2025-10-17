@@ -111,7 +111,7 @@ CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.add
   - 健康检查引用 `/health`，确保服务正常。  
 - **frontend**：  
   - 构建目录 `./frontend`，暴露 8501 端口。  
-  - `API_BASE_URL` 指向 Compose 内部的 `backend` 服务。  
+  - `API_BASE_URL` 指向 Compose 内部的 `backend` 服务（例如：`http://backend:8080`）。  
 - **网络与卷**：  
   - 自定义桥接网络 `travel-network`，保证服务互联。  
   - 使用命名卷 `results` 或本地挂载存储规划结果。
@@ -132,12 +132,14 @@ cp env.example .env  # 若尚未创建
 
 ### 5.2 （可选）单独构建与调试
 
+> 重要：在容器内访问另一个容器的服务时，不能使用 `http://localhost:8080`。`localhost` 在容器内指向的是容器自身。应当通过 Docker 网络中的“容器名/服务名”访问，例如 `http://travel-backend:8080` 或在 Compose 中使用 `http://backend:8080`。
+
 - **后端**
   ```bash
   cd backend
   docker build -t travel-backend .
   docker run --rm -p 8080:8080 \
-    --env-file ../.env \
+    --env-file .env \
     -v $(pwd)/results:/app/results \
     travel-backend
   ```
@@ -146,7 +148,19 @@ cp env.example .env  # 若尚未创建
   ```bash
   cd frontend
   docker build -t travel-frontend .
-  docker run --rm -p 8501:8501 travel-frontend
+  # 创建用户定义网络（若尚未创建）
+  docker network create travel-net || true
+
+  # 先在同一网络中启动后端（如果未用 compose）
+  docker run -d --name travel-backend --network travel-net -p 8080:8080 \
+    --env-file ../backend/.env \
+    -v $(pwd)/../backend/results:/app/results \
+    travel-backend
+
+  # 启动前端，并通过环境变量指向后端容器名
+  docker run --rm --name travel-frontend --network travel-net -p 8501:8501 \
+    -e API_BASE_URL=http://travel-backend:8080 \
+    travel-frontend
   ```
 
 ### 5.3 使用 Compose 启动全栈
@@ -202,7 +216,7 @@ docker compose -f docker-compose.yml logs -f
 | 构建失败 / 依赖安装慢 | 留意网络环境，可配置代理或使用镜像源；查看 `pip` 错误日志 |
 | 端口冲突 | 调整 `docker-compose.yml` 中的 `ports` 映射 |
 | API 调用失败 | 确认外部服务密钥有效，检查容器内是否能访问目标域名 |
-| 前端无法调用后端 | 确保 `API_BASE_URL` 指向 `http://backend:8080`（容器内部）或正确的宿主机地址 |
+| 前端无法调用后端 | 在容器内不要使用 `localhost`；使用 `http://backend:8080`（Compose 服务名）或 `http://<后端容器名>:8080`（自建网络） |
 
 ---
 

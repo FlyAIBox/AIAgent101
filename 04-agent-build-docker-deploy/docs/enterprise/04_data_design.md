@@ -125,9 +125,9 @@ erDiagram
 flowchart TD
     A[前端输入\nTravelRequest] --> B[FastAPI]
     B --> C[LangGraph Travel Agents]
-    C --> D[业务模块\nWeather/Attraction/Hotel/Currency]
+    C --> D[工具层\nbackend/tools/travel_tools.py]
     D --> E[外部 API\nQWeather/AMap/Exchangerate/DuckDuckGo]
-    D --> F[数据模型装配\nDayPlan/TripSummary]
+    C --> F[数据模型装配\nDayPlan/TripSummary]
     C --> G[任务状态\nplanning_tasks]
     G --> H[tasks_state.json]
     F --> I[结果输出\nresults/*.json]

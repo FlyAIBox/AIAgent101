@@ -36,6 +36,8 @@ services:
     ports:
       - "8501:8501"
     environment:
+      # 注意：容器内不要使用 http://localhost:8080 访问后端
+      # 前端应通过 Compose 内部服务名访问后端：http://backend:8080
       - API_BASE_URL=http://backend:8080
     depends_on:
       - backend
