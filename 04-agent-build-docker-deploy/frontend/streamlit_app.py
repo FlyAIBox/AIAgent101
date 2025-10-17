@@ -930,7 +930,7 @@ def main():
                     # 无法获取状态，可能是网络问题
                     attempt += 1
                     if attempt < max_attempts:
-                        status_placeholder.warning(f"⚠️ 无法获取任务状态，正在重试... ({attempt}/{max_attempts})")
+                        status_placeholder.warning(f"任务正在执行中... ({attempt}/{max_attempts})")
                         time.sleep(5)
                     else:
                         status_placeholder.error("❌ 无法获取任务状态")
