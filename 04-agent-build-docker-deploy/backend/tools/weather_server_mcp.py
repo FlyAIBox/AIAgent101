@@ -30,6 +30,7 @@ from urllib.parse import urljoin
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 from pathlib import Path
+from pypinyin import lazy_pinyin, Style
 
 # 加载 .env 文件中的环境变量
 dotenv_path = Path(__file__).resolve().parents[1] / '.env'
@@ -37,9 +38,9 @@ load_dotenv(dotenv_path)
 
 # 初始化日志
 def setup_weather_server_logger():
-    logger = logging.getLogger('weather_server')
-    logger.setLevel(logging.INFO)
-    if not logger.handlers:
+    ws_logger = logging.getLogger('weather_server')
+    ws_logger.setLevel(logging.INFO)
+    if not ws_logger.handlers:
         log_dir = Path("logs")
         log_dir.mkdir(exist_ok=True)
         fh = logging.FileHandler('logs/backend.log', encoding='utf-8')
@@ -47,8 +48,8 @@ def setup_weather_server_logger():
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                                       datefmt='%Y-%m-%d %H:%M:%S')
         fh.setFormatter(formatter)
-        logger.addHandler(fh)
-    return logger
+        ws_logger.addHandler(fh)
+    return ws_logger
 
 ws_logger = setup_weather_server_logger()
 
@@ -156,18 +157,56 @@ async def get_weather_warning(location: Union[str, int]) -> str:
     获取指定位置的天气灾害预警
     
     参数:
-        location: 城市ID或经纬度坐标（经度,纬度）
-                例如：'101010100'（北京）或 '116.41,39.92'
-                也可以直接传入数字ID，如 101010100
+        location (str): 位置信息，支持以下格式：
+                       - 中文城市名（如"北京"、"西宁"等，会自动转换为拼音再查找城市ID）
+                       - 城市拼音（如"xining"表示西宁，会自动转换为城市ID）
+                       - 城市ID（如"101010100"表示北京）  
+                       - 经纬度坐标（如"116.41,39.92"）
         
     返回:
         格式化的预警信息字符串
     """
-    # 确保 location 为字符串类型
-    location = str(location)
-    
+    # 解析 location 为城市ID或经纬度
+    async def _resolve_location(raw: Union[str, int]) -> str:
+        text = str(raw).strip()
+        # 经纬度直接透传
+        if "," in text:
+            ws_logger.info(f"[预警]检测到经纬度，直接使用: {text}")
+            return text
+        # 数字ID直接透传
+        if text.isdigit():
+            ws_logger.info(f"[预警]检测到城市ID，直接使用: {text}")
+            return text
+        # 中文 → 拼音
+        if any('\u4e00' <= ch <= '\u9fff' for ch in text):
+            py = _convert_chinese_to_pinyin(text)
+            ws_logger.info(f"[预警]中文转拼音: {text} → {py}")
+            lookup = await make_qweather_request("geo/v2/city/lookup", {"location": py, "lang": "zh"})
+        # 拼音
+        elif text.isalpha() and text.islower():
+            py = text
+            ws_logger.info(f"[预警]检测到拼音，开始查找: {py}")
+            lookup = await make_qweather_request("geo/v2/city/lookup", {"location": py, "lang": "zh"})
+        else:
+            ws_logger.info(f"[预警]未识别的格式，原样使用: {text}")
+            return text
+
+        if not lookup or lookup.get("code") != "200":
+            ws_logger.warning(f"[预警]城市查找失败，回退原值: {text}")
+            return text
+        locations = lookup.get("location", [])
+        if not locations:
+            ws_logger.info(f"[预警]无匹配结果，回退原值: {text}")
+            return text
+        chosen = next((loc for loc in locations if loc.get("type") == "city"), locations[0])
+        city_id = chosen.get("id") or text
+        ws_logger.info(f"[预警]解析完成: {text} → {city_id}")
+        return city_id
+
+    resolved = await _resolve_location(location)
+
     params = {
-        "location": location,
+        "location": resolved,
         "lang": "zh"
     }
     
@@ -222,16 +261,50 @@ async def get_daily_forecast(location: Union[str, int], days: int = 3) -> str:
     获取指定位置的天气预报
     
     参数:
-        location: 城市ID或经纬度坐标（经度,纬度）
-                例如：'101010100'（北京）或 '116.41,39.92'
-                也可以直接传入数字ID，如 101010100
-        days: 预报天数，可选值为 3、7、10、15、30，默认为 3
+        location (str): 位置信息，支持以下格式：
+                       - 中文城市名（如"北京"、"西宁"等，会自动转换为拼音再查找城市ID）
+                       - 城市拼音（如"xining"表示西宁，会自动转换为城市ID）
+                       - 城市ID（如"101010100"表示北京）  
+                       - 经纬度坐标（如"116.41,39.92"）
+        days (int): 预报天数，可选值为 3、7、10、15、30，默认为 3
         
     返回:
         格式化的天气预报字符串
     """
-    # 确保 location 为字符串类型
-    location = str(location)
+    # 解析 location 为城市ID或经纬度
+    async def _resolve_location(raw: Union[str, int]) -> str:
+        text = str(raw).strip()
+        if "," in text:
+            ws_logger.info(f"[预报]检测到经纬度，直接使用: {text}")
+            return text
+        if text.isdigit():
+            ws_logger.info(f"[预报]检测到城市ID，直接使用: {text}")
+            return text
+        if any('\u4e00' <= ch <= '\u9fff' for ch in text):
+            py = _convert_chinese_to_pinyin(text)
+            ws_logger.info(f"[预报]中文转拼音: {text} → {py}")
+            lookup = await make_qweather_request("geo/v2/city/lookup", {"location": py, "lang": "zh"})
+        elif text.isalpha() and text.islower():
+            py = text
+            ws_logger.info(f"[预报]检测到拼音，开始查找: {py}")
+            lookup = await make_qweather_request("geo/v2/city/lookup", {"location": py, "lang": "zh"})
+        else:
+            ws_logger.info(f"[预报]未识别的格式，原样使用: {text}")
+            return text
+
+        if not lookup or lookup.get("code") != "200":
+            ws_logger.warning(f"[预报]城市查找失败，回退原值: {text}")
+            return text
+        locations = lookup.get("location", [])
+        if not locations:
+            ws_logger.info(f"[预报]无匹配结果，回退原值: {text}")
+            return text
+        chosen = next((loc for loc in locations if loc.get("type") == "city"), locations[0])
+        city_id = chosen.get("id") or text
+        ws_logger.info(f"[预报]解析完成: {text} → {city_id}")
+        return city_id
+
+    resolved = await _resolve_location(location)
     
     # 确保 days 参数有效
     valid_days = [3, 7, 10, 15, 30]
@@ -239,7 +312,7 @@ async def get_daily_forecast(location: Union[str, int], days: int = 3) -> str:
         days = 3  # 默认使用3天预报
     
     params = {
-        "location": location,
+        "location": resolved,
         "lang": "zh"
     }
     # 和风天气API文档 https://dev.qweather.com/docs/api/weather/weather-daily-forecast/
@@ -265,6 +338,96 @@ async def get_daily_forecast(location: Union[str, int], days: int = 3) -> str:
     joined = "\n---\n".join(formatted_forecasts)
     ws_logger.info(f"get_daily_forecast 返回长度: {len(joined)} 字符")
     return joined
+
+
+def _convert_chinese_to_pinyin(chinese_text: str) -> str:
+    """
+    将中文城市名转换为拼音（全拼）
+    
+    Args:
+        chinese_text: 中文城市名，如 "西宁"
+        
+    Returns:
+        str: 拼音全拼，如 "xining"
+    """
+    try:
+        # 使用 pypinyin 将中文转换为拼音
+        pinyin_list = lazy_pinyin(chinese_text, style=Style.NORMAL)
+        pinyin = ''.join(pinyin_list)
+        ws_logger.info(f"中文转拼音: {chinese_text} → {pinyin}")
+        return pinyin
+    except Exception as e:
+        ws_logger.error(f"中文转拼音失败: {chinese_text} - {str(e)}")
+        return chinese_text  # 转换失败时返回原文本
+
+
+async def lookup_city_id_by_pinyin(pinyin: str) -> str:
+    """
+    根据城市名称的拼音（全拼）查找城市ID。
+
+    参数:
+        pinyin: 城市名称的拼音（全拼），如 "xining"
+
+    返回:
+        若成功，返回匹配城市对象的精简 JSON 字符串（包含 name、id、lat、lon、adm1 等字段）；
+        若失败或未找到，返回说明文本。
+    """
+    params = {
+        "location": pinyin,
+        "lang": "zh"
+    }
+
+    endpoint = "geo/v2/city/lookup"
+    ws_logger.info(f"调用 [查找城市ID]| endpoint={endpoint}, params={params}")
+    data = await make_qweather_request(endpoint, params)
+
+    if not data:
+        ws_logger.warning("[查找城市ID]返回空或失败")
+        return "无法查询城市ID或API请求失败。"
+
+    if data.get("code") != "200":
+        ws_logger.error(f"[查找城市ID]API错误: {data.get('code')}")
+        return f"API 返回错误: {data.get('code')}"
+
+    locations = data.get("location", [])
+    if not locations:
+        ws_logger.info(f"[查找城市ID]无匹配结果 | pinyin={pinyin}")
+        return f"未找到与 {pinyin} 匹配的城市。"
+
+    # 优先选择 type == "city" 的主城市，否则回退第一个
+    chosen = None
+    for loc in locations:
+        if loc.get("type") == "city":
+            chosen = loc
+            break
+    if chosen is None:
+        chosen = locations[0]
+
+    # 仅返回常用字段，避免冗余
+    result = {
+        "name": chosen.get("name"),
+        "id": chosen.get("id"),
+        "lat": chosen.get("lat"),
+        "lon": chosen.get("lon"),
+        "adm2": chosen.get("adm2"),
+        "adm1": chosen.get("adm1"),
+        "country": chosen.get("country"),
+        "type": chosen.get("type"),
+        "rank": chosen.get("rank"),
+        "fxLink": chosen.get("fxLink"),
+    }
+
+    ws_logger.info(
+        f"[查找城市ID]命中: name={result['name']}, id={result['id']}"
+    )
+
+    # 以紧凑 JSON 字符串形式返回
+    try:
+        import json as _json
+        return _json.dumps(result, ensure_ascii=False)
+    except Exception:
+        # 兜底为可读字符串
+        return f"{result}"
 
 if __name__ == "__main__":
     ws_logger.info("正在启动 MCP 天气服务器…")

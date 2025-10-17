@@ -18,6 +18,8 @@ Date: 2025.10.11
 import asyncio
 import logging
 import os
+import aiohttp
+import json
 from typing import Optional, Dict, Any, List
 from contextlib import AsyncExitStack
 from pathlib import Path
@@ -76,128 +78,6 @@ def _resolve_mcp_server_path() -> str:
     raise FileNotFoundError(
         "找不到MCP天气服务器文件，已检查: " + ", ".join(candidates)
     )
-
-
-def _resolve_city_location(location: str) -> str:
-    """
-    解析位置参数，将中文城市名转换为城市ID
-    
-    Args:
-        location: 位置信息，可以是中文城市名、城市ID或经纬度
-        
-    Returns:
-        str: 标准化的位置参数（城市ID或经纬度）
-    """
-    logger.info(f"开始解析城市位置参数: {location}")
-    
-    # 如果已经是数字ID或经纬度格式，直接返回
-    if location.isdigit() or ',' in location:
-        logger.info(f"位置参数已是标准格式（城市ID或经纬度）: {location}")
-        return location
-        
-    # 尝试使用LLM转换城市名为城市ID
-    try:
-        logger.info(f"尝试使用LLM转换城市名: {location}")
-        city_id = _convert_city_name_to_id_with_llm(location)
-        if city_id:
-            logger.info(f"LLM城市名转换成功: {location} → {city_id}")
-            return city_id
-    except Exception as e:
-        logger.warning(f"LLM转换失败: {str(e)}，回退到备用映射")
-    
-    # 备用：常用城市硬编码映射
-    city_mapping = {
-        "北京": "101010100", "上海": "101020100", "广州": "101280101",
-        "深圳": "101280601", "杭州": "101210101", "南京": "101190101",
-        "成都": "101270101", "武汉": "101200101", "重庆": "101040100",
-        "天津": "101030100", "西安": "101110101", "苏州": "101190401",
-        "郑州": "101180101", "长沙": "101250101", "青岛": "101120201",
-        "大连": "101070201", "宁波": "101210401", "厦门": "101230201",
-        "福州": "101230101", "沈阳": "101070101"
-    }
-    
-    if location in city_mapping:
-        resolved = city_mapping[location]
-        logger.info(f"使用备用映射转换成功: {location} → {resolved}")
-        return resolved
-    
-    # 如果都无法转换，返回原值
-    logger.warning(f"无法转换城市名: {location}，使用原值进行天气查询")
-    return location
-
-
-def _convert_city_name_to_id_with_llm(city_name: str) -> Optional[str]:
-    """
-    使用大模型将城市名转换为和风天气城市ID
-    
-    Args:
-        city_name: 中文城市名
-        
-    Returns:
-        str: 和风天气城市ID，如果转换失败返回None
-    """
-    try:
-        # 检查是否有可用的OpenAI配置
-        config = Configuration()
-        client = OpenAI(
-            api_key=config.api_key,
-            base_url=config.base_url
-        )
-        
-        # 设计转换提示词
-        system_prompt = """你是一个专业的城市信息助手，专门负责将中文城市名转换为和风天气API的城市ID。
-
-        和风天气城市ID规则：
-        - 北京: 101010100
-        - 上海: 101020100  
-        - 广州: 101280101
-        - 深圳: 101280601
-        - 杭州: 101210101
-        - 南京: 101190101
-        - 成都: 101270101
-        - 武汉: 101200101
-        - 重庆: 101040100
-        - 天津: 101030100
-        - 西安: 101110101
-
-        请根据上述规律和你的知识，为用户提供的城市名返回对应的和风天气城市ID。
-
-        要求：
-        1. 只返回数字格式的城市ID，不要返回其他内容
-        2. 如果不确定，返回 "UNKNOWN"
-        3. 城市ID通常是9位数字，格式类似 101XXXXXX"""
-
-        user_prompt = f"请提供 {city_name} 的和风天气城市ID："
-        
-        logger.info(f"LLM提示词-系统: {system_prompt}")
-        logger.info(f"LLM提示词-用户: {user_prompt}")
-
-        response = client.chat.completions.create(
-            model="deepseek-chat",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            max_tokens=20,
-            temperature=0.1  # 降低随机性，提高准确性
-        )
-        
-        result = response.choices[0].message.content.strip()
-        logger.info(f"LLM返回: {result}")
-        
-        # 验证返回结果格式
-        if result == "UNKNOWN":
-            return None
-        elif result.isdigit() and len(result) == 9:
-            return result
-        else:
-            logger.warning(f"LLM返回格式异常: {result}")
-            return None
-            
-    except Exception as e:
-        logger.error(f"LLM城市ID转换失败: {str(e)}")
-        return None
-
 
 class Configuration:
     """配置管理类，负责管理和验证环境变量"""
@@ -418,10 +298,9 @@ class MCPWeatherClient:
             logger.warning(f"无效的 days={days}，将回退为 3")
             days = 3
 
-        # 解析位置参数，将中文城市名转换为城市ID
-        resolved_location = _resolve_city_location(location)
-        arguments: Dict[str, Any] = {"location": resolved_location, "days": int(days)}
-        logger.info(f"调用 get_daily_forecast，入参: location={resolved_location}, days={days}")
+        # 解析位置参数，将中文城市名或拼音转换为城市ID
+        arguments: Dict[str, Any] = {"location": location, "days": int(days)}
+        logger.info(f"调用 get_daily_forecast，入参: location={location}, days={days}")
         result = await self.server.execute_tool("get_daily_forecast", arguments)
 
         # MCP 返回结果通常包含 content 列表与 Part 文本
@@ -436,8 +315,6 @@ class MCPWeatherClient:
             logger.info(f"get_daily_forecast 返回非标准结构，已转为字符串，长度: {len(fallback)}")
             return fallback
 
-
-
 async def fetch_forecast_via_mcp(location: str, days: int = 3) -> str:
     """
     通过 MCP 获取天气预报
@@ -447,7 +324,8 @@ async def fetch_forecast_via_mcp(location: str, days: int = 3) -> str:
     
     参数:
         location (str): 位置信息，支持以下格式：
-                       - 中文城市名（如"北京"、"上海"等，会自动转换为城市ID）
+                       - 中文城市名（如"北京"、"西宁"等，会自动转换为拼音再查找城市ID）
+                       - 城市拼音（如"xining"表示西宁，会自动转换为城市ID）
                        - 城市ID（如"101010100"表示北京）  
                        - 经纬度坐标（如"116.41,39.92"）
         days (int): 预报天数，默认为3天，支持3、7、10、15、30天
@@ -457,6 +335,7 @@ async def fetch_forecast_via_mcp(location: str, days: int = 3) -> str:
         
     示例:
         >>> forecast = await fetch_forecast_via_mcp("北京", 7)        # 中文城市名
+         >>> forecast = await fetch_forecast_via_mcp("beijing", 7)    # 城市拼音
         >>> forecast = await fetch_forecast_via_mcp("101010100", 7)   # 城市ID
         >>> forecast = await fetch_forecast_via_mcp("116.41,39.92", 7) # 经纬度
         >>> print(forecast)

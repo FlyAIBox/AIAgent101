@@ -497,7 +497,7 @@ def get_planning_status(task_id: str) -> Optional[Dict[str, Any]]:
                     return None
         except requests.exceptions.Timeout:
             if retry < max_retries - 1:
-                st.warning(f"请求超时，正在重试 ({retry + 1}/{max_retries})...")
+                st.warning(f"任务执行中 ({retry + 1}/{max_retries})...")
                 time.sleep(3)
             else:
                 st.error("⏰ 请求超时，后端可能正在处理中，请稍后手动刷新页面查看结果")
