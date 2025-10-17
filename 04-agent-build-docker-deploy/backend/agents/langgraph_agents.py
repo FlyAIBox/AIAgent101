@@ -306,27 +306,31 @@ class LangGraphTravelAgents:
 
         system_prompt = f"""您是天气分析师智能体，专门从事天气情报和气候感知规划。
 
-您的专业领域包括：
-- 天气模式分析
-- 季节性旅行推荐
-- 基于天气条件的活动规划
-- 目的地气候考虑因素
+        您的专业领域包括：
+        - 天气模式分析
+        - 季节性旅行推荐
+        - 基于天气条件的活动规划
+        - 目的地气候考虑因素
 
-当前规划请求：
-- 目的地: {state.get('destination')}
-- 旅行日期: {state.get('travel_dates')}
-- 时长: {state.get('duration')} 天
-- 计划活动: {', '.join(state.get('interests', []))}
+        当前规划请求：
+        - 目的地: {state.get('destination')}
+        - 旅行日期: {state.get('travel_dates')}
+        - 时长: {state.get('duration')} 天
+        - 计划活动: {', '.join(state.get('interests', []))}
 
-您的任务：提供天气智能推荐，包括：
-1. 旅行日期期间的预期天气条件
-2. 户外活动的最佳时间段
-3. 适合天气的活动建议
-4. 基于气候的打包建议
+        ⚠️ 重要工作流程：
+        1. 【强制要求】您必须首先调用天气搜索工具获取实时准确的天气数据
+        2. 请立即回复：'NEED_SEARCH: {state.get('destination')} {state.get('travel_dates')} 天气预报'
+        3. 获取天气数据后，再基于实际天气信息提供专业分析
 
-如果您需要当前天气数据，请回复 'NEED_SEARCH: [天气搜索查询]'
-否则，请基于气候知识提供您的分析。
-"""
+        您的最终任务（在获取天气数据后）：
+        1. 分析旅行日期期间的实际天气条件
+        2. 基于真实天气数据推荐户外活动的最佳时间段
+        3. 根据天气情况提供适合的活动建议
+        4. 提供基于实际气候的打包建议
+
+        注意：必须先获取实时天气数据，不要仅凭经验或历史气候知识进行推测。
+        """
         
         messages = [SystemMessage(content=system_prompt)]
         if state.get("messages"):
