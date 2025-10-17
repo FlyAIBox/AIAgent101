@@ -181,7 +181,7 @@ curl http://localhost:8080/health
 ## 📊 系统监控
 
 ### 日志文件
-- **后端日志**: `logs/backend.log`
+- **后端日志**: `backend/logs/backend.log`
 - **前端日志**: `logs/frontend.log`
 - **错误日志**: `logs/error.log`
 

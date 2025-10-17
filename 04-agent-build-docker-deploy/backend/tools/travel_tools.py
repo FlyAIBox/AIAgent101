@@ -27,9 +27,9 @@ import re
 from datetime import datetime
 from .weather_client_mcp import fetch_forecast_via_mcp
 
-# 配置日志记录器
+# 配置详细日志记录器
 def setup_travel_logger():
-    """设置旅行工具日志记录器"""
+    """设置日志记录器"""
     logger = logging.getLogger('travel_tools')
     logger.setLevel(logging.INFO)
     
@@ -42,7 +42,7 @@ def setup_travel_logger():
         file_handler = logging.FileHandler('logs/backend.log', encoding='utf-8')
         file_handler.setLevel(logging.INFO)
         
-        # 设置日志格式
+        # 设置详细日志格式
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S'

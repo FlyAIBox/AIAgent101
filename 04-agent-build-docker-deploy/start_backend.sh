@@ -29,18 +29,18 @@ if ! python -c "import fastapi" 2>/dev/null; then
 fi
 
 # 创建日志目录
-mkdir -p ../logs
+mkdir -p logs
 
 # 启动服务
 echo "🌐 启动后端服务..."
 echo "📍 服务地址: http://localhost:8080"
 echo "📄 API文档: http://localhost:8080/docs"
 echo "🔧 健康检查: http://localhost:8080/health"
-echo "📋 日志文件: logs/backend.log"
+echo "📋 日志文件: backend/logs/backend.log"
 echo "=================================="
 
 # 启动服务并记录日志
-nohup python api_server.py > ../logs/backend.log 2>&1 &
+nohup python api_server.py > logs/backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo "✅ 后端服务已启动"
@@ -68,12 +68,12 @@ if curl -s http://localhost:8080/health >/dev/null 2>&1; then
     echo "💡 使用提示:"
     echo "1. 访问前端页面开始规划旅行"
     echo "2. 如果之前有任务，可以使用手动查询功能"
-    echo "3. 查看日志: tail -f -n 200 logs/backend.log"
+    echo "3. 查看日志: tail -f -n 200 backend/logs/backend.log"
     echo "4. 停止服务: kill $BACKEND_PID"
 else
     echo ""
     echo "❌ 服务启动可能失败"
-    echo "🔍 请检查日志: tail -f logs/backend.log"
+    echo "🔍 请检查日志: tail -f backend/logs/backend.log"
     echo "🔧 手动启动: cd backend && python api_server.py"
 fi
 
