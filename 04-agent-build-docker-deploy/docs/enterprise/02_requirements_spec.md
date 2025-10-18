@@ -16,7 +16,7 @@
 | FR-03 | 功能 | 用户可查询任务状态、查看进度与结果。 |
 | FR-04 | 功能 | 用户可下载结果 JSON，用于后续人工编辑或归档。 |
 | FR-05 | 功能 | 支持简化模式（SimpleTravelAgent）和模拟模式（MockTravelAgent）作为回退。 |
-| FR-06 | 功能 | 集成 DuckDuckGo、QWeather、AMap、Exchangerate-API 提供实时数据。 |
+| FR-06 | 功能 | 集成 DuckDuckGo、QWeather提供实时数据。 |
 | FR-07 | 功能 | 支持任务列表检索，便于运营与审计。 |
 | NFR-01 | 非功能 | 关键接口响应时间（非规划过程）≤ 1s。 |
 | NFR-02 | 非功能 | 规划任务超时时间默认 5 分钟，超时需自动降级。 |
@@ -42,7 +42,6 @@
   1. 协调员分析需求并确定调用顺序。
   2. 旅行顾问、天气分析师、预算优化师、当地专家、行程规划师依次处理。
   3. 工具节点通过 `travel_tools.ALL_TOOLS` 调用 DuckDuckGo 搜索。
-  4. 汇率转换使用 `CurrencyConverter`（EXCHANGE_RATE_API_BASE 提供实时数据）。
 - 输出：综合的旅行计划字典，写入任务状态 `result` 字段并保存 JSON。
 
 ### 4.3 任务状态查询（FR-03）
@@ -60,9 +59,9 @@
 
 ### 4.6 外部服务集成（FR-06）
 - **DuckDuckGo 搜索**：无需 Key，通过 `ddgs` 库调用，需注意节流。
-- **QWeather**：必须配置 `QWEATHER_API_KEY`，`weather_service.py` 处理城市 ID 与回退。
-- **AMap 文本搜索**：需配置 `AMAP_API_KEY`，用于景点/餐饮/活动 POI。
-- **汇率转换**：`CurrencyConverter` 读取 `EXCHANGE_RATE_API_BASE`（完整端点，可含 API Key）。
+- **QWeather**：可选配置 `QWEATHER_API_KEY`，通过MCP天气服务器提供结构化天气数据，无配置时回退到DuckDuckGo搜索。
+- **DuckDuckGo搜索**：主要数据源，无需API密钥，提供目的地、景点、酒店、餐厅等信息。
+- **MCP天气服务器**：集成QWeather API，提供专业天气预报数据。
 - 失败处理：任一服务异常时，模块需捕获异常并提供合理回退（如模拟数据）。
 
 ### 4.7 任务列表（FR-07）

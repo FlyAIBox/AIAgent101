@@ -126,7 +126,7 @@ flowchart TD
     A[前端输入\nTravelRequest] --> B[FastAPI]
     B --> C[LangGraph Travel Agents]
     C --> D[工具层\nbackend/tools/travel_tools.py]
-    D --> E[外部 API\nQWeather/AMap/Exchangerate/DuckDuckGo]
+    D --> E[外部 API\nDuckDuckGo搜索 + MCP天气服务器]
     C --> F[数据模型装配\nDayPlan/TripSummary]
     C --> G[任务状态\nplanning_tasks]
     G --> H[tasks_state.json]

@@ -75,15 +75,10 @@ OPENAI_BASE_URL=https://api.deepseek.com/v1  # 可按需调整
 OPENAI_MODEL=deepseek-chat                  # 可按需调整
 ```
 
-常用可选服务：
+可选服务（用于MCP天气服务器）：
 ```bash
 QWEATHER_API_KEY=your_qweather_api_key
 QWEATHER_API_BASE=https://api.qweather.com
-
-AMAP_API_KEY=your_amap_api_key
-AMAP_BASE_URL=https://restapi.amap.com
-
-EXCHANGE_RATE_API_BASE=https://v6.exchangerate-api.com/v6/YOUR-API-KEY/latest/CNY
 ```
 
 ### 4. 启动服务

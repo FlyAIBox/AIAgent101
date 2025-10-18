@@ -15,7 +15,7 @@
 - Docker 20+
 - Docker Compose v2
 - Python 3.10（用于本地调试）
-- 外部 API Key：`OPENAI_API_KEY`、`QWEATHER_API_KEY`、`AMAP_API_KEY`、`EXCHANGE_RATE_API_BASE`（完整端点）
+- 外部 API Key：`OPENAI_API_KEY`（必需）、`QWEATHER_API_KEY`（可选，用于MCP天气服务器）
 
 ## 3. 容器镜像构建
 ```mermaid
@@ -49,8 +49,6 @@ services:
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - QWEATHER_API_KEY=${QWEATHER_API_KEY}
-      - AMAP_API_KEY=${AMAP_API_KEY}
-      - EXCHANGE_RATE_API_BASE=${EXCHANGE_RATE_API_BASE}
     volumes:
       - ./results:/app/results
     ports:
@@ -102,7 +100,7 @@ flowchart LR
 
 ## 6. 配置与 secrets 管理
 - `.env` 仅用于本地开发；生产环境通过 Secrets Manager（如 AWS Secrets Manager、Vault）或 CI/CD 注入环境变量。
-- `EXCHANGE_RATE_API_BASE` 示例：`https://v6.exchangerate-api.com/v6/<密钥>/latest/CNY`。
+- `QWEATHER_API_KEY` 示例：从和风天气开放平台获取，用于MCP天气服务器提供结构化天气数据。
 - 注意高德和和风天气 API 的调用频率与额度，必要时配置熔断与重试。
 
 ## 7. 日志与监控

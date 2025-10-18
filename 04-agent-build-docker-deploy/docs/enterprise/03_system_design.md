@@ -85,7 +85,9 @@ graph LR
 
 ### 3.4 工具与外部服务
 - 由 `backend/tools/travel_tools.py` 暴露的工具提供天气、景点、酒店、餐饮、预算等查询能力；
-- 这些工具封装对外部服务（DuckDuckGo 搜索、QWeather、AMap、Exchangerate 等）的访问，并在失败时提供回退逻辑；
+- 主要使用DuckDuckGo搜索获取实时信息，无需API密钥；
+- 天气服务通过MCP服务器集成QWeather API，提供结构化天气数据；
+- 所有工具在失败时提供回退逻辑，确保系统稳定性；
 - 规划中的日程/总结/预算拆分由多智能体在对话与工具结果的基础上综合生成，不存在独立的 `backend/modules/*.py` 业务模块文件。
 
 ### 3.5 工具层
