@@ -53,7 +53,7 @@
 | 04 | 🏗️ 系统搭建 | `04-agent-build-docker-deploy/` | 组装前后端与容器化部署方案 |
 | 05 | 🔧 模型微调 | `05-agent-model-finetuning/` | 打造垂直领域定制模型适配器 |
 | 06 | 📊 评估体系 | `06-agent-evaluation/` | 建立质量与安全评估闭环 |
-| 07 | 🎯 模型推理 | `07-agent-model-deploy/` | 部署高吞吐推理服务，掌握性能杠杆 |
+| 07 | 🎯 模型推理 | `07-agent-model-inference/` | 部署高吞吐推理服务，掌握性能杠杆 |
 | 08 | 🚀 性能压测 | `08-agent-llm_benchmark/` | 定量衡量推理性能并持续优化 |
 | 09 | 🔄 业务编排 | `09-agent-workflow-n8n/` | 零代码快速接入业务流程 |
 | 10 | 🧭 职业发展 | `10-agent-review/` | 沟通项目价值，准备求职答辩 |
