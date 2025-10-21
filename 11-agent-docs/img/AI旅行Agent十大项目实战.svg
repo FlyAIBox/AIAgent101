@@ -1,0 +1,175 @@
+<svg viewBox="0 0 1400 1600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 定义样式 -->
+  <defs>
+    <style>
+      .title-text { font-family: 'SimSun', serif; font-size: 28px; font-weight: bold; fill: #1a1a1a; }
+      .chapter-text { font-family: 'SimSun', serif; font-size: 16px; font-weight: bold; fill: #2c3e50; }
+      .project-text { font-family: 'SimSun', serif; font-size: 14px; fill: #34495e; }
+      .en-text { font-family: 'Times New Roman', serif; font-size: 13px; fill: #5d6d7e; font-style: italic; }
+      .formula-text { font-family: 'Times New Roman', serif; font-size: 12px; fill: #7f8c8d; font-style: italic; }
+      .box { fill: #ffffff; stroke: #3498db; stroke-width: 2; }
+      .box-highlight { fill: #e8f4f8; stroke: #2980b9; stroke-width: 2.5; }
+      .arrow { stroke: #95a5a6; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-main { stroke: #3498db; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead-main); }
+      .phase-box { fill: #ecf0f1; stroke: #34495e; stroke-width: 1.5; rx: 8; }
+    </style>
+    
+    <!-- 箭头标记 -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#95a5a6" />
+    </marker>
+    <marker id="arrowhead-main" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#3498db" />
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="700" y="40" class="title-text" text-anchor="middle">AI旅行Agent十大项目实战</text>
+  <text x="700" y="65" class="en-text" text-anchor="middle">AI Travel Agent: Ten Practical Projects Structure</text>
+
+  <!-- 第一阶段：基础能力构建 -->
+  <rect class="phase-box" x="50" y="100" width="1300" height="380"/>
+  <text x="700" y="130" class="chapter-text" text-anchor="middle">阶段一：基础能力构建 (Foundation Building)</text>
+
+  <!-- 项目1：聊天助手 -->
+  <rect class="box-highlight" x="80" y="160" width="380" height="140"/>
+  <text x="270" y="190" class="project-text" text-anchor="middle" font-weight="bold">项目实战1：聊天助手构建</text>
+  <text x="270" y="210" class="en-text" text-anchor="middle">Chatbot Assistant</text>
+  <line x1="80" y1="220" x2="460" y2="220" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="90" y="240" class="project-text">• 基础对话管理 (Dialog Management)</text>
+  <text x="90" y="260" class="project-text">• 大模型响应处理 (LLM Response Handling)</text>
+  <text x="90" y="280" class="formula-text">Response = Parse(JSON) → Extract(content, tokens, cost)</text>
+
+  <!-- 项目2：提示词工程 -->
+  <rect class="box-highlight" x="510" y="160" width="380" height="140"/>
+  <text x="700" y="190" class="project-text" text-anchor="middle" font-weight="bold">项目实战2：外部知识接入</text>
+  <text x="700" y="210" class="en-text" text-anchor="middle">External Knowledge Integration (RAG)</text>
+  <line x1="510" y1="220" x2="890" y2="220" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="520" y="240" class="project-text">• 检索增强生成 (Retrieval-Augmented Generation)</text>
+  <text x="520" y="260" class="project-text">• 上下文扩展 (Context Extension)</text>
+  <text x="520" y="280" class="formula-text">RAG = Retrieve(query) + Generate(context, query)</text>
+
+  <!-- 项目3：MCP工具调用 -->
+  <rect class="box-highlight" x="940" y="160" width="380" height="140"/>
+  <text x="1130" y="190" class="project-text" text-anchor="middle" font-weight="bold">项目实战3：天气顾问集成</text>
+  <text x="1130" y="210" class="en-text" text-anchor="middle">Weather Advisor (MCP + DeepSeek)</text>
+  <line x1="940" y1="220" x2="1320" y2="220" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="950" y="240" class="project-text">• MCP协议实现 (Model Context Protocol)</text>
+  <text x="950" y="260" class="project-text">• 工具自动选择 (Tool Selection)</text>
+  <text x="950" y="280" class="formula-text">Output = LLM(prompt, tools) → Execute(tool_calls)</text>
+
+  <!-- 连接箭头 -->
+  <path class="arrow-main" d="M 270,300 L 270,320 L 700,320 L 700,340"/>
+  <path class="arrow" d="M 460,230 L 510,230"/>
+  <path class="arrow" d="M 890,230 L 940,230"/>
+
+  <!-- 第二阶段：多智能体协作 -->
+  <rect class="phase-box" x="50" y="520" width="1300" height="380"/>
+  <text x="700" y="550" class="chapter-text" text-anchor="middle">阶段二：多智能体协作 (Multi-Agent Collaboration)</text>
+
+  <!-- 项目4：LangGraph子图 -->
+  <rect class="box" x="80" y="580" width="560" height="140"/>
+  <text x="360" y="610" class="project-text" text-anchor="middle" font-weight="bold">项目实战4：LangGraph子图协同</text>
+  <text x="360" y="630" class="en-text" text-anchor="middle">LangGraph Subgraph Orchestration</text>
+  <line x1="80" y1="640" x2="640" y2="640" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="90" y="660" class="project-text">• 状态图构建 (StateGraph Construction)</text>
+  <text x="90" y="680" class="project-text">• 条件路由 (Conditional Routing)</text>
+  <text x="90" y="700" class="formula-text">Graph = Nodes + Edges + Router(condition) → next_node</text>
+
+  <!-- 项目5：端到端多Agent系统 -->
+  <rect class="box" x="700" y="580" width="620" height="140"/>
+  <text x="1010" y="610" class="project-text" text-anchor="middle" font-weight="bold">项目实战5：旅行规划多智能体系统</text>
+  <text x="1010" y="630" class="en-text" text-anchor="middle">End-to-End Multi-Agent Travel Planning System</text>
+  <line x1="700" y1="640" x2="1320" y2="640" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="710" y="660" class="project-text">• 协调员+专家智能体 (Coordinator + Specialists)</text>
+  <text x="710" y="680" class="project-text">• FastAPI后端+Streamlit前端+Docker部署</text>
+  <text x="710" y="700" class="formula-text">System = Orchestrator → {Advisor, Analyst, Optimizer, Expert, Planner}</text>
+
+  <!-- 连接箭头 -->
+  <path class="arrow-main" d="M 360,720 L 360,740 L 1010,740 L 1010,760"/>
+  <path class="arrow" d="M 640,650 L 700,650"/>
+
+  <!-- 第三阶段：模型定制化 -->
+  <rect class="phase-box" x="50" y="940" width="1300" height="280"/>
+  <text x="700" y="970" class="chapter-text" text-anchor="middle">阶段三：模型定制与优化 (Model Customization And Optimization)</text>
+
+  <!-- 项目6：模型微调 -->
+  <rect class="box" x="80" y="1000" width="600" height="180"/>
+  <text x="380" y="1030" class="project-text" text-anchor="middle" font-weight="bold">项目实战6：领域模型微调</text>
+  <text x="380" y="1050" class="en-text" text-anchor="middle">Travel Domain Model Fine-tuning</text>
+  <line x1="80" y1="1060" x2="680" y2="1060" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="90" y="1080" class="project-text">• 数据集构建 (Dataset Construction)</text>
+  <text x="90" y="1100" class="project-text">• LoRA/Q-LoRA微调 (Parameter-Efficient Fine-Tuning)</text>
+  <text x="90" y="1120" class="project-text">• 模型量化 (Model Quantization: GPTQ/AWQ)</text>
+  <text x="90" y="1140" class="project-text">• vLLM部署 (High-Performance Inference)</text>
+  <text x="90" y="1160" class="formula-text">LoRA: W' = W + ΔW, where ΔW = BA (rank r ≤ d)</text>
+
+  <!-- 项目7：评估系统 -->
+  <rect class="box" x="720" y="1000" width="600" height="180"/>
+  <text x="1020" y="1030" class="project-text" text-anchor="middle" font-weight="bold">项目实战7：智能体效果评估</text>
+  <text x="1020" y="1050" class="en-text" text-anchor="middle">Agent Evaluation System (Langfuse)</text>
+  <line x1="720" y1="1060" x2="1320" y2="1060" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="730" y="1080" class="project-text">• 可观测性基础设施 (Observability Infrastructure)</text>
+  <text x="730" y="1100" class="project-text">• 自动化评估 (LLM-as-a-Judge)</text>
+  <text x="730" y="1120" class="project-text">• 指标分析 (Metrics: Relevance, Hallucination, Coherence)</text>
+  <text x="730" y="1140" class="project-text">• 评估报告生成 (Report Generation)</text>
+  <text x="730" y="1160" class="formula-text">Score = Σ w_i × metric_i, where Σ w_i = 1</text>
+
+  <!-- 连接箭头 -->
+  <path class="arrow" d="M 680,1090 L 720,1090"/>
+
+  <!-- 第四阶段：生产部署 -->
+  <rect class="phase-box" x="50" y="1260" width="1300" height="280"/>
+  <text x="700" y="1290" class="chapter-text" text-anchor="middle">阶段四：生产级部署 (Production Deployment)</text>
+
+  <!-- 项目8：高性能推理 -->
+  <rect class="box" x="80" y="1320" width="380" height="180"/>
+  <text x="270" y="1350" class="project-text" text-anchor="middle" font-weight="bold">项目实战8：高性能推理服务</text>
+  <text x="270" y="1370" class="en-text" text-anchor="middle">vLLM Deployment And Optimization</text>
+  <line x1="80" y1="1380" x2="460" y2="1380" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="90" y="1400" class="project-text">• vLLM容器化部署</text>
+  <text x="90" y="1420" class="project-text">• PagedAttention优化</text>
+  <text x="90" y="1440" class="project-text">• Gradio交互界面</text>
+  <text x="90" y="1460" class="project-text">• 参数调优</text>
+  <text x="90" y="1480" class="formula-text">Throughput = batch_size / latency</text>
+
+  <!-- 项目9：性能压测 -->
+  <rect class="box" x="510" y="1320" width="380" height="180"/>
+  <text x="700" y="1350" class="project-text" text-anchor="middle" font-weight="bold">项目实战9：性能压测与优化</text>
+  <text x="700" y="1370" class="en-text" text-anchor="middle">Performance Testing And Tuning</text>
+  <line x1="510" y1="1380" x2="890" y2="1380" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="520" y="1400" class="project-text">• vLLM Benchmark测试</text>
+  <text x="520" y="1420" class="project-text">• 高并发模拟</text>
+  <text x="520" y="1440" class="project-text">• 瓶颈分析</text>
+  <text x="520" y="1460" class="project-text">• 优化方案设计</text>
+  <text x="520" y="1480" class="formula-text">QPS = concurrent_users / avg_response_time</text>
+
+  <!-- 项目10：零代码集成 -->
+  <rect class="box" x="940" y="1320" width="380" height="180"/>
+  <text x="1130" y="1350" class="project-text" text-anchor="middle" font-weight="bold">项目实战10：零代码智能体</text>
+  <text x="1130" y="1370" class="en-text" text-anchor="middle">No-Code Agent (n8n Workflow)</text>
+  <line x1="940" y1="1380" x2="1320" y2="1380" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="950" y="1400" class="project-text">• n8n工作流设计</text>
+  <text x="950" y="1420" class="project-text">• 多源数据集成</text>
+  <text x="950" y="1440" class="project-text">• AI分析节点</text>
+  <text x="950" y="1460" class="project-text">• 自动化邮件通知</text>
+  <text x="950" y="1480" class="formula-text">Workflow = Trigger → Process → Action</text>
+
+  <!-- 主流程箭头 -->
+  <path class="arrow-main" d="M 700,480 L 700,520"/>
+  <path class="arrow-main" d="M 700,900 L 700,940"/>
+  <path class="arrow-main" d="M 700,1220 L 700,1260"/>
+  
+  <!-- 横向连接 -->
+  <path class="arrow" d="M 460,1410 L 510,1410"/>
+  <path class="arrow" d="M 890,1410 L 940,1410"/>
+
+  <!-- 图例 -->
+  <rect class="phase-box" x="1150" y="20" width="200" height="60"/>
+  <text x="1160" y="40" class="project-text">图例 (Legend)</text>
+  <rect class="box-highlight" x="1160" y="45" width="30" height="15"/>
+  <text x="1195" y="56" class="project-text" font-size="12">基础项目</text>
+  <rect class="box" x="1160" y="65" width="30" height="15"/>
+  <text x="1195" y="76" class="project-text" font-size="12">进阶项目</text>
+
+</svg>
