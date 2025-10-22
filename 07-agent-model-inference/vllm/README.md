@@ -216,3 +216,5 @@ ngrok.set_auth_token("your_token_here")  # 替换为实际 token
 - [DeepSeek AI](https://github.com/deepseek-ai) - 优秀的开源模型
 - [Google Colab](https://colab.research.google.com/) - 免费 GPU 资源
 - [FastAPI](https://fastapi.tiangolo.com/) - 现代 Web 框架
+https://github.com/FlyAIBox/recipes
+https://github.com/vllm-project/vllm/tree/main/examples
