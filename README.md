@@ -391,8 +391,15 @@ AIAgent101/
 #### 📋 快速安装 (推荐)
 ```bash
 # 克隆项目代码
-git clone https://github.com/your-repo/AIAgent101.git
+# 1. 初始化 LFS
+git lfs install
+# 2. 克隆仓库 (LFS 文件将自动下载)
+git clone https://github.com/FlyAIBox/AIAgent101.git
+# 3.切换到新克隆的仓库目录
 cd AIAgent101
+# 4.手动拉取所有 LFS 管理的大文件
+git lfs pull
+
 
 # 一键安装脚本(Ubuntu 22.04)
 chmod +x 00-agent-env/setup_agent101_dev.sh
